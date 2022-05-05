@@ -17,6 +17,11 @@ const InitPage = () => {
             d3 日本地図
           </a>
         </Link>
+        <Link href="/dashboard/d3Bar">
+          <a className="ml-6 p-2 text-xl rounded hover:opacity-50 bg-gray-50 text-gray-700 shadow-lg">
+            d3　棒グラフ
+          </a>
+        </Link>
       </div>
     </Layout>
   )
