@@ -16,15 +16,14 @@ const BarPractice = ({ data }) => {
     const label = ['A', 'B', 'C', 'D', 'E', 'F']
     const x = d3.scaleBand().rangeRound([0, width]).domain(label).padding(0.2)
 
-    const chart = d3
+    const svg = d3
       .select(ref.current)
-      .append('svg')
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.bottom)
       .append('g')
       .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
-    const bar = chart
+    const bar = svg
       .selectAll('g')
       .data(data)
       .enter()
@@ -38,34 +37,22 @@ const BarPractice = ({ data }) => {
       .attr('height', (d) => height - y(d))
       .attr('width', x.bandwidth())
 
-    chart.append('g').attr('className', 'y axis').call(d3.axisLeft(y))
-    chart
+    svg
+      .append('g')
+      .attr('className', 'y axis')
+      .style('font-size', '16px')
+      .call(d3.axisLeft(y))
+    svg
       .append('g')
       .attr('className', 'x axis')
       .attr('transform', 'translate(0,' + height + ')')
+      .style('font-size', '20px')
       .call(d3.axisBottom(x))
-
-    // chart
-    //   .selectAll('rect')
-    //   .data(data)
-    //   .enter()
-    //   .append('rect')
-    //   .attr('x', (d, i) => x(label[i]))
-    //   .attr('y', (d) => {
-    //     return height - y(d)
-    //   })
-    //   .attr('width', x.bandwidth())
-    //   .attr('height', (d) => y(d))
-
-    return () => {
-      chart && chart.remove()
-      bar && bar.remove()
-    }
   }, [data])
 
   return (
     <>
-      <div ref={ref}></div>
+      <svg ref={ref}></svg>
     </>
   )
 }

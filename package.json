@@ -19,7 +19,8 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "swr": "^1.0.1",
-    "tailwindcss": "^2.2.16"
+    "tailwindcss": "^2.2.16",
+    "topojson-client": "^3.1.0"
   },
   "devDependencies": {
     "@testing-library/dom": "^8.9.0",
