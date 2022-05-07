@@ -29,8 +29,24 @@ const CourceraD3Assignment = ({ routes, geoJson }) => {
     <>
       <div>Courcera:Information Visualization</div>
       <div className="flex flex-wrap">
-        <svg ref={ref} className="bar"></svg>
-        <svg ref={ref1} className="bar"></svg>
+        <div>
+          <h2 className="text-2xl text-center">Airlines</h2>
+          <svg
+            ref={ref}
+            className="bar border-solid border-2 border-black"
+            width="400"
+            height="400"
+          ></svg>
+        </div>
+        <div>
+          <h2 className="text-2xl text-center">Airports</h2>
+          <svg
+            ref={ref1}
+            className="border-solid border-2 border-black"
+            width="600"
+            height="400"
+          ></svg>
+        </div>
       </div>
     </>
   )
