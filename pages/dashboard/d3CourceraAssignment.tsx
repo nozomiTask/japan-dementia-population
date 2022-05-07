@@ -18,7 +18,9 @@ const D3CourceraAssignment = () => {
   return (
     <Layout>
       <div>
-        {routes && routes.length > 0 && <CourceraD3Assignment data={routes} />}
+        {routes && routes.length > 0 && (
+          <CourceraD3Assignment data={routes} />
+        )}
       </div>
     </Layout>
   )
