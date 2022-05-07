@@ -10,8 +10,12 @@ interface DATA {
 }
 
 const D3Courcera = () => {
-  const [data, setData] = useState<DATA>(null)
-
+  const [data, setData] = useState(null)
+  const [data1, setData1] = useState(null)
+  const [dataPie, setDataPie] = useState(null)
+  const [geoJson, setGeoJson] = useState(null)
+  const [dataset, setDataset] = useState(null)
+  const [dataEQ, setDataEQ] = useState(null)
   useEffect(() => {
     d3.csv('../dataPersons.csv')
       .then((d) => {
@@ -19,10 +23,57 @@ const D3Courcera = () => {
         setData(d)
       })
       .catch((e) => console.log(`failed message: ${e}`))
+
+    d3.csv('../data1.csv')
+      .then((d) => {
+        console.log('data1.csv reading success!')
+        setData1(d)
+      })
+      .catch((e) => console.log(`failed message: ${e}`))
+
+    d3.csv('../dataPie.csv')
+      .then((d) => {
+        console.log('dataPie.csv reading success!')
+        setDataPie(d)
+      })
+      .catch((e) => console.log(`failed message: ${e}`))
+
+    d3.json('../countries.geo.json')
+      .then((d) => {
+        console.log('countries.geo.json reading success!')
+        setGeoJson(d)
+      })
+      .catch((e) => console.log(`failed message: ${e}`))
+
+    d3.csv('../dataset.csv')
+      .then((d) => {
+        console.log('dataset.csv reading success!')
+        setDataset(d)
+      })
+      .catch((e) => console.log(`failed message: ${e}`))
+      .catch((e) => console.log(`failed message: ${e}`))
+
+    d3.csv('../dataEQ.csv')
+      .then((d) => {
+        console.log('dataEQ.csv reading success!')
+        setDataEQ(d)
+      })
+      .catch((e) => console.log(`failed message: ${e}`))
   }, [])
   return (
     <Layout>
-      <div>{data && <CourceraD3 data={data} />}</div>
+      <div>
+        {data && (
+          <CourceraD3
+            data={data}
+            data1={data1}
+            dataPie={dataPie}
+            geoJson={geoJson}
+            dataset={dataset}
+            dataEQ={dataEQ}
+          />
+        )}
+      </div>
     </Layout>
   )
 }
