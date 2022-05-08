@@ -27,6 +27,16 @@ const InitPage = () => {
             d3 Courcera
           </a>
         </Link>
+        <Link href="/dashboard/d3Courcera01">
+          <a className="ml-6 p-2 text-xl rounded hover:opacity-50 bg-gray-50 text-gray-700 shadow-lg">
+            d3 Courcera01
+          </a>
+        </Link>
+        <Link href="/dashboard/d3Courcera02">
+          <a className="ml-6 p-2 text-xl rounded hover:opacity-50 bg-gray-50 text-gray-700 shadow-lg">
+            d3 Courcera02
+          </a>
+        </Link>
         <Link href="/dashboard/d3CourceraAssignment">
           <a className="ml-6 p-2 text-xl rounded hover:opacity-50 bg-gray-50 text-gray-700 shadow-lg">
             d3 Courcera Assignment

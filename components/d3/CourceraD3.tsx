@@ -164,7 +164,7 @@ const CourceraD3 = ({ data, data1, dataPie, geoJson, dataset, dataEQ }) => {
       sales: +d.sales,
     }))
     const pie = d3.pie().value((d) => d.sales)
-    console.log('pie data', pie(data))
+    // console.log('pie data', pie(data))
     const colorScale = d3
       .scaleOrdinal()
       .range(d3.schemeCategory10)
@@ -275,9 +275,11 @@ const CourceraD3 = ({ data, data1, dataPie, geoJson, dataset, dataEQ }) => {
       .attr('cx', (d) => projection([+d.Longitude, +d.Latitude])[0])
       .attr('cy', (d) => projection([+d.Longitude, +d.Latitude])[1])
   }
+
   return (
     <>
       <div>Courcera:Information Visualization</div>
+      <br />
       <br />
       <br />
       <div>{'week 2'}</div>
