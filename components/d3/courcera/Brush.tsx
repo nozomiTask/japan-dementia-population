@@ -15,8 +15,8 @@ const Brush = ({ data }) => {
 
     showData(data, body)
     const brush = d3.brush()
-    brush.on('brush', function () {
-      const coords = d3.event.selection
+    brush.on('brush', function (event) {
+      const coords = event.selection
       body.selectAll('circle').attr('fill', function () {
         const cx = d3.select(this).attr('cx')
         const cy = d3.select(this).attr('cy')
@@ -71,9 +71,9 @@ const Brush = ({ data }) => {
 
     // zoom
     const zoom = d3.zoom()
-    zoom.on('zoom', function () {
-      const newXScale = d3.event.transform.rescaleX(xScale)
-      const newYScale = d3.event.transform.rescaleY(yScale)
+    zoom.on('zoom', function (event) {
+      const newXScale = event.transform.rescaleX(xScale)
+      const newYScale = event.transform.rescaleY(yScale)
 
       xAxis.scale(newXScale)
       xAxisGroup.call(xAxis)
