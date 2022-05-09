@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import * as d3 from 'd3'
-import { Layout } from '../../components/layout/Layout'
-import CourceraD301 from '../../components/d3/CourceraD301'
+import { Layout } from '../../../components/layout/Layout'
+import CourceraD301 from '../../../components/d3/courcera/CourceraD301'
+
 
 interface DATA {
   Name: string
@@ -14,21 +15,21 @@ const D3Courcera01 = () => {
   const [dataHierarchy, setDataHierarchy] = useState(null)
   const [dataEvent, setDataEvent] = useState(null)
   useEffect(() => {
-    d3.json('../data.json')
+    d3.json('../../data.json')
       .then((d) => {
         console.log('data.json reading success!')
         setDataLink(d)
       })
       .catch((e) => console.log(`failed message: ${e}`))
 
-    d3.json('../dataHierarchy.json')
+    d3.json('../../dataHierarchy.json')
       .then((d) => {
         console.log('dataHierarchy.json reading success!')
         setDataHierarchy(d)
       })
       .catch((e) => console.log(`failed message: ${e}`))
 
-    d3.csv('../dataEvent.csv')
+    d3.csv('../../dataEvent.csv')
       .then((d) => {
         console.log('dataEvent.csv reading success!')
         setDataEvent(d)

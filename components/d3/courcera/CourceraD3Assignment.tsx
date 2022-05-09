@@ -3,12 +3,12 @@ import * as d3 from 'd3'
 import {
   drawAirlinesChart,
   groupByAirline,
-} from '../../tools/courseraAssignment'
+} from '../../../tools/courseraAssignment'
 import {
   drawAirports,
   drawMap,
   groupByAirport,
-} from '../../tools/courseraMapAssigment'
+} from '../../../tools/courseraMapAssigment'
 const CourceraD3Assignment = ({ routes, geoJson }) => {
   const ref = useRef(null)
   const ref1 = useRef(null)

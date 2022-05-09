@@ -1,45 +1,43 @@
 import Link from 'next/link'
 import React from 'react'
-import LineChart from '../../components/d3/PieChart'
-import { Layout } from '../../components/layout/Layout'
+import { Layout } from '../../../components/layout/Layout'
 
-const InitPage = () => {
+const courceraInitPage = () => {
   return (
     <Layout>
-      <div className="bg-gray-100 pr-4 py-4 my-4 flex justify-start">
-        <Link href="/dashboard/d3test">
+      <div className="bg-gray-100 pr-4 py-4 my-4 flex justify-start container">
+        <Link href="/dashboard/courcera/brush">
           <a className="ml-6 p-2 text-xl rounded hover:opacity-50 bg-gray-50 text-gray-700 shadow-lg">
-            d3 test
+            Brush & zoom
           </a>
         </Link>
-        <Link href="/dashboard/d3Japan">
+                <Link href="/dashboard/courcera/toolTips">
           <a className="ml-6 p-2 text-xl rounded hover:opacity-50 bg-gray-50 text-gray-700 shadow-lg">
-            d3 日本地図
+            toolTips
           </a>
         </Link>
-        <Link href="/dashboard/d3Japan01">
+        <Link href="/dashboard/courcera/d3Courcera">
           <a className="ml-6 p-2 text-xl rounded hover:opacity-50 bg-gray-50 text-gray-700 shadow-lg">
-            d3 日本地図　01
+            d3Courcera
           </a>
         </Link>
-        <Link href="/dashboard/courcera/courceraInitPage">
+        <Link href="/dashboard/courcera/d3Courcera01">
           <a className="ml-6 p-2 text-xl rounded hover:opacity-50 bg-gray-50 text-gray-700 shadow-lg">
-            Courcera
-          </a>
-        </Link>  
-        <Link href="/dashboard/d3Bar">
-          <a className="ml-6 p-2 text-xl rounded hover:opacity-50 bg-gray-50 text-gray-700 shadow-lg">
-            d3　棒グラフ
+            d3Courcera01
           </a>
         </Link>
-        <Link href="/dashboard/d3LineChart">
+        <Link href="/dashboard/courcera/d3Courcera02">
           <a className="ml-6 p-2 text-xl rounded hover:opacity-50 bg-gray-50 text-gray-700 shadow-lg">
-            d3　線グラフ
+            d3Courcera02
+          </a>
+        </Link>
+        <Link href="/dashboard/courcera/d3CourceraAssignment">
+          <a className="ml-6 p-2 text-xl rounded hover:opacity-50 bg-gray-50 text-gray-700 shadow-lg">
+            d3CourceraAssignment
           </a>
         </Link>
       </div>
     </Layout>
   )
 }
-
-export default InitPage
+export default courceraInitPage
