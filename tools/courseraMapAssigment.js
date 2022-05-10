@@ -104,3 +104,40 @@ export const drawAirports = (airports, ref1) => {
     .attr('cx', (d) => projection([d.Longitude, d.Latitude])[0])
     .attr('cy', (d) => projection([d.Longitude, d.Latitude])[1])
 }
+
+export const drawRoutes = (airlineID, routes, ref1) => {
+  // let routes = //TODO: get the routes from store
+  const config = getMapConfig(ref1) //get the config
+
+  //TODO: get the projection from the store
+  const projection = getMapProjection(config) //get the projection
+  //TODO: select the svg with id "Map" (our map container)
+  const container = config.container //get the container
+
+  const selectedRoutes = //TODO: filter the routes to keep only the routes which AirlineID is equal to the parameter airlineID received by the function
+    routes.filter((d) => d.AirlineID === airlineID)
+
+  let bindedData = container.selectAll('line').data(selectedRoutes, (d) => d.ID)
+  //This seconf parameter tells D3 what to use to identify the routes,
+  //this hepls D3 to correctly find which routes have been added or removed.
+
+  //TODO: Use the .enter selector to append a line for each new route.
+  bindedData
+    .enter()
+    .append('line')
+    .attr('x1', (d) => projection(d.SourceLongitude)[0])
+    .attr('y1', (d) => projection(d.SourceLongitude)[1])
+    .attr('x2', (d) => projection(d.DestLongitude)[0])
+    .attr('y2', (d) => projection(d.DestLongitude)[1])
+
+    //TODO: for each line set the start of the line (x1 and y1) to be the position of the source airport (SourceLongitude and SourceLatitude)
+    // Hint: you can use projection to convert longitude and latitude to x and y.
+    //TODO: for each line set the end of the line (x2 and y2) to be the position of the source airport (DestLongitude and DestLongitude)
+
+    //TODO: set the color of the stroke of the line to "#992a2a"
+    .style('stroke', '#992a2a')
+    //TODO: set the opacity to 0.1
+    .style('opacity', 0.1)
+  //TODO: use exit function over bindedData to remove any routes that does not satisfy the filter.
+  bindedData.exit()
+}

@@ -7,6 +7,7 @@ import {
 import {
   drawAirports,
   drawMap,
+  drawRoutes,
   groupByAirport,
 } from '../../../tools/courseraMapAssigment'
 const CourceraD3Assignment = ({ routes, geoJson }) => {
@@ -16,12 +17,13 @@ const CourceraD3Assignment = ({ routes, geoJson }) => {
   useEffect(() => {
     if (!!routes && !!geoJson) {
       const airlines = groupByAirline(routes)
-      drawAirlinesChart(airlines, ref)
+      drawAirlinesChart(airlines, ref, routes, ref1)
       console.log('airlines ', airlines)
       drawMap(geoJson, ref1)
       const airports = groupByAirport(routes)
       console.log('airports ', airports)
       drawAirports(airports, ref1)
+      drawRoutes('24', routes, ref1) // <- add this line
     }
   }, [routes, geoJson])
 

@@ -1,5 +1,5 @@
 import * as d3 from 'd3'
-
+import { drawRoutes } from './courseraMapAssigment'
 export const groupByAirline = (data) => {
   //Iterate over each route, producing a dictionary where the keys is are the ailines ids and the values are the information of the airline.
   let result = data.reduce((result, d) => {
@@ -23,10 +23,10 @@ export const groupByAirline = (data) => {
   return result
 }
 
-export const drawAirlinesChart = (airlines, ref) => {
+export const drawAirlinesChart = (airlines, ref, routes, ref1) => {
   let config = getAirlinesChartConfig(ref)
   let scales = getAirlinesChartScales(airlines, config)
-  drawBarsAirlinesChart(airlines, scales, config)
+  drawBarsAirlinesChart(airlines, scales, config, routes, ref1)
   drawAxesAirlinesChart(airlines, scales, config)
 }
 
@@ -88,7 +88,7 @@ const getAirlinesChartScales = (airlines, config) => {
   return { xScale, yScale }
 }
 
-const drawBarsAirlinesChart = (airlines, scales, config) => {
+const drawBarsAirlinesChart = (airlines, scales, config, routes, ref1) => {
   let { margin, container } = config // this is equivalent to 'let margin = config.margin; let container = config.container'
   let { xScale, yScale } = scales
   let body = container
@@ -109,6 +109,24 @@ const drawBarsAirlinesChart = (airlines, scales, config) => {
     //TODO: set the width of the bar to be proportional to the airline count using the xScale
     .attr('width', (d) => xScale(d.Count))
     .attr('fill', '#2a5599')
+
+    // assignment 2
+
+    .on('mouseenter', function (d) {
+      // <- this is the new code
+      //TODO: call the drawRoutes function passing the AirlineID id 'd'
+      drawRoutes(d.airlineID, routes, ref1)
+      //TODO: change the fill color of the bar to "#992a5b" as a way to highlight the bar. Hint: use d3.select(this)
+      d3.select(this).attr('fill', '#992a5b')
+    })
+    //TODO: Add another listener, this time for mouseleave
+
+    //TODO: In this listener, call drawRoutes(null), this will cause the function to remove all lines in the chart since there is no airline withe AirlineID == null.
+    //TODO: change the fill color of the bar back to "#2a5599"
+    .on('mouseleave', function (d) {
+      d3.select(this).attr('fill', '#2a5599')
+      drawRoutes(null, routes, ref1)
+    })
 }
 
 const drawAxesAirlinesChart = (airlines, scales, config) => {
@@ -126,6 +144,7 @@ const drawAxesAirlinesChart = (airlines, scales, config) => {
 
   let axisY = d3
     //TODO: Create an axis on the left for the Y scale
+
     .axisLeft(yScale)
 
   //TODO: Append a g tag to the container,
