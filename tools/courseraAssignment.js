@@ -115,7 +115,7 @@ const drawBarsAirlinesChart = (airlines, scales, config, routes, ref1) => {
     .on('mouseenter', function (d) {
       // <- this is the new code
       //TODO: call the drawRoutes function passing the AirlineID id 'd'
-      drawRoutes(d.airlineID, routes, ref1)
+      drawRoutes(d.AirlineID, routes, ref1)
       //TODO: change the fill color of the bar to "#992a5b" as a way to highlight the bar. Hint: use d3.select(this)
       d3.select(this).attr('fill', '#992a5b')
     })

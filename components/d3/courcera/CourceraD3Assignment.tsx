@@ -23,7 +23,7 @@ const CourceraD3Assignment = ({ routes, geoJson }) => {
       const airports = groupByAirport(routes)
       console.log('airports ', airports)
       drawAirports(airports, ref1)
-      drawRoutes('24', routes, ref1) // <- add this line
+      // drawRoutes('24', routes, ref1) // <- add this line
     }
   }, [routes, geoJson])
 

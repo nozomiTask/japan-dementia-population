@@ -125,10 +125,10 @@ export const drawRoutes = (airlineID, routes, ref1) => {
   bindedData
     .enter()
     .append('line')
-    .attr('x1', (d) => projection(d.SourceLongitude)[0])
-    .attr('y1', (d) => projection(d.SourceLongitude)[1])
-    .attr('x2', (d) => projection(d.DestLongitude)[0])
-    .attr('y2', (d) => projection(d.DestLongitude)[1])
+    .attr('x1', (d) => projection([d.SourceLongitude, d.SourceLatitude])[0])
+    .attr('y1', (d) => projection([d.SourceLongitude, d.SourceLatitude])[1])
+    .attr('x2', (d) => projection([d.DestLongitude, d.DestLatitude])[0])
+    .attr('y2', (d) => projection([d.DestLongitude, d.DestLatitude])[1])
 
     //TODO: for each line set the start of the line (x1 and y1) to be the position of the source airport (SourceLongitude and SourceLatitude)
     // Hint: you can use projection to convert longitude and latitude to x and y.
@@ -139,5 +139,5 @@ export const drawRoutes = (airlineID, routes, ref1) => {
     //TODO: set the opacity to 0.1
     .style('opacity', 0.1)
   //TODO: use exit function over bindedData to remove any routes that does not satisfy the filter.
-  bindedData.exit()
+  bindedData.exit().remove()
 }
