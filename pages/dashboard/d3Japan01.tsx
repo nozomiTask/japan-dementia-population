@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Layout } from '../../components/layout/Layout'
-import JapanMap from '../../components/d3/JapanMap'
+import JapanMap from '../../components/d3/JapanMapAndChart'
 import JapanMap01 from '../../components/d3/JapanMap01'
 
 const D3Japan01 = () => {
