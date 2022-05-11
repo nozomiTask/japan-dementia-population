@@ -4,7 +4,7 @@ import * as d3 from 'd3'
 //https://qiita.com/alclimb/items/31d4360c74a8f8935256
 import {drawJapanMap} from "../../tools/drawJapanMap"
 import { drawJapanChart } from '../../tools/drawJapanChart'
-const JapanMap = ({suikei,geoJson }) => {
+const JapanMap = ({suikei,geoJson, prevalence }) => {
   const [geoData, setgGeoData] = useState(geoJson.features)
 
   const ref = useRef(null)
@@ -12,7 +12,7 @@ const JapanMap = ({suikei,geoJson }) => {
   
   useEffect(() => {
    !!ref && !!geoData && drawJapanMap(ref,geoData)
-   !!ref1 && !!suikei && drawJapanChart(ref1,suikei)
+   !!ref1 && !!suikei && !!prevalence && drawJapanChart(ref1,suikei,prevalence)
 
 
  
