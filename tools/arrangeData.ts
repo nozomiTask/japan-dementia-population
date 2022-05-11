@@ -26,7 +26,7 @@ export const arrangeData = (suikei, prevalence) => {
         if (s['市などの別'] === 'a' && s['年'] === year) {
           const area = s['都道府県']
           console.log(`${area} ${year}`)
-          console.log(`${[...ages.map((g) => s.g)]}`)
+          console.log(`${[...ages.map((g) => s[g+"/m"])]}`)
 
           // dPop: number””
           // dementiaCategory: string //dementia, mci, dementiaAndMci
