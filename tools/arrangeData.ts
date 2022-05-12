@@ -1,38 +1,72 @@
 export const arrangeData = (suikei, prevalence) => {
-  interface DementiaPop {
+  interface DEMENTIAPOP {
     area: string
-    dPop: number
+    dPopMale: {}
+    dPopFemale: {}
+    dPopAll: {}
+    dPopMaleSum: number
+    dPopFemaleSum: number
+    dPopAllSum: number
     year: string
-    gender: string // male, female, a;ll
     dementiaCategory: string //dementia, mci, dementiaAndMci
   }
 
-  const dp: DementiaPop[] = []
-  const year = '2020年'
+  const sources = [
+    'AsiaPaciﬁcHighIncome',
+    'EastAsia',
+    'SouthAsiaSouthEastAsia',
+    'WesternEurope',
+    'NorthAmerica',
+    'LatinAmerica',
+    'Japan',
+    'MCIJapan',
+  ]
 
+  const dps: DEMENTIAPOP[] = []
+  const year = '2020年'
+  const areaUnit = 'a'
+  const source = 'Japan'
+  const prvlnc = prevalence.filter((p) => p.source === source)
   suikei.forEach((s) => {
     const ages = Object.keys(s)
-      .filter((f) => f.indexOf('/a') !== -1 )
+      .filter((f) => f.indexOf('/a') !== -1)
       .map((m) => m.split('/')[0])
-    ages.forEach((age_) => {
-      const age = age_.split('/')[0]
-      const gender =
-        age_.split('/') && age_.split('/')[1] === 'm'
-          ? '男'
-          : age_.split('/')[1] === 'f'
-          ? '女'
-          : '全体' 
-      if (!!age) {
-        if (s['市などの別'] === 'a' && s['年'] === year) {
-          const area = s['都道府県']
-          console.log(`${area} ${year}`)
-          console.log(`${[...ages.map((g) => s[g+"/m"])]}`)
+    if (s['市などの別'] === areaUnit && s['年'] === year) {
+      let dPopMale = {}
+      let dPopFemale = {}
+      let dPopAll = {}
 
-          // dPop: number””
-          // dementiaCategory: string //dementia, mci, dementiaAndMci
-        }
+      ages.forEach((a) => {
+        dPopMale[a] = +s[a + '/m'] * +prvlnc.find((d) => d.gender === 'male')[a]
+        dPopFemale[a] =
+          +s[a + '/f'] * +prvlnc.find((d) => d.gender === 'female')[a]
+        dPopAll[a] = dPopMale[a] + dPopFemale[a]
+      })
+      let dPopMaleSum = 0
+      let dPopFemaleSum = 0
+      let dPopAllSum = 0
+
+      for (let a in ages) {
+        dPopMaleSum += dPopMale[ages[a]]
+        dPopFemaleSum += dPopFemale[ages[a]]
+        dPopAllSum += dPopAll[ages[a]]
       }
-    })
+
+      const dp: DEMENTIAPOP = {
+        area: s['都道府県'],
+        dPopMale: dPopMale,
+        dPopFemale: dPopFemale,
+        dPopAll: dPopAll,
+        dPopMaleSum: dPopMaleSum,
+        dPopFemaleSum: dPopFemaleSum,
+        dPopAllSum: dPopAllSum,
+        year: year,
+        dementiaCategory: 'dementia', //dementia, mci, dementiaAndMci
+      }
+      dps.push(dp as DEMENTIAPOP)
+      // dPop: number””
+      // dementiaCategory: string //dementia, mci, dementiaAndMci
+    }
   })
 }
 /*
