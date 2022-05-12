@@ -21,7 +21,7 @@ export const arrangeData = (suikei, prevalence) => {
           ? '男'
           : age_.split('/')[1] === 'f'
           ? '女'
-          : '全体'
+          : '全体' 
       if (!!age) {
         if (s['市などの別'] === 'a' && s['年'] === year) {
           const area = s['都道府県']
