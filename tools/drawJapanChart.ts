@@ -20,8 +20,8 @@ const getDChartConfig = (ref) => {
   let height = 400
   let margin = {
     top: 10,
-    bottom: 20,
-    left: 40,
+    bottom: 40,
+    left: 60,
     right: 10,
   }
   //The body is the are that will be occupied by the bars.
