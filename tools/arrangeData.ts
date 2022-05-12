@@ -1,16 +1,6 @@
-export const arrangeData = (suikei, prevalence) => {
-  interface DEMENTIAPOP {
-    area: string
-    dPopMale: {}
-    dPopFemale: {}
-    dPopAll: {}
-    dPopMaleSum: number
-    dPopFemaleSum: number
-    dPopAllSum: number
-    year: string
-    dementiaCategory: string //dementia, mci, dementiaAndMci
-  }
+import { DEMENTIAPOP } from '../types/dementiaPop'
 
+export const arrangeData = (suikei, prevalence): DEMENTIAPOP[] => {
   const sources = [
     'AsiaPaciﬁcHighIncome',
     'EastAsia',
@@ -68,6 +58,7 @@ export const arrangeData = (suikei, prevalence) => {
       // dementiaCategory: string //dementia, mci, dementiaAndMci
     }
   })
+  return dps
 }
 /*
 将来の地域別男女5歳階級別人口（各年10月1日時点の推計人口：2015年は国勢調査による実績値）

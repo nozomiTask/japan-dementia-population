@@ -2,20 +2,20 @@ import React, { useEffect, useRef, useState } from 'react'
 import * as d3 from 'd3'
 
 //https://qiita.com/alclimb/items/31d4360c74a8f8935256
-import {drawJapanMap} from "../../tools/drawJapanMap"
-import { drawJapanChart } from '../../tools/drawJapanChart'
-const JapanMap = ({suikei,geoJson, prevalence }) => {
+import { drawJapanMap } from '../../tools/drawJapanMap'
+import { drawDementiaChart } from '../../tools/drawJapanChart'
+const JapanMap = ({ suikei, geoJson, prevalence }) => {
   const [geoData, setgGeoData] = useState(geoJson.features)
 
   const ref = useRef(null)
   const ref1 = useRef(null)
-  
+
   useEffect(() => {
-   !!ref && !!geoData && drawJapanMap(ref,geoData)
-   !!ref1 && !!suikei && !!prevalence && drawJapanChart(ref1,suikei,prevalence)
-
-
- 
+    !!ref && !!geoData && drawJapanMap(ref, geoData)
+    !!ref1 &&
+      !!suikei &&
+      !!prevalence &&
+      drawDementiaChart(ref1, suikei, prevalence)
   }, [geoJson])
   return (
     <>
@@ -27,7 +27,7 @@ const JapanMap = ({suikei,geoJson, prevalence }) => {
           参考文献
         </a>
       </div>
-      <div className="flex flex-wrap">
+      <div className="flex ">
         <div>
           <h2 className="text-2xl text-center">グラフ</h2>
           <svg
@@ -46,7 +46,6 @@ const JapanMap = ({suikei,geoJson, prevalence }) => {
             height="400"
           ></svg>
         </div>
-        
       </div>
     </>
   )
