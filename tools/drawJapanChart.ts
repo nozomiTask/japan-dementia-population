@@ -12,7 +12,7 @@ const drawDChart = (dPop, ref) => {
   let config = getDChartConfig(ref)
   let scales = getDChartScales(dPop, config)
   drawBarsDChart(dPop, scales, config)
-  drawAxesDChart(dPop, scales, config)
+  drawAxesDChart(scales, config)
 }
 
 const getDChartConfig = (ref) => {
@@ -20,8 +20,8 @@ const getDChartConfig = (ref) => {
   let height = 400
   let margin = {
     top: 10,
-    bottom: 50,
-    left: 130,
+    bottom: 20,
+    left: 40,
     right: 10,
   }
   //The body is the are that will be occupied by the bars.
@@ -104,7 +104,7 @@ const drawBarsDChart = (dPop, scales, config) => {
     })
 }
 
-const drawAxesDChart = (dPop, scales, config) => {
+const drawAxesDChart = (scales, config) => {
   let { xScale, yScale } = scales
   let { container, margin, height } = config
   let axisX = d3.axisBottom(xScale).ticks(5)
