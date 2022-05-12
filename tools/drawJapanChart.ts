@@ -115,7 +115,7 @@ const drawAxesDChart = (scales, config) => {
       'transform',
       `translate(${margin.left}px,${height - margin.bottom}px)`
     )
-    .style("font", "7px times")
+    .style('font', '10px times')
     .call(axisX)
 
   let axisY = d3
@@ -129,6 +129,6 @@ const drawAxesDChart = (scales, config) => {
   container
     .append('g')
     .style('transform', `translate(${margin.left}px,${margin.top}px)`)
-    .style("font", "7px times")
+    .style('font', '7px times')
     .call(axisY)
 }
