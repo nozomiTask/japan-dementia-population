@@ -82,19 +82,19 @@ const drawBarsDChart = (dPop, scales, config, setHidden, configMap) => {
     .append('g')
     .style('transform', `translate(${margin.left}px,${margin.top}px)`)
 
-  const tooltip = configMap.container
-    .append('div')
+  const tooltip = d3
+    .select('#map')
+    .append('p')
     .style(
       'transform',
       `translate(${configMap.margin.left}px,${configMap.margin.top}px)`
     )
-    .attr("id","tooltip")
-    .style("background-color","red")
-    .style("width","20px")
-    .style("height","20px")
-    .attr("z-index", "100")
-    .text("@@@@@@@")
-
+    .attr('id', 'tooltip')
+    .style('background-color', 'red')
+    .style('width', '20px')
+    .style('height', '20px')
+    .style('z-index', '100')
+    .text('@@@@@@@')
 
   let bars = body
     .selectAll('.bar')

@@ -14,16 +14,15 @@ const JapanMap = ({ suikei, geoJson, prevalence }) => {
   useEffect(() => {
     const dPop = arrangeData(suikei, prevalence)
     !!ref && !!geoData && drawJapanMap(ref, geoData, dPop)
-    !!ref1 && !!suikei && !!prevalence && 
-    drawDementiaChart(ref1, dPop, setHidden, ref)
-  }, [geoJson])
+    !!ref1 &&
+      !!suikei &&
+      !!prevalence &&
+      drawDementiaChart(ref1, dPop, setHidden, ref)
+  }, [geoData, geoJson, prevalence, suikei])
   return (
     <>
       <div id="map-container">
-        <a
-          href="https://qiita.com/alclimb/items/31d4360c74a8f8935256
-"
-        >
+        <a href="https://qiita.com/alclimb/items/31d4360c74a8f8935256">
           参考文献
         </a>
       </div>
@@ -31,6 +30,7 @@ const JapanMap = ({ suikei, geoJson, prevalence }) => {
         <div>
           <h2 className="text-2xl text-center">グラフ</h2>
           <svg
+            id="chart"
             ref={ref1}
             className="border-solid border-2 border-black"
             width="400"
@@ -40,18 +40,21 @@ const JapanMap = ({ suikei, geoJson, prevalence }) => {
         <div>
           <h2 className="text-2xl text-center">地図</h2>
           <svg
+            id="map"
             ref={ref}
             className="bar border-solid border-2 border-black"
             width="400"
             height="400"
-          >       </svg>
+          >
+            {' '}
+          </svg>
         </div>
- <div
+        {/* <div
           id="tooltip"
           className={hidden ? 'hidden' : 'block'}
         >
           ToolTip
-        </div>
+        </div> */}
       </div>
     </>
   )

@@ -88,7 +88,8 @@ export const drawJapanMap = (ref,geoData, dPop)=>{
             .attr(`height`, textSize.height + padding.y * 2)
   
           // マウス位置の都道府県領域を赤色に変更
-          d3.select(this).attr(`fill`, `#CC4C39`)
+          // d3.select(this).attr(`fill`, `#CC4C39`)
+          d3.select(this).attr(`fill`, `red`)
           d3.select(this).attr(`stroke-width`, `1`)
         })
   
