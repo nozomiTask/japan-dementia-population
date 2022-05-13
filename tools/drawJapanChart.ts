@@ -1,17 +1,29 @@
 import * as d3 from 'd3'
 import { arrangeData } from './arrangeData'
+const showTooltip = (tooltip, text, coords, setHidden) => {
+  const x = coords[0]
+  const y = coords[1]
 
-export const drawDementiaChart = (ref1, suikei, prevalence_) => {
+  tooltip
+    .text(text)
+    .style('top', `${y}`)
+    .style('left', `${x}`)
+    .style('background-color', 'white')
+
+  setHidden(false)
+}
+export const drawDementiaChart = (ref1, dPop, setHidden, ref) => {
   // console.log('prevalence', prevalence_)
   // console.log('suikei', suikei)
-  const dPop = arrangeData(suikei, prevalence_)
-  drawDChart(dPop, ref1)
+  // const dPop = arrangeData(suikei, prevalence_)
+  drawDChart(dPop, ref1, setHidden, ref)
 }
 
-const drawDChart = (dPop, ref) => {
-  let config = getDChartConfig(ref)
+const drawDChart = (dPop, ref1, setHidden, ref) => {
+  let config = getDChartConfig(ref1)
+  let configMap = getDChartConfig(ref)
   let scales = getDChartScales(dPop, config)
-  drawBarsDChart(dPop, scales, config)
+  drawBarsDChart(dPop, scales, config, setHidden, configMap)
   drawAxesDChart(scales, config)
 }
 
@@ -63,12 +75,26 @@ const getDChartScales = (dPop, config) => {
   return { xScale, yScale }
 }
 
-const drawBarsDChart = (dPop, scales, config) => {
-  let { margin, container } = config // this is equivalent to 'let margin = config.margin; let container = config.container'
+const drawBarsDChart = (dPop, scales, config, setHidden, configMap) => {
+  let { margin, bodyHeight, bodyWidth, container } = config // this is equivalent to 'let margin = config.margin; let container = config.container'
   let { xScale, yScale } = scales
   let body = container
     .append('g')
     .style('transform', `translate(${margin.left}px,${margin.top}px)`)
+
+  const tooltip = configMap.container
+    .append('div')
+    .style(
+      'transform',
+      `translate(${configMap.margin.left}px,${configMap.margin.top}px)`
+    )
+    .attr("id","tooltip")
+    .style("background-color","red")
+    .style("width","20px")
+    .style("height","20px")
+    .attr("z-index", "100")
+    .text("@@@@@@@")
+
 
   let bars = body
     .selectAll('.bar')
@@ -93,6 +119,11 @@ const drawBarsDChart = (dPop, scales, config) => {
       // drawRoutes(d.AirlineID, routes, ref1)
       //TODO: change the fill color of the bar to "#992a5b" as a way to highlight the bar. Hint: use d3.select(this)
       d3.select(this).attr('fill', '#992a5b')
+      setHidden(false)
+      const text = d.area + ':' + Math.floor(d.dPopAllSum) + '人'
+      const coords = [d3.event.clientX, d3.event.clientY]
+
+      showTooltip(tooltip, text, coords, setHidden)
     })
     //TODO: Add another listener, this time for mouseleave
 

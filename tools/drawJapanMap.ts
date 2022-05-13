@@ -1,7 +1,7 @@
 import * as d3 from "d3"
 
 
-export const drawJapanMap = (ref,geoData)=>{
+export const drawJapanMap = (ref,geoData, dPop)=>{
     const width = 400 // 描画サイズ: 幅
     const height = 400 // 描画サイズ: 高さ
     const centerPos = [137.0, 38.2] // 地図のセンター位置
@@ -42,13 +42,16 @@ export const drawJapanMap = (ref,geoData)=>{
         .attr(`d`, path)
         .attr(`stroke`, `#666`)
         .attr(`stroke-width`, 0.25)
-        .attr(`fill`, `#2566CC`)
+        .attr(`fill`, `#2a5599`)
         .attr(`fill-opacity`, (item: any) => {
           // メモ
           // item.properties.name_ja に都道府県名が入っている
-  
+          const max = d3.max(dPop, d=>+d.dPopAllSum)
+          const opac_ = dPop.find(d=>item.properties.name_ja===d.area)
+          const opac =opac_ ? opac_.dPopAllSum:0
+          
           // 透明度をランダムに指定する (0.0 - 1.0)
-          return Math.random()
+          return Math.sqrt(opac/max) //Math.random()
         })
   
         /**

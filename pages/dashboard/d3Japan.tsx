@@ -35,10 +35,9 @@ const D3Japan = () => {
     <Layout>
       <div className="container">
         <a href="https://zenn.dev/ignorant_kenji/articles/76dab0a748516470452b">
-          <span className="text-3xl text-blue-500">reactとd3.js</span>
+          <span className="text-3xl text-blue-500">認知症（とMCI）の人の数</span>
         </a>
         <div>
-          <h2 className="label">日本地図</h2>
           {!!suikei && !!geoJson && !!prevalence && (
             <JapanMap
               suikei={suikei}

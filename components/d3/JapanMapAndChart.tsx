@@ -1,21 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react'
 import * as d3 from 'd3'
-
-//https://qiita.com/alclimb/items/31d4360c74a8f8935256
 import { drawJapanMap } from '../../tools/drawJapanMap'
 import { drawDementiaChart } from '../../tools/drawJapanChart'
+import { arrangeData } from '../../tools/arrangeData'
+//https://qiita.com/alclimb/items/31d4360c74a8f8935256
+
 const JapanMap = ({ suikei, geoJson, prevalence }) => {
   const [geoData, setgGeoData] = useState(geoJson.features)
-
+  const [hidden, setHidden] = useState(false)
   const ref = useRef(null)
   const ref1 = useRef(null)
 
   useEffect(() => {
-    !!ref && !!geoData && drawJapanMap(ref, geoData)
-    !!ref1 &&
-      !!suikei &&
-      !!prevalence &&
-      drawDementiaChart(ref1, suikei, prevalence)
+    const dPop = arrangeData(suikei, prevalence)
+    !!ref && !!geoData && drawJapanMap(ref, geoData, dPop)
+    !!ref1 && !!suikei && !!prevalence && 
+    drawDementiaChart(ref1, dPop, setHidden, ref)
   }, [geoJson])
   return (
     <>
@@ -44,7 +44,13 @@ const JapanMap = ({ suikei, geoJson, prevalence }) => {
             className="bar border-solid border-2 border-black"
             width="400"
             height="400"
-          ></svg>
+          >       </svg>
+        </div>
+ <div
+          id="tooltip"
+          className={hidden ? 'hidden' : 'block'}
+        >
+          ToolTip
         </div>
       </div>
     </>
