@@ -83,7 +83,7 @@ const drawBarsDChart = (dPop, scales, config, setHidden, configMap) => {
     .style('transform', `translate(${margin.left}px,${margin.top}px)`)
 
   const tooltip = d3
-    .select('#map')
+    .select('#viewBox')
     .append('p')
     .style(
       'transform',
