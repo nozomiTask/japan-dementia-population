@@ -1,17 +1,32 @@
 import * as d3 from 'd3'
 import { arrangeData } from './arrangeData'
-const showTooltip = (tooltip, text, coords, setHidden) => {
+const showTooltip = (text, coords, setHidden) => {
   const x = coords[0]
   const y = coords[1]
 
-  tooltip
+  const group = d3.select('#viewBox').append(`g`).attr(`id`, `tooltip`)
+
+  const rectElemnt = group
+    .append('rect')
+    .attr('stroke', '#666')
+    .attr('stroke-width', 0.5)
+    .attr('background-color', '#fff')
+
+  const textElement = group
+    .append('text')
     .text(text)
-    .style('top', `${y}`)
-    .style('left', `${x}`)
-    .style('background-color', 'white')
+    .attr('x', '250')
+    .attr('y', '300')
+    .attr('width', '150')
+    .attr('height', '40')
 
   setHidden(false)
 }
+
+const eraseTooltip = () => {
+  d3.select('#tooltip').remove()
+}
+
 export const drawDementiaChart = (ref1, dPop, setHidden, ref) => {
   // console.log('prevalence', prevalence_)
   // console.log('suikei', suikei)
@@ -82,20 +97,6 @@ const drawBarsDChart = (dPop, scales, config, setHidden, configMap) => {
     .append('g')
     .style('transform', `translate(${margin.left}px,${margin.top}px)`)
 
-  const tooltip = d3
-    .select('#viewBox')
-    .append('p')
-    .style(
-      'transform',
-      `translate(${configMap.margin.left}px,${configMap.margin.top}px)`
-    )
-    .attr('id', 'tooltip')
-    .style('background-color', 'red')
-    .style('width', '20px')
-    .style('height', '20px')
-    .style('z-index', '100')
-    .text('@@@@@@@')
-
   let bars = body
     .selectAll('.bar')
     //TODO: Use the .data method to bind the airlines to the bars (elements with class bar)
@@ -118,12 +119,13 @@ const drawBarsDChart = (dPop, scales, config, setHidden, configMap) => {
       //TODO: call the drawRoutes function passing the AirlineID id 'd'
       // drawRoutes(d.AirlineID, routes, ref1)
       //TODO: change the fill color of the bar to "#992a5b" as a way to highlight the bar. Hint: use d3.select(this)
-      d3.select(this).attr('fill', '#992a5b')
+      // d3.select(this).attr('fill', '#992a5b')
+      d3.select(this).attr('fill', 'red')
       setHidden(false)
       const text = d.area + ':' + Math.floor(d.dPopAllSum) + '人'
       const coords = [d3.event.clientX, d3.event.clientY]
 
-      showTooltip(tooltip, text, coords, setHidden)
+      showTooltip(text, coords, setHidden)
     })
     //TODO: Add another listener, this time for mouseleave
 
@@ -131,6 +133,7 @@ const drawBarsDChart = (dPop, scales, config, setHidden, configMap) => {
     //TODO: change the fill color of the bar back to "#2a5599"
     .on('mouseleave', function (d) {
       d3.select(this).attr('fill', '#2a5599')
+      eraseTooltip()
       // drawRoutes(null, routes, ref1)
     })
 }
