@@ -1,5 +1,5 @@
 import { DEMENTIAPOP } from '../types/dementiaPop'
-import * as d3 from "d3"
+import * as d3 from 'd3'
 export const arrangeData = (suikei, prevalence): DEMENTIAPOP[] => {
   const sources = [
     'AsiaPaciﬁcHighIncome',
@@ -51,6 +51,7 @@ export const arrangeData = (suikei, prevalence): DEMENTIAPOP[] => {
         dPopFemaleSum: dPopFemaleSum,
         dPopAllSum: dPopAllSum,
         year: year,
+        order: 0,
         dementiaCategory: 'dementia', //dementia, mci, dementiaAndMci
       }
       dps.push(dp as DEMENTIAPOP)
@@ -60,9 +61,15 @@ export const arrangeData = (suikei, prevalence): DEMENTIAPOP[] => {
   })
 
   const dps_ = dps.sort((a, b) => d3.descending(a.dPopAllSum, b.dPopAllSum))
+  let order = 0
 
+  const dps__: DEMENTIAPOP[] = dps_.map((d) => {
+    order += 1
+    d.order = order
+    return d
+  })
 
-  return dps_
+  return dps__
 }
 /*
 将来の地域別男女5歳階級別人口（各年10月1日時点の推計人口：2015年は国勢調査による実績値）

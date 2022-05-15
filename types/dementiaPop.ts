@@ -7,5 +7,6 @@ export interface DEMENTIAPOP {
   dPopFemaleSum: number
   dPopAllSum: number
   year: string
+  order: number
   dementiaCategory: string //dementia, mci, dementiaAndMci
 }

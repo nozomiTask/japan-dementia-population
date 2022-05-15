@@ -1,6 +1,14 @@
 import * as d3 from 'd3'
+import { drawDChart, eraseTooltip, showTooltip } from './drawDChart'
 
-export const drawJapanMap = (ref, geoData, dPop) => {
+export const drawDMap = (ref, data, selectedArea) => {
+  try {
+    d3.select('#label-group').remove()
+  } catch (e) {}
+
+  const { refMap, refChart } = ref
+  const { geoData, dPop } = data
+
   const width = 400 // 描画サイズ: 幅
   const height = 400 // 描画サイズ: 高さ
   const centerPos = [137.0, 38.2] // 地図のセンター位置
@@ -18,7 +26,7 @@ export const drawJapanMap = (ref, geoData, dPop) => {
 
   // SVG要素を追加
   const svg = d3
-    .select(ref.current)
+    .select(refMap.current)
     .append(`svg`)
     .attr(`viewBox`, `0 0 ${width} ${height}`)
     .attr(`width`, `100%`)
@@ -41,7 +49,10 @@ export const drawJapanMap = (ref, geoData, dPop) => {
     .attr(`d`, path)
     .attr(`stroke`, `#666`)
     .attr(`stroke-width`, 0.25)
-    .attr(`fill`, `#2a5599`)
+    .attr(`fill`, (d) => {
+      if (selectedArea === d.properties.name_ja) return 'red'
+      else return `#2a5599`
+    })
     .attr(`fill-opacity`, (item: any) => {
       // メモ
       // item.properties.name_ja に都道府県名が入っている
@@ -62,7 +73,11 @@ export const drawJapanMap = (ref, geoData, dPop) => {
 
       // 地図データから都道府県名を取得する
       const label = item.properties.name_ja
+      const selectedArea = label
 
+      drawDChart(ref, data, selectedArea)
+      const dd = dPop.find((d) => d.area === label)
+      showTooltip(dd)
       // 矩形を追加: テキストの枠
       const rectElement = group
         .append(`rect`)
@@ -115,13 +130,19 @@ export const drawJapanMap = (ref, geoData, dPop) => {
      * 都道府県領域の MouseOut イベントハンドラ
      */
     .on(`mouseout`, function (item: any) {
-      // ラベルグループを削除
-      svg.select('#label-group').remove()
+      // try {
+      //   d3.slect('.chart').remove()
+      // } catch (e) {}
 
+      // ラベルグループを削除
+      try {
+        svg.select('#label-group').remove()
+      } catch (e) {}
+      eraseTooltip()
       // マウス位置の都道府県領域を青色に戻す
       d3.select(this).attr(`fill`, `#2566CC`)
       d3.select(this).attr(`stroke-width`, `0.25`)
     })
 
-  return () => ref && svg.select(ref.current).remove()
+  return () => refMap && svg.select(refMap.current).remove()
 }

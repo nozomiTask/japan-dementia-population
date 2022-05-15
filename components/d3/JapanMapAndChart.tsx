@@ -1,23 +1,26 @@
 import React, { useEffect, useRef, useState } from 'react'
 import * as d3 from 'd3'
-import { drawJapanMap } from '../../tools/drawJapanMap'
-import { drawDementiaChart } from '../../tools/drawJapanChart'
+import { drawDMap } from '../../tools/drawDMap'
+import { drawDChart } from '../../tools/drawDChart'
 import { arrangeData } from '../../tools/arrangeData'
 //https://qiita.com/alclimb/items/31d4360c74a8f8935256
 
 const JapanMap = ({ suikei, geoJson, prevalence }) => {
   const [geoData, setgGeoData] = useState(geoJson.features)
   const [hidden, setHidden] = useState(false)
-  const ref = useRef(null)
-  const ref1 = useRef(null)
+  const refMap = useRef(null)
+  const refChart = useRef(null)
 
   useEffect(() => {
     const dPop = arrangeData(suikei, prevalence)
-    !!ref && !!geoData && drawJapanMap(ref, geoData, dPop)
-    !!ref1 &&
+    const selectedArea = ''
+    const ref = { refMap, refChart }
+    const data = { geoData, dPop }
+    !!refMap && !!geoData && drawDMap(ref, data, selectedArea)
+    !!refChart &&
       !!suikei &&
       !!prevalence &&
-      drawDementiaChart(ref1, dPop, setHidden, ref)
+      drawDChart(ref, data, selectedArea)
   }, [geoData, geoJson, prevalence, suikei])
   return (
     <>
@@ -31,7 +34,7 @@ const JapanMap = ({ suikei, geoJson, prevalence }) => {
           <h2 className="text-2xl text-center">グラフ</h2>
           <svg
             id="chart"
-            ref={ref1}
+            ref={refChart}
             className="border-solid border-2 border-black"
             width="400"
             height="400"
@@ -41,7 +44,7 @@ const JapanMap = ({ suikei, geoJson, prevalence }) => {
           <h2 className="text-2xl text-center">地図</h2>
           <svg
             id="map"
-            ref={ref}
+            ref={refMap}
             className="bar border-solid border-2 border-black"
             width="400"
             height="400"
@@ -49,12 +52,6 @@ const JapanMap = ({ suikei, geoJson, prevalence }) => {
             {' '}
           </svg>
         </div>
-        {/* <div
-          id="tooltip"
-          className={hidden ? 'hidden' : 'block'}
-        >
-          ToolTip
-        </div> */}
       </div>
     </>
   )

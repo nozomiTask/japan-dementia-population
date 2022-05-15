@@ -1,9 +1,17 @@
 import * as d3 from 'd3'
-import { arrangeData } from './arrangeData'
-const showTooltip = (text, coords, setHidden) => {
-  const x = coords[0]
-  const y = coords[1]
-
+import { drawDMap } from './drawDMap'
+export const showTooltip = (d) => {
+  // const x = coords[0]
+  // const y = coords[1]
+  const html =
+    d.order +
+    '位 ' +
+    d.area +
+    ' ' +
+    Math.floor(d.dPopAllSum) +
+    '人(' +
+    d.year +
+    ')'
   const group = d3.select('#viewBox').append(`g`).attr(`id`, `tooltip`)
 
   const rectElemnt = group
@@ -14,31 +22,34 @@ const showTooltip = (text, coords, setHidden) => {
 
   const textElement = group
     .append('text')
-    .text(text)
-    .attr('x', '250')
-    .attr('y', '300')
-    .attr('width', '150')
-    .attr('height', '40')
-
-  setHidden(false)
+    .html(html)
+    .attr('x', '200')
+    .attr('y', '350')
+    .attr('width', '200')
+    .attr('height', '50')
 }
 
-const eraseTooltip = () => {
+export const eraseTooltip = () => {
   d3.select('#tooltip').remove()
 }
 
-export const drawDementiaChart = (ref1, dPop, setHidden, ref) => {
-  // console.log('prevalence', prevalence_)
-  // console.log('suikei', suikei)
-  // const dPop = arrangeData(suikei, prevalence_)
-  drawDChart(dPop, ref1, setHidden, ref)
-}
+// export const drawDementiaChart = (ref, data, selectedArea) => {
+//   // console.log('prevalence', prevalence_)
+//   // console.log('suikei', suikei)
+//   // const dPop = arrangeData(suikei, prevalence_)
+//   drawDChart(ref, data, selectedArea)
+// }
 
-const drawDChart = (dPop, ref1, setHidden, ref) => {
-  let config = getDChartConfig(ref1)
-  let configMap = getDChartConfig(ref)
+export const drawDChart = (ref, data, selectedArea) => {
+  try {
+    d3.selectAll('.chart').remove()
+  } catch (e) {}
+  const { refMap, refChart } = ref
+  const { geoData, dPop } = data
+  let config = getDChartConfig(refChart)
+  // let configMap = getDChartConfig(ref)
   let scales = getDChartScales(dPop, config)
-  drawBarsDChart(dPop, scales, config, setHidden, configMap)
+  drawBarsDChart(ref, data, scales, config, selectedArea)
   drawAxesDChart(scales, config)
 }
 
@@ -90,14 +101,19 @@ const getDChartScales = (dPop, config) => {
   return { xScale, yScale }
 }
 
-const drawBarsDChart = (dPop, scales, config, setHidden, configMap) => {
-  let { margin, bodyHeight, bodyWidth, container } = config // this is equivalent to 'let margin = config.margin; let container = config.container'
-  let { xScale, yScale } = scales
-  let body = container
+const drawBarsDChart = (ref, data, scales, config, selectedArea) => {
+  const { refMap, refChart } = ref
+  const { geoData, dPop } = data
+
+  const { margin, bodyHeight, bodyWidth, container } = config // this is equivalent to 'let margin = config.margin; let container = config.container'
+  const { xScale, yScale } = scales
+
+  const body = container
     .append('g')
+    .attr('class', 'chart')
     .style('transform', `translate(${margin.left}px,${margin.top}px)`)
 
-  let bars = body
+  const bars = body
     .selectAll('.bar')
     //TODO: Use the .data method to bind the airlines to the bars (elements with class bar)
     .data(dPop)
@@ -108,33 +124,25 @@ const drawBarsDChart = (dPop, scales, config, setHidden, configMap) => {
     .append('rect')
     .attr('height', yScale.bandwidth())
     .attr('y', (d) => yScale(d.area))
-    //TODO: set the width of the bar to be proportional to the airline count using the xScale
     .attr('width', (d) => xScale(d.dPopAllSum))
-    .attr('fill', '#2a5599')
-
-    // assignment 2
+    .attr('fill', (d) => {
+      if (d.area === selectedArea) return 'red'
+      return '#2a5599'
+    })
 
     .on('mouseenter', function (d) {
-      // <- this is the new code
-      //TODO: call the drawRoutes function passing the AirlineID id 'd'
-      // drawRoutes(d.AirlineID, routes, ref1)
-      //TODO: change the fill color of the bar to "#992a5b" as a way to highlight the bar. Hint: use d3.select(this)
-      // d3.select(this).attr('fill', '#992a5b')
       d3.select(this).attr('fill', 'red')
-      setHidden(false)
-      const text = d.area + ':' + Math.floor(d.dPopAllSum) + '人'
-      const coords = [d3.event.clientX, d3.event.clientY]
 
-      showTooltip(text, coords, setHidden)
+      // const coords = [d3.event.clientX, d3.event.clientY]
+
+      const selectedArea = d.area
+      d3.select('#viewBox').remove()
+      drawDMap(ref, data, selectedArea)
+      showTooltip(d)
     })
-    //TODO: Add another listener, this time for mouseleave
-
-    //TODO: In this listener, call drawRoutes(null), this will cause the function to remove all lines in the chart since there is no airline withe AirlineID == null.
-    //TODO: change the fill color of the bar back to "#2a5599"
     .on('mouseleave', function (d) {
       d3.select(this).attr('fill', '#2a5599')
       eraseTooltip()
-      // drawRoutes(null, routes, ref1)
     })
 }
 
@@ -145,6 +153,7 @@ const drawAxesDChart = (scales, config) => {
 
   container
     .append('g')
+    .attr('class', 'chart')
     .style(
       'transform',
       `translate(${margin.left}px,${height - margin.bottom}px)`
@@ -162,6 +171,7 @@ const drawAxesDChart = (scales, config) => {
   // and call the axisY axis to draw the left axis.
   container
     .append('g')
+    .attr('class', 'chart')
     .style('transform', `translate(${margin.left}px,${margin.top}px)`)
     .style('font', '7px times')
     .call(axisY)
