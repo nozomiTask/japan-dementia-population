@@ -5,7 +5,7 @@ import { drawDChart } from '../../tools/drawDChart'
 import { arrangeData } from '../../tools/arrangeData'
 //https://qiita.com/alclimb/items/31d4360c74a8f8935256
 
-const JapanMapAndChart = ({ suikei, geoJson, prevalence }) => {
+const JapanMapAndChart = ({ suikei, geoJson, prevalence, setPrefecture }) => {
   const [geoData, setgGeoData] = useState(geoJson.features)
   const refMap = useRef(null)
   const refChart = useRef(null)
@@ -15,12 +15,12 @@ const JapanMapAndChart = ({ suikei, geoJson, prevalence }) => {
     const selectedArea = ''
     const ref = { refMap, refChart }
     const data = { geoData, dPop }
-    // !!refMap && !!geoData && 
-    drawDMap(ref, data, selectedArea)
-    // !!refChart &&
-    //   !!suikei &&
-    //   !!prevalence &&
+    !!refMap && !!geoData && drawDMap(ref, data, selectedArea)
+    !!refChart &&
+      !!suikei &&
+      !!prevalence &&
       drawDChart(ref, data, selectedArea)
+    selectedArea && selectedArea !== '' && setPrefecture(selectedArea)
   }, [geoData, geoJson, prevalence, suikei])
   return (
     <>

@@ -3,15 +3,16 @@ import * as d3 from 'd3'
 import { drawDMap } from '../../tools/drawDMap'
 import { drawDChart } from '../../tools/drawDChart'
 import { arrangeData } from '../../tools/arrangeData'
-//https://qiita.com/alclimb/items/31d4360c74a8f8935256
+import { arrangeCityData } from '../../tools/arrangeCityData'
+import { arrangePrefectureData } from '../../tools/arrangePrefectureData'
 
-const JapanMap = ({ suikei, geoJson, prevalence }) => {
+const PrefectureMap = ({ suikei, geoJson, prevalence, prefecture, setCity }) => {
   const [geoData, setgGeoData] = useState(geoJson.features)
   const refMap = useRef(null)
   const refChart = useRef(null)
 
   useEffect(() => {
-    const dPop = arrangeData(suikei, prevalence)
+    const dPop = arrangePrefectureData(suikei, prevalence, prefecture)
     const selectedArea = ''
     const ref = { refMap, refChart }
     const data = { geoData, dPop }
@@ -20,19 +21,15 @@ const JapanMap = ({ suikei, geoJson, prevalence }) => {
       !!suikei &&
       !!prevalence &&
       drawDChart(ref, data, selectedArea)
+      selectedArea && selectedArea !== '' && setCity(selectedArea)
   }, [geoData, geoJson, prevalence, suikei])
   return (
     <>
-      <div id="map-container">
-        <a href="https://qiita.com/alclimb/items/31d4360c74a8f8935256">
-          参考文献
-        </a>
-      </div>
       <div className="flex ">
         <div>
           <h2 className="text-2xl text-center">グラフ</h2>
           <svg
-            id="chart"
+            id="chartPrefecture"
             ref={refChart}
             className="border-solid border-2 border-black"
             width="400"
@@ -42,7 +39,7 @@ const JapanMap = ({ suikei, geoJson, prevalence }) => {
         <div>
           <h2 className="text-2xl text-center">地図</h2>
           <svg
-            id="map"
+            id="mapPrefecture"
             ref={refMap}
             className="bar border-solid border-2 border-black"
             width="400"
@@ -56,4 +53,4 @@ const JapanMap = ({ suikei, geoJson, prevalence }) => {
   )
 }
 
-export default JapanMap
+export default PrefectureMap

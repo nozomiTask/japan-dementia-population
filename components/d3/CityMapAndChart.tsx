@@ -3,15 +3,16 @@ import * as d3 from 'd3'
 import { drawDMap } from '../../tools/drawDMap'
 import { drawDChart } from '../../tools/drawDChart'
 import { arrangeData } from '../../tools/arrangeData'
+import { arrangeCityData } from '../../tools/arrangeCityData'
 //https://qiita.com/alclimb/items/31d4360c74a8f8935256
 
-const CityMap = ({ suikei, geoJson, prevalence }) => {
+const CityMap = ({ suikei, geoJson, prevalence, prefecture, city }) => {
   const [geoData, setgGeoData] = useState(geoJson.features)
   const refMap = useRef(null)
   const refChart = useRef(null)
 
   useEffect(() => {
-    const dPop = arrangeData(suikei, prevalence)
+    const dPop = arrangeCityData(suikei, prevalence, prefecture, city)
     const selectedArea = ''
     const ref = { refMap, refChart }
     const data = { geoData, dPop }

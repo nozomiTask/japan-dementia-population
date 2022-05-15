@@ -1,6 +1,10 @@
 import { DEMENTIAPOP } from '../types/dementiaPop'
 import * as d3 from 'd3'
-export const arrangePrefectureData = (suikei, prevalence, selectedPrefecture): DEMENTIAPOP[] => {
+export const arrangePrefectureData = (
+  suikei,
+  prevalence,
+  prefecture
+): DEMENTIAPOP[] => {
   const sources = [
     'AsiaPaciﬁcHighIncome',
     'EastAsia',
