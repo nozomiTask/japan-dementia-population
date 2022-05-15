@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { Layout } from '../../components/layout/Layout'
 import JapanMap from '../../components/d3/JapanMapAndChart'
 import * as d3 from 'd3'
+import JapanMapAndChart from '../../components/d3/JapanMapAndChart'
+import PrefectureMapAndChart from '../../components/d3/PrefectureMapAndChart'
+import CityMapAndChart from '../../components/d3/CityMapAndChart'
 
 const D3Japan = () => {
   const [suikei, setSuikei] = useState(null)
@@ -16,7 +19,7 @@ const D3Japan = () => {
       .catch((e) =>
         console.log(`modified_suikei_kekka.csv failed message: ${e}`)
       )
-      
+
     d3.json('../assets/japan.geo.json')
       .then((d) => {
         setGeoJson(d)
@@ -34,17 +37,37 @@ const D3Japan = () => {
   return (
     <Layout>
       <div className="container">
-        <a href="https://zenn.dev/ignorant_kenji/articles/76dab0a748516470452b">
-          <span className="text-3xl text-blue-500">認知症（とMCI）の人の数</span>
-        </a>
-        <div>
-          {!!suikei && !!geoJson && !!prevalence && (
-            <JapanMap
-              suikei={suikei}
-              geoJson={geoJson}
-              prevalence={prevalence}
-            />
-          )}
+        {/* <a href="https://zenn.dev/ignorant_kenji/articles/76dab0a748516470452b"> */}
+        <span className="text-3xl text-blue-500">認知症（とMCI）の人の数</span>
+        {/* </a> */}
+        <div className="flex-col">
+          <div>
+            {!!suikei && !!geoJson && !!prevalence && (
+              <JapanMapAndChart
+                suikei={suikei}
+                geoJson={geoJson}
+                prevalence={prevalence}
+              />
+            )}
+          </div>
+          {/* <div>
+            {!!suikei && !!geoJson && !!prevalence && (
+              <PrefectureMapAndChart
+                suikei={suikei}
+                geoJson={geoJson}
+                prevalence={prevalence}
+              />
+            )}
+          </div>
+          <div>
+            {!!suikei && !!geoJson && !!prevalence && (
+              <CityMapAndChart
+                suikei={suikei}
+                geoJson={geoJson}
+                prevalence={prevalence}
+              />
+            )}
+          </div> */}
         </div>
       </div>
     </Layout>

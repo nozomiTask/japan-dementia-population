@@ -23,22 +23,15 @@ export const showTooltip = (d) => {
   const textElement = group
     .append('text')
     .html(html)
-    .attr('x', '200')
-    .attr('y', '350')
+    .attr('x', '150')
+    .attr('y', '380')
     .attr('width', '200')
-    .attr('height', '50')
+    .attr('height', '20')
 }
 
 export const eraseTooltip = () => {
   d3.select('#tooltip').remove()
 }
-
-// export const drawDementiaChart = (ref, data, selectedArea) => {
-//   // console.log('prevalence', prevalence_)
-//   // console.log('suikei', suikei)
-//   // const dPop = arrangeData(suikei, prevalence_)
-//   drawDChart(ref, data, selectedArea)
-// }
 
 export const drawDChart = (ref, data, selectedArea) => {
   try {
