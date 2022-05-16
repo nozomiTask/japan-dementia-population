@@ -1,7 +1,9 @@
 import * as d3 from 'd3'
 import { drawDChart, eraseTooltip, showTooltip } from './drawDChart'
-
-export const drawDMap = (ref, data, selectedArea, index) => {
+import { prefectureList } from './prefectureList'
+import * as topojson from 'topojson-client'
+import { centerXY } from './centerXY'
+export const drawDMap = (ref, data, selectedArea, index, prefecture) => {
   try {
     d3.select('#label-group' + index).remove()
   } catch (e) {}
@@ -12,10 +14,22 @@ export const drawDMap = (ref, data, selectedArea, index) => {
   const width = 400 // 描画サイズ: 幅
   const height = 400 // 描画サイズ: 高さ
   // const centerPos = [137.0, 38.2] // 地図のセンター位置
-  let centerPos = d3.geoCentroid(geoJsonPrefecture)
-  // if (centerPos[0]===NaN) 
-  centerPos = [137.0, 38.2]
-  const scale = 1000 // 地図のスケール
+  let centerPos = null
+  let geoData_ = null
+  let scale = null
+  if (index === 'prefecture') {
+    const prefNo = prefectureList[prefecture]
+    const obj = geoJsonPrefecture.objects[prefNo]
+    geoData_ = topojson.feature(geoJsonPrefecture, obj).features
+    centerPos = centerXY(geoData_)
+    scale = 10000
+  }
+  // if (centerPos[0]===NaN)
+  if (index === 'all') {
+    centerPos = [137.0, 38.2]
+    geoData_ = geoData
+    scale = 1000 // 地図のスケール
+  }
 
   // 地図の投影設定
   const projection = d3
@@ -36,17 +50,11 @@ export const drawDMap = (ref, data, selectedArea, index) => {
     .attr(`height`, `100%`)
     .attr('id', 'viewBox')
 
-  //
-  // [ メモ ]
-  // 動的にGeoJsonファイルを読み込む場合は以下のコードを使用
-  // const geoJson = await d3.json(`/japan.geo.json`);
-  //
-
-  // 都道府県の領域データをpathで描画
+ 
 
   svg
     .selectAll(`path`)
-    .data(geoData)
+    .data(geoData_)
     .enter()
     .append(`path`)
     .attr(`d`, path)
@@ -78,7 +86,7 @@ export const drawDMap = (ref, data, selectedArea, index) => {
       const label = item.properties.name_ja
       const selectedArea = label
 
-      drawDChart(ref, data, selectedArea, index)
+      drawDChart(ref, data, selectedArea, index, prefecture)
       const dd = dPop.find((d) => d.area === label)
       dd && showTooltip(dd)
       // 矩形を追加: テキストの枠

@@ -4,7 +4,7 @@ import { drawDMap } from '../../tools/drawDMap'
 import { drawDChart } from '../../tools/drawDChart'
 import { arrangePrefectureData } from '../../tools/arrangePrefectureData'
 import { prefList } from '../../pages/dashboard/d3Japan'
-import  topojson from "topojson"
+import topojson from 'topojson-client'
 
 const PrefectureMap = ({
   suikei,
@@ -13,10 +13,7 @@ const PrefectureMap = ({
   prefecture,
   setCity,
 }) => {
-  const obj = geoJsonPrefecture[prefList[prefecture]]
-  const [geoData, setgGeoData] = useState(
-    topojson.feature(geoJsonPrefecture, obj).features
-  )
+  const [geoData, setgGeoData] = useState(null)
   const refMap = useRef(null)
   const refChart = useRef(null)
 
@@ -26,11 +23,13 @@ const PrefectureMap = ({
     const ref = { refMap, refChart }
     const data = { geoJsonPrefecture, geoData, dPop }
     const index = 'prefecture'
-    !!refMap && !!geoData && drawDMap(ref, data, selectedArea, index)
+    !!refMap &&
+      !!geoData &&
+      drawDMap(ref, data, selectedArea, index, prefecture)
     !!refChart &&
       !!suikei &&
       !!prevalence &&
-      drawDChart(ref, data, selectedArea, index)
+      drawDChart(ref, data, selectedArea, index, prefecture)
     selectedArea && selectedArea !== '' && setCity(selectedArea)
   }, [geoData, geoJsonPrefecture, prevalence, suikei])
   return (

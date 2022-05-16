@@ -20,7 +20,6 @@
     "react-dom": "17.0.2",
     "swr": "^1.0.1",
     "tailwindcss": "^2.2.16",
-    "topojson": "^3.0.2",
     "topojson-client": "^3.1.0"
   },
   "devDependencies": {

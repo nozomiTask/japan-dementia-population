@@ -33,7 +33,7 @@ export const eraseTooltip = () => {
   d3.select('#tooltip').remove()
 }
 
-export const drawDChart = (ref, data, selectedArea, index) => {
+export const drawDChart = (ref, data, selectedArea, index, prefecture) => {
   try {
     d3.selectAll('.chart'+index).remove()
   } catch (e) {}
@@ -42,7 +42,7 @@ export const drawDChart = (ref, data, selectedArea, index) => {
   let config = getDChartConfig(refChart)
   // let configMap = getDChartConfig(ref)
   let scales = getDChartScales(dPop, config)
-  drawBarsDChart(ref, data, scales, config, selectedArea,index)
+  drawBarsDChart(ref, data, scales, config, selectedArea,index,prefecture)
   drawAxesDChart(scales, config, index)
 }
 
@@ -94,7 +94,7 @@ const getDChartScales = (dPop, config) => {
   return { xScale, yScale }
 }
 
-const drawBarsDChart = (ref, data, scales, config, selectedArea,index) => {
+const drawBarsDChart = (ref, data, scales, config, selectedArea,index, prefecture) => {
   const { refMap, refChart } = ref
   const { geoData, dPop } = data
 
@@ -130,7 +130,7 @@ const drawBarsDChart = (ref, data, scales, config, selectedArea,index) => {
 
       const selectedArea = d.area
       d3.select('#viewBox').remove()
-      drawDMap(ref, data, selectedArea,index)
+      drawDMap(ref, data, selectedArea,index, prefecture)
       showTooltip(d)
     })
     .on('mouseleave', function (d) {
