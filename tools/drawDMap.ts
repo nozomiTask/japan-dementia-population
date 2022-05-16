@@ -3,15 +3,17 @@ import { drawDChart, eraseTooltip, showTooltip } from './drawDChart'
 
 export const drawDMap = (ref, data, selectedArea, index) => {
   try {
-    d3.select('#label-group').remove()
+    d3.select('#label-group' + index).remove()
   } catch (e) {}
 
   const { refMap, refChart } = ref
-  const { geoData, dPop } = data
+  const { geoJsonPrefecture, geoData, dPop } = data
 
   const width = 400 // 描画サイズ: 幅
   const height = 400 // 描画サイズ: 高さ
-  const centerPos = [137.0, 38.2] // 地図のセンター位置
+  // const centerPos = [137.0, 38.2] // 地図のセンター位置
+  let centerPos = d3.geoCentroid(geoJsonPrefecture)
+  if (centerPos[0]===NaN) centerPos = [137.0, 38.2]
   const scale = 1000 // 地図のスケール
 
   // 地図の投影設定
@@ -69,7 +71,7 @@ export const drawDMap = (ref, data, selectedArea, index) => {
      */
     .on(`mouseover`, function (item: any) {
       // ラベル用のグループ
-      const group = svg.append(`g`).attr(`id`, `label-group`)
+      const group = svg.append(`g`).attr(`id`, `label-group` + index)
 
       // 地図データから都道府県名を取得する
       const label = item.properties.name_ja
@@ -77,11 +79,11 @@ export const drawDMap = (ref, data, selectedArea, index) => {
 
       drawDChart(ref, data, selectedArea, index)
       const dd = dPop.find((d) => d.area === label)
-      showTooltip(dd)
+      dd && showTooltip(dd)
       // 矩形を追加: テキストの枠
       const rectElement = group
         .append(`rect`)
-        .attr(`id`, `label-rect`)
+        .attr(`id`, `label-rect` + index)
         .attr(`stroke`, `#666`)
         .attr(`stroke-width`, 0.5)
         .attr(`fill`, `#fff`)
@@ -89,7 +91,7 @@ export const drawDMap = (ref, data, selectedArea, index) => {
       // テキストを追加
       const textElement = group
         .append(`text`)
-        .attr(`id`, `label-text`)
+        .attr(`id`, `label-text` + index)
         .text(label)
 
       // テキストのサイズから矩形のサイズを調整
@@ -112,7 +114,10 @@ export const drawDMap = (ref, data, selectedArea, index) => {
      */
     .on('mousemove', function (item: any) {
       // テキストのサイズ情報を取得
-      const textSize = svg.select('#label-text').node().getBBox()
+      const textSize = svg
+        .select('#label-text' + index)
+        .node()
+        .getBBox()
 
       // マウス位置からラベルの位置を指定
       const labelPos = {
@@ -122,7 +127,7 @@ export const drawDMap = (ref, data, selectedArea, index) => {
 
       // ラベルの位置を移動
       svg
-        .select('#label-group')
+        .select('#label-group' + index)
         .attr(`transform`, `translate(${labelPos.x}, ${labelPos.y})`)
     })
 
@@ -136,7 +141,7 @@ export const drawDMap = (ref, data, selectedArea, index) => {
 
       // ラベルグループを削除
       try {
-        svg.select('#label-group').remove()
+        svg.select('#label-group' + index).remove()
       } catch (e) {}
       eraseTooltip()
       // マウス位置の都道府県領域を青色に戻す

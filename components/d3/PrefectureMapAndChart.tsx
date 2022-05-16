@@ -4,8 +4,17 @@ import { drawDMap } from '../../tools/drawDMap'
 import { drawDChart } from '../../tools/drawDChart'
 import { arrangePrefectureData } from '../../tools/arrangePrefectureData'
 
-const PrefectureMap = ({ suikei, geoJson, prevalence, prefecture, setCity }) => {
-  const [geoData, setgGeoData] = useState(geoJson.features)
+const PrefectureMap = ({
+  suikei,
+  geoJsonPrefecture,
+  prevalence,
+  prefecture,
+  setCity,
+}) => {
+
+
+
+  const [geoData, setgGeoData] = useState(geoJsonPrefecture.features)
   const refMap = useRef(null)
   const refChart = useRef(null)
 
@@ -13,15 +22,15 @@ const PrefectureMap = ({ suikei, geoJson, prevalence, prefecture, setCity }) => 
     const dPop = arrangePrefectureData(suikei, prevalence, prefecture)
     const selectedArea = ''
     const ref = { refMap, refChart }
-    const data = { geoData, dPop }
-    const index ="prefecture"
-    !!refMap && !!geoData && drawDMap(ref, data, selectedArea,index)
+    const data = { geoJsonPrefecture, geoData, dPop }
+    const index = 'prefecture'
+    !!refMap && !!geoData && drawDMap(ref, data, selectedArea, index)
     !!refChart &&
       !!suikei &&
       !!prevalence &&
       drawDChart(ref, data, selectedArea, index)
-      selectedArea && selectedArea !== '' && setCity(selectedArea)
-  }, [geoData, geoJson, prevalence, suikei])
+    selectedArea && selectedArea !== '' && setCity(selectedArea)
+  }, [geoData, geoJsonPrefecture, prevalence, suikei])
   return (
     <>
       <div className="flex ">

@@ -14,7 +14,7 @@ const JapanMapAndChart = ({ suikei, geoJson, prevalence, setPrefecture }) => {
     const dPop = arrangeData(suikei, prevalence)
     const selectedArea = ''
     const ref = { refMap, refChart }
-    const data = { geoData, dPop }
+    const data = { geoJson, geoData, dPop }
     const index ="all"
     !!refMap && !!geoData && drawDMap(ref, data, selectedArea, index)
     !!refChart &&

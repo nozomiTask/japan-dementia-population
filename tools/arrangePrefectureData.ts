@@ -25,7 +25,7 @@ export const arrangePrefectureData = (
     const ages = Object.keys(s)
       .filter((f) => f.indexOf('/a') !== -1)
       .map((m) => m.split('/')[0])
-    if (s['市などの別'] === areaUnit && s['年'] === year) {
+    if (s["市などの別"]!=="a" && s['都道府県'] === prefecture && s['年'] === year) {
       let dPopMale = {}
       let dPopFemale = {}
       let dPopAll = {}
@@ -47,7 +47,7 @@ export const arrangePrefectureData = (
       }
 
       const dp: DEMENTIAPOP = {
-        area: s['都道府県'],
+        area: s['市区町村'],
         dPopMale: dPopMale,
         dPopFemale: dPopFemale,
         dPopAll: dPopAll,
