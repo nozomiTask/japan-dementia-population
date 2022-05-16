@@ -10,8 +10,8 @@ const D3Japan = () => {
   const [suikei, setSuikei] = useState(null)
   const [geoJson, setGeoJson] = useState(null)
   const [prevalence, setPrevalence] = useState(null)
-  const [prefecture, setPrefecture] = useState(null)
-  const [city, setCity] = useState(null)
+  const [prefecture, setPrefecture] = useState("東京都")
+  const [city, setCity] = useState("三鷹市")
 
   useEffect(() => {
     d3.csv('../assets/modified_suikei_kekka.csv')
@@ -54,7 +54,7 @@ const D3Japan = () => {
               />
             )}
           </div>
-          {/*    <div>
+          <div>
             {!!suikei && !!geoJson && !!prevalence && (
               <PrefectureMapAndChart
                 suikei={suikei}
@@ -75,7 +75,7 @@ const D3Japan = () => {
                 city={city}
               />
             )}
-          </div> */}
+          </div>
         </div>
       </div>
     </Layout>

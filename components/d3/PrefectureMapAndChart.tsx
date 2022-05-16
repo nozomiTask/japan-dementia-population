@@ -2,8 +2,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import * as d3 from 'd3'
 import { drawDMap } from '../../tools/drawDMap'
 import { drawDChart } from '../../tools/drawDChart'
-import { arrangeData } from '../../tools/arrangeData'
-import { arrangeCityData } from '../../tools/arrangeCityData'
 import { arrangePrefectureData } from '../../tools/arrangePrefectureData'
 
 const PrefectureMap = ({ suikei, geoJson, prevalence, prefecture, setCity }) => {
@@ -16,11 +14,12 @@ const PrefectureMap = ({ suikei, geoJson, prevalence, prefecture, setCity }) => 
     const selectedArea = ''
     const ref = { refMap, refChart }
     const data = { geoData, dPop }
-    !!refMap && !!geoData && drawDMap(ref, data, selectedArea)
+    const index ="prefecture"
+    !!refMap && !!geoData && drawDMap(ref, data, selectedArea,index)
     !!refChart &&
       !!suikei &&
       !!prevalence &&
-      drawDChart(ref, data, selectedArea)
+      drawDChart(ref, data, selectedArea, index)
       selectedArea && selectedArea !== '' && setCity(selectedArea)
   }, [geoData, geoJson, prevalence, suikei])
   return (

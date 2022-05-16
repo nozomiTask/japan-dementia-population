@@ -33,17 +33,17 @@ export const eraseTooltip = () => {
   d3.select('#tooltip').remove()
 }
 
-export const drawDChart = (ref, data, selectedArea) => {
+export const drawDChart = (ref, data, selectedArea, index) => {
   try {
-    d3.selectAll('.chart').remove()
+    d3.selectAll('.chart'+index).remove()
   } catch (e) {}
   const { refMap, refChart } = ref
   const { geoData, dPop } = data
   let config = getDChartConfig(refChart)
   // let configMap = getDChartConfig(ref)
   let scales = getDChartScales(dPop, config)
-  drawBarsDChart(ref, data, scales, config, selectedArea)
-  drawAxesDChart(scales, config)
+  drawBarsDChart(ref, data, scales, config, selectedArea,index)
+  drawAxesDChart(scales, config, index)
 }
 
 const getDChartConfig = (ref) => {
@@ -94,7 +94,7 @@ const getDChartScales = (dPop, config) => {
   return { xScale, yScale }
 }
 
-const drawBarsDChart = (ref, data, scales, config, selectedArea) => {
+const drawBarsDChart = (ref, data, scales, config, selectedArea,index) => {
   const { refMap, refChart } = ref
   const { geoData, dPop } = data
 
@@ -103,7 +103,7 @@ const drawBarsDChart = (ref, data, scales, config, selectedArea) => {
 
   const body = container
     .append('g')
-    .attr('class', 'chart')
+    .attr('class', 'chart'+index)
     .style('transform', `translate(${margin.left}px,${margin.top}px)`)
 
   const bars = body
@@ -130,7 +130,7 @@ const drawBarsDChart = (ref, data, scales, config, selectedArea) => {
 
       const selectedArea = d.area
       d3.select('#viewBox').remove()
-      drawDMap(ref, data, selectedArea)
+      drawDMap(ref, data, selectedArea,index)
       showTooltip(d)
     })
     .on('mouseleave', function (d) {
@@ -139,14 +139,14 @@ const drawBarsDChart = (ref, data, scales, config, selectedArea) => {
     })
 }
 
-const drawAxesDChart = (scales, config) => {
+const drawAxesDChart = (scales, config, index) => {
   let { xScale, yScale } = scales
   let { container, margin, height } = config
   let axisX = d3.axisBottom(xScale).ticks(5)
 
   container
     .append('g')
-    .attr('class', 'chart')
+    .attr('class', 'chart'+index)
     .style(
       'transform',
       `translate(${margin.left}px,${height - margin.bottom}px)`
@@ -164,7 +164,7 @@ const drawAxesDChart = (scales, config) => {
   // and call the axisY axis to draw the left axis.
   container
     .append('g')
-    .attr('class', 'chart')
+    .attr('class', 'chart'+index)
     .style('transform', `translate(${margin.left}px,${margin.top}px)`)
     .style('font', '7px times')
     .call(axisY)

@@ -15,11 +15,12 @@ const JapanMapAndChart = ({ suikei, geoJson, prevalence, setPrefecture }) => {
     const selectedArea = ''
     const ref = { refMap, refChart }
     const data = { geoData, dPop }
-    !!refMap && !!geoData && drawDMap(ref, data, selectedArea)
+    const index ="all"
+    !!refMap && !!geoData && drawDMap(ref, data, selectedArea, index)
     !!refChart &&
       !!suikei &&
       !!prevalence &&
-      drawDChart(ref, data, selectedArea)
+      drawDChart(ref, data, selectedArea,index)
     selectedArea && selectedArea !== '' && setPrefecture(selectedArea)
   }, [geoData, geoJson, prevalence, suikei])
   return (

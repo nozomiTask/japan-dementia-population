@@ -1,7 +1,7 @@
 import * as d3 from 'd3'
 import { drawDChart, eraseTooltip, showTooltip } from './drawDChart'
 
-export const drawDMap = (ref, data, selectedArea) => {
+export const drawDMap = (ref, data, selectedArea, index) => {
   try {
     d3.select('#label-group').remove()
   } catch (e) {}
@@ -75,7 +75,7 @@ export const drawDMap = (ref, data, selectedArea) => {
       const label = item.properties.name_ja
       const selectedArea = label
 
-      drawDChart(ref, data, selectedArea)
+      drawDChart(ref, data, selectedArea, index)
       const dd = dPop.find((d) => d.area === label)
       showTooltip(dd)
       // 矩形を追加: テキストの枠
