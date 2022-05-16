@@ -3,6 +3,8 @@ import * as d3 from 'd3'
 import { drawDMap } from '../../tools/drawDMap'
 import { drawDChart } from '../../tools/drawDChart'
 import { arrangePrefectureData } from '../../tools/arrangePrefectureData'
+import { prefList } from '../../pages/dashboard/d3Japan'
+import  topojson from "topojson"
 
 const PrefectureMap = ({
   suikei,
@@ -11,10 +13,10 @@ const PrefectureMap = ({
   prefecture,
   setCity,
 }) => {
-
-
-
-  const [geoData, setgGeoData] = useState(geoJsonPrefecture.features)
+  const obj = geoJsonPrefecture[prefList[prefecture]]
+  const [geoData, setgGeoData] = useState(
+    topojson.feature(geoJsonPrefecture, obj).features
+  )
   const refMap = useRef(null)
   const refChart = useRef(null)
 

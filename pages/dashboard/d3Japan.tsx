@@ -6,7 +6,7 @@ import JapanMapAndChart from '../../components/d3/JapanMapAndChart'
 import PrefectureMapAndChart from '../../components/d3/PrefectureMapAndChart'
 import CityMapAndChart from '../../components/d3/CityMapAndChart'
 
-var prefList = {
+export const prefList = {
   日本: '00',
   北海道: '01',
   青森県: '02',

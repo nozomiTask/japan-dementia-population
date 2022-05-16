@@ -13,7 +13,8 @@ export const drawDMap = (ref, data, selectedArea, index) => {
   const height = 400 // 描画サイズ: 高さ
   // const centerPos = [137.0, 38.2] // 地図のセンター位置
   let centerPos = d3.geoCentroid(geoJsonPrefecture)
-  if (centerPos[0]===NaN) centerPos = [137.0, 38.2]
+  // if (centerPos[0]===NaN) 
+  centerPos = [137.0, 38.2]
   const scale = 1000 // 地図のスケール
 
   // 地図の投影設定
