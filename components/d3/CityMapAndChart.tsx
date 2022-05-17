@@ -21,7 +21,7 @@ const CityMap = ({ suikei, geoJson, prevalence, prefecture, city }) => {
     //   !!suikei &&
     //   !!prevalence &&
     //   drawDChart(ref, data, selectedArea, index)
-  }, [geoData, geoJson, prevalence, suikei])
+  }, [city])
   return (
     <>
       <div id="map-container">
@@ -35,7 +35,7 @@ const CityMap = ({ suikei, geoJson, prevalence, prefecture, city }) => {
           <svg
             id="chartcity"
             className="border-solid border-2 border-black"
-            width="400"
+            width="800"
             height="400"
           ></svg>
         </div>
