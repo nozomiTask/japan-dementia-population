@@ -11,35 +11,27 @@ const PrefectureMap = ({
   geoJsonPrefecture,
   prevalence,
   prefecture,
+  setPrefecture,
   setCity,
 }) => {
   const [geoData, setgGeoData] = useState(null)
-  const refMap = useRef(null)
-  const refChart = useRef(null)
 
   useEffect(() => {
     const dPop = arrangePrefectureData(suikei, prevalence, prefecture)
     const selectedArea = ''
-    const ref = { refMap, refChart }
     const data = { geoJsonPrefecture, geoData, dPop }
     const index = 'prefecture'
-    !!refMap &&
-      !!geoData &&
-      drawDMap(ref, data, selectedArea, index, prefecture)
-    !!refChart &&
-      !!suikei &&
-      !!prevalence &&
-      drawDChart(ref, data, selectedArea, index, prefecture)
-    selectedArea && selectedArea !== '' && setCity(selectedArea)
+    drawDMap(data, selectedArea, index, prefecture, setPrefecture, setCity)
+    drawDChart(data, selectedArea, index, prefecture, setPrefecture, setCity)
+    selectedArea !== '' && setCity(selectedArea)
   }, [geoData, geoJsonPrefecture, prevalence, suikei])
   return (
     <>
       <div className="flex ">
         <div>
-          <h2 className="text-2xl text-center">グラフ</h2>
+          <h2 className="text-2xl text-center">都道府県</h2>
           <svg
-            id="chartPrefecture"
-            ref={refChart}
+            id="chartprefecture"
             className="border-solid border-2 border-black"
             width="400"
             height="400"
@@ -48,8 +40,7 @@ const PrefectureMap = ({
         <div>
           <h2 className="text-2xl text-center">地図</h2>
           <svg
-            id="mapPrefecture"
-            ref={refMap}
+            id="mapprefecture"
             className="bar border-solid border-2 border-black"
             width="400"
             height="400"

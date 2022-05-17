@@ -116,6 +116,7 @@ const D3Japan = () => {
                 geoJson={geoJson}
                 prevalence={prevalence}
                 setPrefecture={setPrefecture}
+                setCity={setCity}
               />
             )}
           </div>
@@ -126,6 +127,7 @@ const D3Japan = () => {
                 geoJsonPrefecture={geoJsonPrefecture}
                 prevalence={prevalence}
                 prefecture={prefecture}
+                setPrefecture={setPrefecture}
                 setCity={setCity}
               />
             )}

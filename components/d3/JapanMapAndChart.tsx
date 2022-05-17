@@ -5,23 +5,17 @@ import { drawDChart } from '../../tools/drawDChart'
 import { arrangeData } from '../../tools/arrangeData'
 //https://qiita.com/alclimb/items/31d4360c74a8f8935256
 
-const JapanMapAndChart = ({ suikei, geoJson, prevalence, setPrefecture }) => {
+const JapanMapAndChart = ({ suikei, geoJson, prevalence, setPrefecture,setCity }) => {
   const [geoData, setgGeoData] = useState(geoJson.features)
-  const refMap = useRef(null)
-  const refChart = useRef(null)
 
   useEffect(() => {
     const dPop = arrangeData(suikei, prevalence)
     const selectedArea = ''
-    const ref = { refMap, refChart }
     const data = { geoJson, geoData, dPop }
     const index = 'all'
-    !!refMap && !!geoData && drawDMap(ref, data, selectedArea, index, '')
-    !!refChart &&
-      !!suikei &&
-      !!prevalence &&
-      drawDChart(ref, data, selectedArea, index, "")
-    selectedArea && selectedArea !== '' && setPrefecture(selectedArea)
+    drawDMap(data, selectedArea, index, '', setPrefecture, setCity)
+    drawDChart(data, selectedArea, index, '', setPrefecture, setCity)
+    selectedArea !== '' && setPrefecture(selectedArea)
   }, [geoData, geoJson, prevalence, suikei])
   return (
     <>
@@ -32,10 +26,9 @@ const JapanMapAndChart = ({ suikei, geoJson, prevalence, setPrefecture }) => {
       </div>
       <div className="flex ">
         <div>
-          <h2 className="text-2xl text-center">グラフ</h2>
+          <h2 className="text-2xl text-center">全国</h2>
           <svg
-            id="chart"
-            ref={refChart}
+            id="chartall"
             className="border-solid border-2 border-black"
             width="400"
             height="400"
@@ -44,8 +37,7 @@ const JapanMapAndChart = ({ suikei, geoJson, prevalence, setPrefecture }) => {
         <div>
           <h2 className="text-2xl text-center">地図</h2>
           <svg
-            id="map"
-            ref={refMap}
+            id="mapall"
             className="bar border-solid border-2 border-black"
             width="400"
             height="400"

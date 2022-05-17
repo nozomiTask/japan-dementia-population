@@ -1,6 +1,6 @@
 import * as d3 from 'd3'
 import { drawDMap } from './drawDMap'
-export const showTooltip = (d, index) => {
+export const showTooltip = (d,index) => {
   // const x = coords[0]
   // const y = coords[1]
   const html =
@@ -12,10 +12,7 @@ export const showTooltip = (d, index) => {
     '人(' +
     d.year +
     ')'
-  const group = d3
-    .select('#viewBox' + index)
-    .append(`g`)
-    .attr(`id`, `tooltip`)
+  const group = d3.select('#viewBox'+index).append(`g`).attr(`id`, `tooltip`)
 
   const rectElemnt = group
     .append('rect')
@@ -36,26 +33,20 @@ export const eraseTooltip = () => {
   d3.select('#tooltip').remove()
 }
 
-export const drawDChart = (
-  data,
-  selectedArea,
-  index,
-  prefecture,
-  setPrefecture,
-  setCity
-) => {
+export const drawPrefectureChart = (ref, data, selectedArea, index, prefecture, setPrefecture, setCity) => {
   try {
-    d3.selectAll('.chart' + index).remove()
+    d3.selectAll('.chart'+index).remove()
   } catch (e) {}
+  const { refMap, refChart } = ref
   const { geoData, dPop } = data
-  let config = getDChartConfig(index)
+  let config = getDChartConfig(refChart)
   // let configMap = getDChartConfig(ref)
   let scales = getDChartScales(dPop, config)
-  drawBarsDChart(data, scales, config, selectedArea, index, prefecture, setPrefecture, setCity)
+  drawBarsDChart(data, scales, config, selectedArea,index,prefecture, setPrefecture, setCity)
   drawAxesDChart(scales, config, index)
 }
 
-const getDChartConfig = (index) => {
+const getDChartConfig = (ref) => {
   let width = 350
   let height = 400
   let margin = {
@@ -71,7 +62,7 @@ const getDChartConfig = (index) => {
   //The container is the SVG where we will draw the chart. In our HTML is the svg ta with the id AirlinesChart
 
   let container = d3 //TODO: use d3.select to select the element with id AirlinesChart
-    .select('#chart' + index)
+    .select(ref.current)
 
   container
     .attr('width', width)
@@ -103,24 +94,15 @@ const getDChartScales = (dPop, config) => {
   return { xScale, yScale }
 }
 
-const drawBarsDChart = (
-  data,
-  scales,
-  config,
-  selectedArea,
-  index,
-  prefecture,
-  setPrefecture,
-  setCity
-) => {
-  const { geoData, dPop } = data
+const drawBarsDChart = (data, scales, config, selectedArea,index, prefecture, setPrefecture, setCity) => {
 
+  const { geoData, dPop } = data
   const { margin, bodyHeight, bodyWidth, container } = config // this is equivalent to 'let margin = config.margin; let container = config.container'
   const { xScale, yScale } = scales
 
   const body = container
     .append('g')
-    .attr('class', 'chart' + index)
+    .attr('class', 'chart'+index)
     .style('transform', `translate(${margin.left}px,${margin.top}px)`)
 
   const bars = body
@@ -146,9 +128,9 @@ const drawBarsDChart = (
       // const coords = [d3.event.clientX, d3.event.clientY]
 
       const selectedArea = d.area
-      d3.select('#viewBox' + index).remove()
-      drawDMap(data, selectedArea, index, prefecture, setPrefecture, setCity)
-      showTooltip(d, index)
+      d3.select('#viewBox'+index).remove()
+      drawDMap(data, selectedArea,index, prefecture, setPrefecture, setCity)
+      showTooltip(d,index)
     })
     .on('mouseleave', function (d) {
       d3.select(this).attr('fill', '#2a5599')
@@ -163,7 +145,7 @@ const drawAxesDChart = (scales, config, index) => {
 
   container
     .append('g')
-    .attr('class', 'chart' + index)
+    .attr('class', 'chart'+index)
     .style(
       'transform',
       `translate(${margin.left}px,${height - margin.bottom}px)`
@@ -181,7 +163,7 @@ const drawAxesDChart = (scales, config, index) => {
   // and call the axisY axis to draw the left axis.
   container
     .append('g')
-    .attr('class', 'chart' + index)
+    .attr('class', 'chart'+index)
     .style('transform', `translate(${margin.left}px,${margin.top}px)`)
     .style('font', '7px times')
     .call(axisY)
