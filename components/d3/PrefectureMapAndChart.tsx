@@ -5,6 +5,7 @@ import { drawDChart } from '../../tools/drawDChart'
 import { arrangePrefectureData } from '../../tools/arrangePrefectureData'
 import { prefList } from '../../pages/dashboard/d3Japan'
 import topojson from 'topojson-client'
+import { prefectureList } from '../../tools/prefectureList'
 
 const PrefectureMap = ({
   suikei,
@@ -14,17 +15,32 @@ const PrefectureMap = ({
   setPrefecture,
   setCity,
 }) => {
-  const [geoData, setgGeoData] = useState(null)
+  const [geoData, setGeoData] = useState(null)
 
   useEffect(() => {
     const dPop = arrangePrefectureData(suikei, prevalence, prefecture)
     const selectedArea = ''
     const data = { geoJsonPrefecture, geoData, dPop }
     const index = 'prefecture'
-    drawDMap(data, selectedArea, index, prefecture, setPrefecture, setCity)
-    drawDChart(data, selectedArea, index, prefecture, setPrefecture, setCity)
-    selectedArea !== '' && setCity(selectedArea)
-  }, [geoData, geoJsonPrefecture, prevalence, suikei])
+    if (geoJsonPrefecture) {
+      const prefNo1 = prefectureList[prefecture]
+      const prefNo2 = Object.keys(geoJsonPrefecture.objects)[0]
+      prefNo1 === prefNo2 &&
+        geoJsonPrefecture &&
+        drawDMap(data, selectedArea, index, prefecture, setPrefecture, setCity)
+      prefNo1 === prefNo2 &&
+        geoJsonPrefecture &&
+        drawDChart(
+          data,
+          selectedArea,
+          index,
+          prefecture,
+          setPrefecture,
+          setCity
+        )
+      selectedArea !== '' && setCity(selectedArea)
+    }
+  }, [geoJsonPrefecture, prefecture])
   return (
     <>
       <div className="flex ">

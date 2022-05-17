@@ -82,6 +82,15 @@ const D3Japan = () => {
       })
       .catch((e) => console.log(`japan.geo.json failed message: ${e}`))
 
+    d3.csv('../assets/prevalence.csv')
+      .then((d) => {
+        setPrevalence(d)
+        console.log('prevalence.csv reading success!')
+      })
+      .catch((e) => console.log(`prevalence.csv failed message: ${e}`))
+  }, [])
+
+  useEffect(() => {
     if (prefecture !== '') {
       const fileName =
         '../assets/topojson/' + prefList[prefecture] + '.topojson' //都道府県ファイルを選択
@@ -94,14 +103,7 @@ const D3Japan = () => {
           console.log(`${fileName} japan.geo.json failed message: ${e}`)
         )
     }
-
-    d3.csv('../assets/prevalence.csv')
-      .then((d) => {
-        setPrevalence(d)
-        console.log('prevalence.csv reading success!')
-      })
-      .catch((e) => console.log(`prevalence.csv failed message: ${e}`))
-  }, [])
+  }, [prefecture])
   return (
     <Layout>
       <div className="container">
@@ -132,7 +134,7 @@ const D3Japan = () => {
               />
             )}
           </div>
-          {/* <div>
+          <div>
             {!!suikei && !!geoJson && !!prevalence && (
               <CityMapAndChart
                 suikei={suikei}
@@ -142,7 +144,7 @@ const D3Japan = () => {
                 city={city}
               />
             )}
-          </div> */}
+          </div>
         </div>
       </div>
     </Layout>

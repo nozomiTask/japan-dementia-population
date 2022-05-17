@@ -17,7 +17,7 @@ export const drawDMap = (data, selectedArea, index, prefecture, setPrefecture, s
   let centerPos = null
   let geoData_ = null
   let scale = null
-  if (index === 'prefecture') {
+  if (prefecture!=="" && index === 'prefecture') {
     const prefNo = prefectureList[prefecture]
     const obj = geoJsonPrefecture?.objects[prefNo]
     geoData_ = topojson.feature(geoJsonPrefecture, obj).features

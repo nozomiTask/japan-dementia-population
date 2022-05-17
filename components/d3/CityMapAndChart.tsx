@@ -15,12 +15,12 @@ const CityMap = ({ suikei, geoJson, prevalence, prefecture, city }) => {
     const selectedArea = ''
     const ref = { refMap, refChart }
     const data = { geoData, dPop }
-    const index = "city"
-    !!refMap && !!geoData && drawDMap(ref, data, selectedArea, index)
-    !!refChart &&
-      !!suikei &&
-      !!prevalence &&
-      drawDChart(ref, data, selectedArea, index)
+    const index = 'city'
+    // !!refMap && !!geoData && drawDMap(ref, data, selectedArea, index)
+    // !!refChart &&
+    //   !!suikei &&
+    //   !!prevalence &&
+    //   drawDChart(ref, data, selectedArea, index)
   }, [geoData, geoJson, prevalence, suikei])
   return (
     <>
@@ -31,27 +31,25 @@ const CityMap = ({ suikei, geoJson, prevalence, prefecture, city }) => {
       </div>
       <div className="flex ">
         <div>
-          <h2 className="text-2xl text-center">グラフ</h2>
+          <h2 className="text-2xl text-center">市区町村</h2>
           <svg
-            id="chart"
-            ref={refChart}
+            id="chartcity"
             className="border-solid border-2 border-black"
             width="400"
             height="400"
           ></svg>
         </div>
-        <div>
+        {/* <div>
           <h2 className="text-2xl text-center">地図</h2>
           <svg
-            id="map"
-            ref={refMap}
+            id="mapcity"
             className="bar border-solid border-2 border-black"
             width="400"
             height="400"
           >
             {' '}
           </svg>
-        </div>
+        </div> */}
       </div>
     </>
   )
