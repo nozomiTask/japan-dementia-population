@@ -3,7 +3,14 @@ import { drawDChart, eraseTooltip, showTooltip } from './drawDChart'
 import { prefectureList } from './prefectureList'
 import * as topojson from 'topojson-client'
 import { centerXY } from './centerXY'
-export const drawDMap = (data, selectedArea, index, prefecture, setPrefecture, setCity) => {
+export const drawDMap = (
+  data,
+  selectedArea,
+  index,
+  prefecture,
+  setPrefecture,
+  setCity
+) => {
   try {
     d3.select('#label-group' + index).remove()
     d3.select('#viewBox' + index).remove()
@@ -17,10 +24,11 @@ export const drawDMap = (data, selectedArea, index, prefecture, setPrefecture, s
   let centerPos = null
   let geoData_ = null
   let scale = null
-  if (prefecture!=="" && index === 'prefecture') {
+  if (prefecture !== '' && index === 'prefecture') {
     const prefNo = prefectureList[prefecture]
     const obj = geoJsonPrefecture?.objects[prefNo]
-    geoData_ = topojson.feature(geoJsonPrefecture, obj).features
+    const geoData__ = topojson.feature(geoJsonPrefecture, obj).features
+    geoData_ = geoData__ //.filter((g) => g.properties.N03_003 === null)
     centerPos = centerXY(geoData_)
     scale = 10000
   }
@@ -58,11 +66,10 @@ export const drawDMap = (data, selectedArea, index, prefecture, setPrefecture, s
     .attr(`d`, path)
     .attr(`stroke`, `#666`)
     .attr(`stroke-width`, 0.25)
-    .attr("id", "mapArea")
+    .attr('id', 'mapArea')
     .attr(`fill`, (d) => {
-      let sArea = null
-      if (index === 'all') sArea = d.properties.name_ja
-      if (index === 'prefecture') sArea = d.properties.N03_004
+      let sArea =getAreaName(index, d, prefecture)
+      
       if (selectedArea === sArea) {
         return 'red'
       } else {
@@ -72,9 +79,8 @@ export const drawDMap = (data, selectedArea, index, prefecture, setPrefecture, s
     .attr(`fill-opacity`, (item: any) => {
       // メモ
       // item.properties.name_ja に都道府県名が入っている
-      let sArea = null
-      if (index === 'all') sArea = item.properties.name_ja
-      if (index === 'prefecture') sArea = item.properties.N03_004
+      let sArea = getAreaName(index, item, prefecture)
+
       const opac_ = dPop.find((d) => sArea === d.area)
       const opac = opac_ ? opac_.dPopAllSum : 0
 
@@ -88,13 +94,21 @@ export const drawDMap = (data, selectedArea, index, prefecture, setPrefecture, s
      */
     // .on(`mouseover`, function (item: any) {
     .on(`click`, function (item: any) {
-      d3.selectAll("#mapArea").attr("fill", "#2566CC")
-      eraseLabel (svg, index)
+      d3.selectAll('#mapArea').attr('fill', '#2566CC')
+      eraseLabel(svg, index)
 
-      displayLabel(item, svg, data, index, prefecture, dPop, setPrefecture, setCity)
-      let sArea = null
-      if (index === 'all') sArea = item.properties.name_ja
-      if (index === 'prefecture') sArea = item.properties.N03_004
+      displayLabel(
+        item,
+        svg,
+        data,
+        index,
+        prefecture,
+        dPop,
+        setPrefecture,
+        setCity
+      )
+      let sArea =  getAreaName(index, item, prefecture)
+  
       setPrefecture(sArea)
       // マウス位置の都道府県領域を赤色に変更
       // d3.select(this).attr(`fill`, `#CC4C39`)
@@ -107,18 +121,18 @@ export const drawDMap = (data, selectedArea, index, prefecture, setPrefecture, s
    */
   // .on('mousemove', function (item: any) {
   // adjustLocation(svg, index)
-    // })
+  // })
 
-    /**
-     * 都道府県領域の MouseOut イベントハンドラ
-     */
-    // .on(`mouseout`, function (item: any) {
-    //   eraseLabel(svg, index)
+  /**
+   * 都道府県領域の MouseOut イベントハンドラ
+   */
+  // .on(`mouseout`, function (item: any) {
+  //   eraseLabel(svg, index)
 
-    //   // マウス位置の都道府県領域を青色に戻す
-    //   d3.select(this).attr(`fill`, `#2566CC`)
-    //   d3.select(this).attr(`stroke-width`, `0.25`)
-    // })
+  //   // マウス位置の都道府県領域を青色に戻す
+  //   d3.select(this).attr(`fill`, `#2566CC`)
+  //   d3.select(this).attr(`stroke-width`, `0.25`)
+  // })
 }
 
 // イベントハンドラー処理
@@ -128,7 +142,7 @@ const eraseLabel = (svg, index) => {
   try {
     svg.select('#label-group' + index).remove()
   } catch (e) {}
-  eraseTooltip()
+  eraseTooltip(index)
 }
 
 //mousemove
@@ -152,14 +166,22 @@ const adjustLocation = (svg, index) => {
 }
 
 // mouseover or click
-const displayLabel = (item, svg, data, index, prefecture, dPop, setPrefecture, setCity) => {
+const displayLabel = (
+  item,
+  svg,
+  data,
+  index,
+  prefecture,
+  dPop,
+  setPrefecture,
+  setCity
+) => {
   // ラベル用のグループ
   const group = svg.append(`g`).attr(`id`, `label-group` + index)
 
   // 地図データから都道府県名を取得する
-  let sArea = null
-  if (index === 'all') sArea = item.properties.name_ja
-  if (index === 'prefecture') sArea = item.properties.N03_004
+  let sArea = getAreaName(index, item,prefecture)
+  
   const label = sArea
   const selectedArea = label
 
@@ -190,4 +212,16 @@ const displayLabel = (item, svg, data, index, prefecture, dPop, setPrefecture, s
     .attr(`y`, textSize.y - padding.y)
     .attr(`width`, textSize.width + padding.x * 2)
     .attr(`height`, textSize.height + padding.y * 2)
+}
+
+const getAreaName = (index, d, prefecture) => {
+  let ret = null
+if (index === 'all') ret = d.properties.name_ja
+  if (index === 'prefecture') {
+    if (prefecture!=="東京都" && d.properties.N03_003) {
+      ret = d.properties.N03_003
+    } else ret = d.properties.N03_004
+  }
+  return ret
+
 }

@@ -1,6 +1,11 @@
 import { DEMENTIAPOP } from '../types/dementiaPop'
 import * as d3 from 'd3'
-export const arrangeData = (suikei, prevalence): DEMENTIAPOP[] => {
+export const arrangeData = (
+  suikei,
+  prevalence,
+  prefecture,
+  index
+): DEMENTIAPOP[] => {
   const sources = [
     'AsiaPaciﬁcHighIncome',
     'EastAsia',
@@ -12,16 +17,33 @@ export const arrangeData = (suikei, prevalence): DEMENTIAPOP[] => {
     'MCIJapan',
   ]
 
+  const age65Stratified = [
+    '65～69歳',
+    '70～74歳',
+    '75～79歳',
+    '80～84歳',
+    '85～89歳',
+    '90歳以上',
+  ]
+
   const dps: DEMENTIAPOP[] = []
-  const year = '2020年'
-  const areaUnit = 'a'
-  const source = 'Japan'
+  const source = 'MCIJapan'
   const prvlnc = prevalence.filter((p) => p.source === source)
   suikei.forEach((s) => {
     const ages = Object.keys(s)
       .filter((f) => f.indexOf('/a') !== -1)
       .map((m) => m.split('/')[0])
-    if (s['市などの別'] === areaUnit && s['年'] === year) {
+
+    if (
+      (index === 'prefecture' &&
+        s['市などの別'] !== 'a' &&
+        s['市などの別'] !== '0' &&
+        s['都道府県'] === prefecture) ||
+      (index === 'prefecture' &&
+        s['市などの別'] === '0' &&
+        s['市などの別'].indexOf('区')) ||
+      (index === 'all' && s['市などの別'] === 'a')
+    ) {
       let dPopMale = {}
       let dPopFemale = {}
       let dPopAll = {}
@@ -35,24 +57,57 @@ export const arrangeData = (suikei, prevalence): DEMENTIAPOP[] => {
       let dPopMaleSum = 0
       let dPopFemaleSum = 0
       let dPopAllSum = 0
+      let dPopMale65 = 0
+      let dPopFemale65 = 0
+      let dPopAll65 = 0
+      let PopMale65 = 0
+      let PopFemale65 = 0
+      let PopAll65 = 0
 
       for (let a in ages) {
         dPopMaleSum += dPopMale[ages[a]]
         dPopFemaleSum += dPopFemale[ages[a]]
         dPopAllSum += dPopAll[ages[a]]
-      }
 
+        if (age65Stratified.indexOf(a)) {
+          PopMale65 += dPopMale[ages[a]]
+          PopFemale65 += dPopFemale[ages[a]]
+          PopAll65 += dPopAll[ages[a]]
+          dPopMale65 += s[a + '/m']
+          dPopFemale65 += s[a + '/f']
+          dPopAll65 += s[a + '/a']
+        }
+      }
+      const dRateMale65 = dPopMale65 / PopMale65
+      const dRateFemale65 = dPopFemale65 / PopFemale65
+      const dRateAll65 = dPopAll65 / PopAll65
+
+      let area = null
+      if (index === 'prefecture') area = s['市区町村']
+      else if (index === 'all') area = s['都道府県']
+
+      const year = s['年']
       const dp: DEMENTIAPOP = {
-        area: s['都道府県'],
+        area: area,
         dPopMale: dPopMale,
         dPopFemale: dPopFemale,
         dPopAll: dPopAll,
         dPopMaleSum: dPopMaleSum,
         dPopFemaleSum: dPopFemaleSum,
         dPopAllSum: dPopAllSum,
+        dPopMale65: dPopMale65,
+        dPopFemale65: dPopFemale65,
+        dPopAll65: dPopAll65,
+        PopMale65: PopMale65,
+        PopFemale65: PopFemale65,
+        PopAll65: PopAll65,
+        dRateMale65: dRateMale65,
+        dRateFemale65: dRateFemale65,
+        dRateAll65: dRateAll65,
         year: year,
         order: 0,
         dementiaCategory: 'dementia', //dementia, mci, dementiaAndMci
+        source: source,
       }
       dps.push(dp as DEMENTIAPOP)
       // dPop: number””
@@ -60,16 +115,7 @@ export const arrangeData = (suikei, prevalence): DEMENTIAPOP[] => {
     }
   })
 
-  const dps_ = dps.sort((a, b) => d3.descending(a.dPopAllSum, b.dPopAllSum))
-  let order = 0
-
-  const dps__: DEMENTIAPOP[] = dps_.map((d) => {
-    order += 1
-    d.order = order
-    return d
-  })
-
-  return dps__
+  return dps
 }
 /*
 将来の地域別男女5歳階級別人口（各年10月1日時点の推計人口：2015年は国勢調査による実績値）

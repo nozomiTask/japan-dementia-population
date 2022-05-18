@@ -15,7 +15,7 @@ export const showTooltip = (d, index) => {
   const group = d3
     .select('#viewBox' + index)
     .append(`g`)
-    .attr(`id`, `tooltip`)
+    .attr(`id`, `tooltip`+index)
 
   const rectElemnt = group
     .append('rect')
@@ -32,8 +32,8 @@ export const showTooltip = (d, index) => {
     .attr('height', '20')
 }
 
-export const eraseTooltip = () => {
-  d3.select('#tooltip').remove()
+export const eraseTooltip = (index) => {
+  d3.select('#tooltip'+index).remove()
 }
 
 export const drawDChart = (
@@ -44,9 +44,7 @@ export const drawDChart = (
   setPrefecture,
   setCity
 ) => {
-  try {
-    d3.selectAll('.chart' + index).remove()
-  } catch (e) {}
+
   const { geoData, dPop } = data
   let config = getDChartConfig(index)
   // let configMap = getDChartConfig(ref)
@@ -118,9 +116,11 @@ const drawBarsDChart = (
   const { margin, bodyHeight, bodyWidth, container } = config // this is equivalent to 'let margin = config.margin; let container = config.container'
   const { xScale, yScale } = scales
 
+
+
   const body = container
     .append('g')
-    .attr('class', 'chart' + index)
+    .attr('id', 'chart' + index)
     .style('transform', `translate(${margin.left}px,${margin.top}px)`)
 
   const bars = body
@@ -152,7 +152,7 @@ const drawBarsDChart = (
     })
     .on('mouseleave', function (d) {
       d3.select(this).attr('fill', '#2a5599')
-      eraseTooltip()
+      eraseTooltip(index)
     })
 }
 
@@ -163,7 +163,7 @@ const drawAxesDChart = (scales, config, index) => {
 
   container
     .append('g')
-    .attr('class', 'chart' + index)
+    .attr('id', 'chart' + index)
     .style(
       'transform',
       `translate(${margin.left}px,${height - margin.bottom}px)`
@@ -181,7 +181,7 @@ const drawAxesDChart = (scales, config, index) => {
   // and call the axisY axis to draw the left axis.
   container
     .append('g')
-    .attr('class', 'chart' + index)
+    .attr('id', 'chart' + index)
     .style('transform', `translate(${margin.left}px,${margin.top}px)`)
     .style('font', '7px times')
     .call(axisY)

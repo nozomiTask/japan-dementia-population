@@ -1,12 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
-import * as d3 from 'd3'
 import { drawDMap } from '../../tools/drawDMap'
 import { drawDChart } from '../../tools/drawDChart'
-import { arrangePrefectureData } from '../../tools/arrangePrefectureData'
-import { prefList } from '../../pages/dashboard/d3Japan'
-import topojson from 'topojson-client'
 import { prefectureList } from '../../tools/prefectureList'
-
+import { arrangeData } from '../../tools/arrangeData'
+import * as d3 from 'd3'
 const PrefectureMap = ({
   suikei,
   geoJsonPrefecture,
@@ -18,13 +15,31 @@ const PrefectureMap = ({
   const [geoData, setGeoData] = useState(null)
 
   useEffect(() => {
-    const dPop = arrangePrefectureData(suikei, prevalence, prefecture)
+    const index = 'prefecture'
+
+    const dPop_ = arrangeData(suikei, prevalence, prefecture, index).filter(
+      (d) => d.year === '2020年'
+    )
+    let order = 0
+    const dPop = dPop_
+      .sort((a, b) => d3.descending(a.dPopAllSum, b.dPopAllSum))
+      .map((d) => {
+        order += 1
+        d.order = order
+        return d
+      })
+
     const selectedArea = ''
     const data = { geoJsonPrefecture, geoData, dPop }
-    const index = 'prefecture'
+
     if (geoJsonPrefecture) {
       const prefNo1 = prefectureList[prefecture]
       const prefNo2 = Object.keys(geoJsonPrefecture.objects)[0]
+
+try{
+  d3.select("#chart"+index).remove()
+}catch(e){}
+
       prefNo1 === prefNo2 &&
         geoJsonPrefecture &&
         drawDMap(data, selectedArea, index, prefecture, setPrefecture, setCity)
