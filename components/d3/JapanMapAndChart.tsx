@@ -16,7 +16,7 @@ const JapanMapAndChart = ({
 
   useEffect(() => {
     const index = 'all'
-    const dPop_ = arrangeData(suikei, prevalence, '', index).filter(
+    const dPop_ = arrangeData(suikei, prevalence, '', '', index).filter(
       (d) => d.year === '2020年'
     )
     let order = 0

@@ -16,8 +16,7 @@ const PrefectureMap = ({
 
   useEffect(() => {
     const index = 'prefecture'
-
-    const dPop_ = arrangeData(suikei, prevalence, prefecture, index).filter(
+    const dPop_ = arrangeData(suikei, prevalence, prefecture, '', index).filter(
       (d) => d.year === '2020年'
     )
     let order = 0
@@ -35,10 +34,6 @@ const PrefectureMap = ({
     if (geoJsonPrefecture) {
       const prefNo1 = prefectureList[prefecture]
       const prefNo2 = Object.keys(geoJsonPrefecture.objects)[0]
-
-try{
-  d3.select("#chart"+index).remove()
-}catch(e){}
 
       prefNo1 === prefNo2 &&
         geoJsonPrefecture &&

@@ -11,10 +11,8 @@ export const drawDMap = (
   setPrefecture,
   setCity
 ) => {
-  try {
-    d3.select('#label-group' + index).remove()
-    d3.select('#viewBox' + index).remove()
-  } catch (e) {}
+  d3.select('#label-group' + index).remove()
+  d3.select('#viewBox' + index).remove()
 
   const { geoJsonPrefecture, geoData, dPop } = data
 
@@ -68,8 +66,8 @@ export const drawDMap = (
     .attr(`stroke-width`, 0.25)
     .attr('id', 'mapArea')
     .attr(`fill`, (d) => {
-      let sArea =getAreaName(index, d, prefecture)
-      
+      let sArea = getAreaName(index, d, prefecture)
+
       if (selectedArea === sArea) {
         return 'red'
       } else {
@@ -107,9 +105,9 @@ export const drawDMap = (
         setPrefecture,
         setCity
       )
-      let sArea =  getAreaName(index, item, prefecture)
-  
-      setPrefecture(sArea)
+      let sArea = getAreaName(index, item, prefecture)
+      if (index === 'all') setPrefecture(sArea)
+      if (index === 'prefecture') setCity(sArea)
       // マウス位置の都道府県領域を赤色に変更
       // d3.select(this).attr(`fill`, `#CC4C39`)
       d3.select(this).attr(`fill`, `red`)
@@ -180,8 +178,8 @@ const displayLabel = (
   const group = svg.append(`g`).attr(`id`, `label-group` + index)
 
   // 地図データから都道府県名を取得する
-  let sArea = getAreaName(index, item,prefecture)
-  
+  let sArea = getAreaName(index, item, prefecture)
+
   const label = sArea
   const selectedArea = label
 
@@ -216,12 +214,11 @@ const displayLabel = (
 
 const getAreaName = (index, d, prefecture) => {
   let ret = null
-if (index === 'all') ret = d.properties.name_ja
+  if (index === 'all') ret = d.properties.name_ja
   if (index === 'prefecture') {
-    if (prefecture!=="東京都" && d.properties.N03_003) {
+    if (prefecture !== '東京都' && d.properties.N03_003) {
       ret = d.properties.N03_003
     } else ret = d.properties.N03_004
   }
   return ret
-
 }

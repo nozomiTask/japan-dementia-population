@@ -4,6 +4,7 @@ export const arrangeData = (
   suikei,
   prevalence,
   prefecture,
+  city,
   index
 ): DEMENTIAPOP[] => {
   const sources = [
@@ -35,12 +36,14 @@ export const arrangeData = (
       .map((m) => m.split('/')[0])
 
     if (
+      (index === 'city' && s['市区町村'] === city) ||
       (index === 'prefecture' &&
         s['市などの別'] !== 'a' &&
         s['市などの別'] !== '0' &&
         s['都道府県'] === prefecture) ||
       (index === 'prefecture' &&
         s['市などの別'] === '0' &&
+        s['都道府県'] === prefecture &&
         s['市などの別'].indexOf('区')) ||
       (index === 'all' && s['市などの別'] === 'a')
     ) {
@@ -69,13 +72,13 @@ export const arrangeData = (
         dPopFemaleSum += dPopFemale[ages[a]]
         dPopAllSum += dPopAll[ages[a]]
 
-        if (age65Stratified.indexOf(a)) {
-          PopMale65 += dPopMale[ages[a]]
-          PopFemale65 += dPopFemale[ages[a]]
-          PopAll65 += dPopAll[ages[a]]
-          dPopMale65 += s[a + '/m']
-          dPopFemale65 += s[a + '/f']
-          dPopAll65 += s[a + '/a']
+        if (age65Stratified.indexOf(ages[a]) !== -1) {
+          dPopMale65 += dPopMale[ages[a]]
+          dPopFemale65 += dPopFemale[ages[a]]
+          dPopAll65 += dPopAll[ages[a]]
+          PopMale65 += +s[ages[a] + '/m']
+          PopFemale65 += +s[ages[a] + '/f']
+          PopAll65 += +s[ages[a] + '/a']
         }
       }
       const dRateMale65 = dPopMale65 / PopMale65
@@ -83,7 +86,7 @@ export const arrangeData = (
       const dRateAll65 = dPopAll65 / PopAll65
 
       let area = null
-      if (index === 'prefecture') area = s['市区町村']
+      if (index === 'city' || index === 'prefecture') area = s['市区町村']
       else if (index === 'all') area = s['都道府県']
 
       const year = s['年']

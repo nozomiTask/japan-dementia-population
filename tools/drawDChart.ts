@@ -15,7 +15,7 @@ export const showTooltip = (d, index) => {
   const group = d3
     .select('#viewBox' + index)
     .append(`g`)
-    .attr(`id`, `tooltip`+index)
+    .attr(`id`, `tooltip` + index)
 
   const rectElemnt = group
     .append('rect')
@@ -33,7 +33,7 @@ export const showTooltip = (d, index) => {
 }
 
 export const eraseTooltip = (index) => {
-  d3.select('#tooltip'+index).remove()
+  d3.select('#tooltip' + index).remove()
 }
 
 export const drawDChart = (
@@ -44,12 +44,22 @@ export const drawDChart = (
   setPrefecture,
   setCity
 ) => {
+  d3.select('#chartg' + index).remove()
 
   const { geoData, dPop } = data
   let config = getDChartConfig(index)
   // let configMap = getDChartConfig(ref)
   let scales = getDChartScales(dPop, config)
-  drawBarsDChart(data, scales, config, selectedArea, index, prefecture, setPrefecture, setCity)
+  drawBarsDChart(
+    data,
+    scales,
+    config,
+    selectedArea,
+    index,
+    prefecture,
+    setPrefecture,
+    setCity
+  )
   drawAxesDChart(scales, config, index)
 }
 
@@ -86,11 +96,11 @@ const getDChartScales = (dPop, config) => {
     .max(dPop, (d) => d.dPopAllSum)
 
   let xScale = d3
-    .scaleLinear()
+    .scaleLog()
     //TODO: Set the range to go from 0 to the width of the body
-    .range([0, bodyWidth])
+    .range([1, bodyWidth])
     //TODO: Set the domain to go from 0 to the maximun value fount for the field 'Count'
-    .domain([0, maximunCount])
+    .domain([1, maximunCount])
 
   let yScale = d3
     .scaleBand()
@@ -116,15 +126,13 @@ const drawBarsDChart = (
   const { margin, bodyHeight, bodyWidth, container } = config // this is equivalent to 'let margin = config.margin; let container = config.container'
   const { xScale, yScale } = scales
 
-
-
   const body = container
     .append('g')
-    .attr('id', 'chart' + index)
+    .attr('id', 'chartg' + index)
     .style('transform', `translate(${margin.left}px,${margin.top}px)`)
 
   const bars = body
-    .selectAll('.bar')
+    .selectAll('rect')
     //TODO: Use the .data method to bind the airlines to the bars (elements with class bar)
     .data(dPop)
 
@@ -163,7 +171,7 @@ const drawAxesDChart = (scales, config, index) => {
 
   container
     .append('g')
-    .attr('id', 'chart' + index)
+    .attr('id', 'chartg' + index)
     .style(
       'transform',
       `translate(${margin.left}px,${height - margin.bottom}px)`
@@ -181,7 +189,7 @@ const drawAxesDChart = (scales, config, index) => {
   // and call the axisY axis to draw the left axis.
   container
     .append('g')
-    .attr('id', 'chart' + index)
+    .attr('id', 'chartg' + index)
     .style('transform', `translate(${margin.left}px,${margin.top}px)`)
     .style('font', '7px times')
     .call(axisY)

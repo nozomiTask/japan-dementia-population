@@ -3,6 +3,8 @@ import * as d3 from 'd3'
 import { drawDMap } from '../../tools/drawDMap'
 import { drawDChart } from '../../tools/drawDChart'
 import { arrangeCityData } from '../../tools/arrangeCityData'
+import { drawLChart } from '../../tools/drawLongitudinalChart'
+import { arrangeData } from '../../tools/arrangeData'
 //https://qiita.com/alclimb/items/31d4360c74a8f8935256
 
 const CityMap = ({ suikei, geoJson, prevalence, prefecture, city }) => {
@@ -11,11 +13,13 @@ const CityMap = ({ suikei, geoJson, prevalence, prefecture, city }) => {
   const refChart = useRef(null)
 
   useEffect(() => {
-    const dPop = arrangeCityData(suikei, prevalence, prefecture, city)
-    const selectedArea = ''
-    const ref = { refMap, refChart }
-    const data = { geoData, dPop }
     const index = 'city'
+    const dPop = arrangeData(suikei, prevalence, prefecture, city, index)
+    const selectedArea = ''
+    const data = { geoData, dPop }
+    if (dPop.length > 0 && dPop[0].area === city) {
+      drawLChart(dPop, index)
+    }
     // !!refMap && !!geoData && drawDMap(ref, data, selectedArea, index)
     // !!refChart &&
     //   !!suikei &&
@@ -35,8 +39,6 @@ const CityMap = ({ suikei, geoJson, prevalence, prefecture, city }) => {
           <svg
             id="chartcity"
             className="border-solid border-2 border-black"
-            width="800"
-            height="400"
           ></svg>
         </div>
         {/* <div>
