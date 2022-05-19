@@ -120,7 +120,6 @@ const drawLine = (data, scales, config, index) => {
     .datum(data)
     .attr('id', 'lineRate' + index)
     .style('transform', `translate(${margin.left + 30}px,${margin.top}px)`)
-
   const line = d3
     .line()
     .x((d) => xScale(d.year))
@@ -132,10 +131,14 @@ const drawLine = (data, scales, config, index) => {
     .y((d) => yRateScale(d.rate))
 
   path
+  .transition()
+  .duration(750)
+  .ease(d3.easeBounceInOut)
     .attr('fill', 'none')
     .attr('stroke', 'black')
     .attr('stroke-width', 3)
     .attr('d', line)
+    
 
   pathRate
     .attr('fill', 'none')
