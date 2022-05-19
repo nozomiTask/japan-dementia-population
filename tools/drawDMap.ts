@@ -1,5 +1,5 @@
 import * as d3 from 'd3'
-import { drawDChart} from './drawDChart'
+import { drawDChart } from './drawDChart'
 import { prefectureList } from './prefectureList'
 import * as topojson from 'topojson-client'
 import { centerXY } from './centerXY'
@@ -30,7 +30,7 @@ export const drawDMap = (
     geoData_ = geoData__ //.filter((g) => g.properties.N03_003 === null)
     centerPos = centerXY(geoData_)
     scale = 10000
-    if (index==="prefecture" && prefecture==="北海道") scale = 2500
+    if (index === 'prefecture' && prefecture === '北海道') scale = 2500
   }
   // if (centerPos[0]===NaN)
   if (index === 'all') {
@@ -107,7 +107,10 @@ export const drawDMap = (
         setCity
       )
       let sArea = getAreaName(index, item, prefecture)
-      if (index === 'all') setPrefecture(sArea)
+      if (index === 'all') {
+        setPrefecture(sArea)
+        setCity('')
+      }
       if (index === 'prefecture') setCity(sArea)
       // マウス位置の都道府県領域を赤色に変更
       // d3.select(this).attr(`fill`, `#CC4C39`)
@@ -141,7 +144,6 @@ const eraseLabel = (svg, index) => {
   try {
     svg.select('#label-group' + index).remove()
   } catch (e) {}
-
 }
 
 //mousemove

@@ -42,7 +42,14 @@ export const arrangeData = (
 
     if (
       (prefecture === '' && city === '全国' && s['コード'] === '0000') ||
-      (index === 'city' && s['市区町村'] === city) ||
+      (city === '' &&
+        s['都道府県'] === prefecture &&
+        s['市などの別'] === 'a') ||
+      (index === 'city' &&
+        s['市区町村'] === city &&
+        prefecture !== '' &&
+        s['市などの別'] !== '0' &&
+        s['市などの別'] !== 'a') ||
       (index === 'prefecture' &&
         s['市などの別'] !== 'a' &&
         s['市などの別'] !== '0' &&
@@ -54,75 +61,25 @@ export const arrangeData = (
         s['市などの別'].indexOf('区')) ||
       (index === 'all' && s['市などの別'] === 'a')
     ) {
-      let dPopMale = {}
-      let dPopFemale = {}
-      let dPopAll = {}
-
-      ages.forEach((a) => {
-        dPopMale[a] = +s[a + '/m'] * +prvlnc.find((d) => d.gender === 'male')[a]
-        dPopFemale[a] =
-          +s[a + '/f'] * +prvlnc.find((d) => d.gender === 'female')[a]
-        dPopAll[a] = dPopMale[a] + dPopFemale[a]
-      })
-      let dPopMaleSum = 0
-      let dPopFemaleSum = 0
-      let dPopAllSum = 0
-      let dPopMale65 = 0
-      let dPopFemale65 = 0
-      let dPopAll65 = 0
-      let PopMale65 = 0
-      let PopFemale65 = 0
-      let PopAll65 = 0
-
-      for (let a in ages) {
-        dPopMaleSum += dPopMale[ages[a]]
-        dPopFemaleSum += dPopFemale[ages[a]]
-        dPopAllSum += dPopAll[ages[a]]
-
-        if (age65Stratified.indexOf(ages[a]) !== -1) {
-          dPopMale65 += dPopMale[ages[a]]
-          dPopFemale65 += dPopFemale[ages[a]]
-          dPopAll65 += dPopAll[ages[a]]
-          PopMale65 += +s[ages[a] + '/m']
-          PopFemale65 += +s[ages[a] + '/f']
-          PopAll65 += +s[ages[a] + '/a']
-        }
-      }
-      const dRateMale65 = dPopMale65 / PopMale65
-      const dRateFemale65 = dPopFemale65 / PopFemale65
-      const dRateAll65 = dPopAll65 / PopAll65
-
-      let area = null
-      if (index === 'city' || index === 'prefecture') area = s['市区町村']
-      if (index === 'all') area = s['都道府県']
-      if (city === '全国') area = '全国'
-
-      const year = s['年']
-      const dp: DEMENTIAPOP = {
-        area: area,
-        dPopMale: dPopMale,
-        dPopFemale: dPopFemale,
-        dPopAll: dPopAll,
-        dPopMaleSum: dPopMaleSum,
-        dPopFemaleSum: dPopFemaleSum,
-        dPopAllSum: dPopAllSum,
-        dPopMale65: dPopMale65,
-        dPopFemale65: dPopFemale65,
-        dPopAll65: dPopAll65,
-        PopMale65: PopMale65,
-        PopFemale65: PopFemale65,
-        PopAll65: PopAll65,
-        dRateMale65: dRateMale65,
-        dRateFemale65: dRateFemale65,
-        dRateAll65: dRateAll65,
-        year: year,
-        order: 0,
-        dementiaCategory: 'dementia', //dementia, mci, dementiaAndMci
-        source: source,
-      }
+      // if (
+      //   //　全国地図を書くとき index="all"
+      //   (index === 'all' && s['市などの別'] === 'a') ||
+      //   // 都道府県地図を書くとき、index="prefecture"
+      //   (index === 'prefecture' &&
+      //     ((prefecture === s['都道府県'] && s['市などの別'] === '0') ||
+      //       (prefecture === '東京都' && s['市などの別'].indexOf('区')))) ||
+      //   (index === 'city' && s['市区町村'] === city)
+      // )
+      const dp = getPopData(
+        s,
+        ages,
+        prvlnc,
+        age65Stratified,
+        index,
+        city,
+        source
+      )
       dps.push(dp as DEMENTIAPOP)
-      // dPop: number””
-      // dementiaCategory: string //dementia, mci, dementiaAndMci
     }
   })
   console.log(
@@ -133,6 +90,78 @@ export const arrangeData = (
 
   return dps
 }
+
+const getPopData = (s, ages, prvlnc, age65Stratified, index, city, source) => {
+  const dPopMale = {}
+  const dPopFemale = {}
+  const dPopAll = {}
+
+  ages.forEach((a) => {
+    dPopMale[a] = +s[a + '/m'] * +prvlnc.find((d) => d.gender === 'male')[a]
+    dPopFemale[a] = +s[a + '/f'] * +prvlnc.find((d) => d.gender === 'female')[a]
+    dPopAll[a] = dPopMale[a] + dPopFemale[a]
+  })
+  let dPopMaleSum = 0
+  let dPopFemaleSum = 0
+  let dPopAllSum = 0
+  let dPopMale65 = 0
+  let dPopFemale65 = 0
+  let dPopAll65 = 0
+  let PopMale65 = 0
+  let PopFemale65 = 0
+  let PopAll65 = 0
+
+  for (let a in ages) {
+    dPopMaleSum += dPopMale[ages[a]]
+    dPopFemaleSum += dPopFemale[ages[a]]
+    dPopAllSum += dPopAll[ages[a]]
+
+    if (age65Stratified.indexOf(ages[a]) !== -1) {
+      dPopMale65 += dPopMale[ages[a]]
+      dPopFemale65 += dPopFemale[ages[a]]
+      dPopAll65 += dPopAll[ages[a]]
+      PopMale65 += +s[ages[a] + '/m']
+      PopFemale65 += +s[ages[a] + '/f']
+      PopAll65 += +s[ages[a] + '/a']
+    }
+  }
+  const dRateMale65 = dPopMale65 / PopMale65
+  const dRateFemale65 = dPopFemale65 / PopFemale65
+  const dRateAll65 = dPopAll65 / PopAll65
+
+  let area = null
+  if (index === 'prefecture') area = s['市区町村']
+  if (index === 'all') area = s['都道府県']
+  if (city === '全国') area = '全国'
+  if (city === '') area = s['都道府県']
+
+  const year = s['年']
+  const dp: DEMENTIAPOP = {
+    area: area,
+    dPopMale: dPopMale,
+    dPopFemale: dPopFemale,
+    dPopAll: dPopAll,
+    dPopMaleSum: dPopMaleSum,
+    dPopFemaleSum: dPopFemaleSum,
+    dPopAllSum: dPopAllSum,
+    dPopMale65: dPopMale65,
+    dPopFemale65: dPopFemale65,
+    dPopAll65: dPopAll65,
+    PopMale65: PopMale65,
+    PopFemale65: PopFemale65,
+    PopAll65: PopAll65,
+    dRateMale65: dRateMale65,
+    dRateFemale65: dRateFemale65,
+    dRateAll65: dRateAll65,
+    year: year,
+    order: 0,
+    dementiaCategory: 'dementia', //dementia, mci, dementiaAndMci
+    source: source,
+  }
+
+  return dp
+}
+
 /*
 将来の地域別男女5歳階級別人口（各年10月1日時点の推計人口：2015年は国勢調査による実績値）
 市などの別：
