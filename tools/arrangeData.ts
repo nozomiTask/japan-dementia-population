@@ -32,7 +32,7 @@ export const arrangeData = (
   const source = 'DementiaPlusMCIJapan'
   const prvlnc = prevalence.filter((p) => p.source === source)
 
-  const NotExist = suikei.find(s=>s["コード"]==="0000") 
+  const NotExist = suikei.find((s) => s['コード'] === '0000')
   !NotExist && includeJapan(suikei)
 
   suikei.forEach((s) => {
@@ -41,6 +41,9 @@ export const arrangeData = (
       .map((m) => m.split('/')[0])
 
     if (
+      (prefecture === '' &&
+        city === '全国' &&
+        s['コード'] === '0000') ||
       (index === 'city' && s['市区町村'] === city) ||
       (index === 'prefecture' &&
         s['市などの別'] !== 'a' &&
@@ -93,8 +96,9 @@ export const arrangeData = (
 
       let area = null
       if (index === 'city' || index === 'prefecture') area = s['市区町村']
-      else if (index === 'all') area = s['都道府県']
-
+      if (index === 'all') area = s['都道府県']
+      if (city === '全国') area = '全国'
+      
       const year = s['年']
       const dp: DEMENTIAPOP = {
         area: area,
@@ -123,7 +127,7 @@ export const arrangeData = (
       // dementiaCategory: string //dementia, mci, dementiaAndMci
     }
   })
-
+console.log(`推計から：${[...dps.filter(d=>d.year==="2020年").map(m=>m.area)]}`)
   return dps
 }
 /*

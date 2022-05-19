@@ -30,6 +30,7 @@ export const drawDMap = (
     geoData_ = geoData__ //.filter((g) => g.properties.N03_003 === null)
     centerPos = centerXY(geoData_)
     scale = 10000
+    if (index==="prefecture" && prefecture==="北海道") scale = 2500
   }
   // if (centerPos[0]===NaN)
   if (index === 'all') {
