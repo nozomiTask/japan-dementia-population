@@ -41,9 +41,7 @@ export const arrangeData = (
       .map((m) => m.split('/')[0])
 
     if (
-      (prefecture === '' &&
-        city === '全国' &&
-        s['コード'] === '0000') ||
+      (prefecture === '' && city === '全国' && s['コード'] === '0000') ||
       (index === 'city' && s['市区町村'] === city) ||
       (index === 'prefecture' &&
         s['市などの別'] !== 'a' &&
@@ -98,7 +96,7 @@ export const arrangeData = (
       if (index === 'city' || index === 'prefecture') area = s['市区町村']
       if (index === 'all') area = s['都道府県']
       if (city === '全国') area = '全国'
-      
+
       const year = s['年']
       const dp: DEMENTIAPOP = {
         area: area,
@@ -127,7 +125,12 @@ export const arrangeData = (
       // dementiaCategory: string //dementia, mci, dementiaAndMci
     }
   })
-console.log(`推計から：${[...dps.filter(d=>d.year==="2020年").map(m=>m.area)]}`)
+  console.log(
+    `推計から：${[
+      ...dps.filter((d) => d.year === '2020年').map((m) => m.area),
+    ]}`
+  )
+
   return dps
 }
 /*

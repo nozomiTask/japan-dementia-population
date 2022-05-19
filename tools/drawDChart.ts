@@ -26,7 +26,7 @@ export const drawDChart = (
     setPrefecture,
     setCity
   )
-  drawAxesDChart(scales, config, index)
+  drawAxesDChart(scales, config, index, prefecture, dPop)
 }
 
 const getDChartConfig = (index) => {
@@ -50,7 +50,7 @@ const getDChartConfig = (index) => {
 const getDChartScales = (dPop, config) => {
   const { bodyWidth, bodyHeight } = config
   const maximunCount = d3.max(dPop, (d) => d.dPopAllSum)
-  const min = Math.floor(maximunCount/100)
+  const min = Math.floor(maximunCount / 100)
   const xScale = d3.scaleLog().range([1, bodyWidth]).domain([10, maximunCount])
   const yScale = d3
     .scaleBand()
@@ -80,9 +80,7 @@ const drawBarsDChart = (
     .attr('id', 'chartBar' + index)
     .style('transform', `translate(${margin.left}px,${margin.top}px)`)
 
-  const bars = body
-    .selectAll('rect')
-    .data(dPop)
+  const bars = body.selectAll('rect').data(dPop)
 
   bars
     .enter()
@@ -108,10 +106,20 @@ const drawBarsDChart = (
     })
 }
 
-const drawAxesDChart = (scales, config, index) => {
+const drawAxesDChart = (scales, config, index, prefecture, dPop) => {
   let { xScale, yScale } = scales
   let { container, margin, height } = config
-  let axisX = d3.axisBottom(xScale).ticks(3).tickFormat(d3.format(",.0f"))
+  let axisX = d3.axisBottom(xScale).ticks(3).tickFormat(d3.format(',.0f'))
+
+  const num = dPop.length
+  let font = '12px times'
+  if (num > 20) font = '10px times'
+  if (num > 30) font = '8px times'
+  if (num > 50) font = '6px times'
+  if (num > 100) font = '5px times'
+  if (num > 150) font = '2px times'
+  // if (prefecture === '北海道' && index === 'prefecture') font = '2px times'
+  // if (prefecture === '東京都' && index === 'prefecture') font = '5px times'
 
   container
     .append('g')
@@ -129,6 +137,6 @@ const drawAxesDChart = (scales, config, index) => {
     .append('g')
     .attr('id', 'chartAxisY' + index)
     .style('transform', `translate(${margin.left}px,${margin.top}px)`)
-    .style('font', '7px times')
+    .style('font', font)
     .call(axisY)
 }
