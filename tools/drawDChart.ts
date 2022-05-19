@@ -50,7 +50,8 @@ const getDChartConfig = (index) => {
 const getDChartScales = (dPop, config) => {
   const { bodyWidth, bodyHeight } = config
   const maximunCount = d3.max(dPop, (d) => d.dPopAllSum)
-  const xScale = d3.scaleLog().range([1, bodyWidth]).domain([1, maximunCount])
+  const min = Math.floor(maximunCount/100)
+  const xScale = d3.scaleLog().range([1, bodyWidth]).domain([10, maximunCount])
   const yScale = d3
     .scaleBand()
     .range([0, bodyHeight])
@@ -110,7 +111,7 @@ const drawBarsDChart = (
 const drawAxesDChart = (scales, config, index) => {
   let { xScale, yScale } = scales
   let { container, margin, height } = config
-  let axisX = d3.axisBottom(xScale).ticks(4).tickFormat(d3.format(",.0f"))
+  let axisX = d3.axisBottom(xScale).ticks(3).tickFormat(d3.format(",.0f"))
 
   container
     .append('g')
