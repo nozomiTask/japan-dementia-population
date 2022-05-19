@@ -1,8 +1,9 @@
 import * as d3 from 'd3'
-import { drawDChart, eraseTooltip, showTooltip } from './drawDChart'
+import { drawDChart} from './drawDChart'
 import { prefectureList } from './prefectureList'
 import * as topojson from 'topojson-client'
 import { centerXY } from './centerXY'
+import { showTooltip } from './tooltips'
 export const drawDMap = (
   data,
   selectedArea,
@@ -93,7 +94,6 @@ export const drawDMap = (
     // .on(`mouseover`, function (item: any) {
     .on(`click`, function (item: any) {
       d3.selectAll('#mapArea').attr('fill', '#2566CC')
-      eraseLabel(svg, index)
 
       displayLabel(
         item,
@@ -140,7 +140,7 @@ const eraseLabel = (svg, index) => {
   try {
     svg.select('#label-group' + index).remove()
   } catch (e) {}
-  eraseTooltip(index)
+
 }
 
 //mousemove

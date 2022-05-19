@@ -16,6 +16,7 @@ export const arrangeData = (
     'LatinAmerica',
     'Japan',
     'MCIJapan',
+    'DementiaPlusMCIJapan',
   ]
 
   const age65Stratified = [
@@ -28,8 +29,12 @@ export const arrangeData = (
   ]
 
   const dps: DEMENTIAPOP[] = []
-  const source = 'MCIJapan'
+  const source = 'DementiaPlusMCIJapan'
   const prvlnc = prevalence.filter((p) => p.source === source)
+
+  const NotExist = suikei.find(s=>s["コード"]==="0000") 
+  !NotExist && includeJapan(suikei)
+
   suikei.forEach((s) => {
     const ages = Object.keys(s)
       .filter((f) => f.indexOf('/a') !== -1)
@@ -44,6 +49,7 @@ export const arrangeData = (
       (index === 'prefecture' &&
         s['市などの別'] === '0' &&
         s['都道府県'] === prefecture &&
+        prefecture === '東京都' &&
         s['市などの別'].indexOf('区')) ||
       (index === 'all' && s['市などの別'] === 'a')
     ) {
@@ -128,3 +134,37 @@ a＝都道府県，0＝政令市の区（東京23区を含む），1＝政令市
 コード,市などの別,都道府県,市区町村,年,総数,0～4歳","5～9歳","・・・
 85～89歳","90歳以上,,,,,,,65～74歳","75歳以上,,,,,65～74歳割合,75歳以上割合
 */
+
+const includeJapan = (suikei) => {
+  const years = [
+    '2015年',
+    '2020年',
+    '2025年',
+    '2030年',
+    '2035年',
+    '2040年',
+    '2045年',
+  ]
+
+  const ret = []
+  const ages = Object.keys(suikei[0]).filter((f) => f.indexOf('/') !== -1)
+  const pref = suikei.filter((s) => s['市などの別'] === 'a')
+
+  years.forEach((year) => {
+    const prefYear = pref.filter((p) => p['年'] === year)
+    const age = ages[0]
+    const r = {}
+    r['コード'] = '0000'
+    r['市などの別'] = 'ALLJAPAN'
+    r['都道府県'] = '全国'
+    r['市区町村'] = ''
+    r['年'] = year
+    ages.forEach((a) => {
+      r[a] = prefYear.reduce((prev, value) => +prev + +value[a], 0)
+    })
+
+    suikei.push(r)
+  })
+
+  return suikei
+}

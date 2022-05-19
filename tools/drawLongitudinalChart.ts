@@ -1,12 +1,17 @@
 import * as d3 from 'd3'
 import { DEMENTIAPOP } from '../types/dementiaPop'
 
-export const drawLChart = (dPop: DEMENTIAPOP[], index) => {
+export const drawLChart = (dPop: DEMENTIAPOP[], prefecture, city, index) => {
   d3.select('#axisX' + index).remove()
   d3.select('#axisY' + index).remove()
   d3.select('#axisYRate' + index).remove()
   d3.select('#line' + index).remove()
   d3.select('#lineRate' + index).remove()
+  d3.select('#titleLongitudinal').remove()
+
+  const title = d3.select('#titlecity').append('h2')
+  const text = prefecture + ' ' + city + 'の認知症とMCIの合計人数と65歳有病率'
+  title.attr('id', 'titleLongitudinal').append('text').text(text)
 
   const config = getChartConfig(index)
   const scales = getChartScale(dPop, config)
@@ -54,11 +59,14 @@ const getChartScale = (dPop: DEMENTIAPOP[], config) => {
     .range([0, bodyWidth])
     .domain(dPop.map((d) => d.year))
     .padding(0.2)
-  const yScale = d3.scaleLinear().range([bodyHeight, 0]).domain([0, max])
+  const yScale = d3
+    .scaleLinear()
+    .range([bodyHeight, 0])
+    .domain([max / 2, max])
   const yRateScale = d3
     .scaleLinear()
     .range([bodyHeight, 0])
-    .domain([0, maxRate])
+    .domain([maxRate / 2, maxRate])
 
   return { xScale, yScale, yRateScale }
 }
@@ -105,13 +113,13 @@ const drawLine = (data, scales, config, index) => {
     .append('path')
     .datum(data)
     .attr('id', 'line' + index)
-    .style('transform', `translate(${margin.left+30}px,${margin.top}px)`)
+    .style('transform', `translate(${margin.left + 30}px,${margin.top}px)`)
 
   const pathRate = container
     .append('path')
     .datum(data)
     .attr('id', 'lineRate' + index)
-    .style('transform', `translate(${margin.left+30}px,${margin.top}px)`)
+    .style('transform', `translate(${margin.left + 30}px,${margin.top}px)`)
 
   const line = d3
     .line()

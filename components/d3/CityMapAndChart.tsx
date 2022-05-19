@@ -9,8 +9,6 @@ import { arrangeData } from '../../tools/arrangeData'
 
 const CityMap = ({ suikei, geoJson, prevalence, prefecture, city }) => {
   const [geoData, setgGeoData] = useState(geoJson.features)
-  const refMap = useRef(null)
-  const refChart = useRef(null)
 
   useEffect(() => {
     const index = 'city'
@@ -18,7 +16,7 @@ const CityMap = ({ suikei, geoJson, prevalence, prefecture, city }) => {
     const selectedArea = ''
     const data = { geoData, dPop }
     if (dPop.length > 0 && dPop[0].area === city) {
-      drawLChart(dPop, index)
+      drawLChart(dPop, prefecture, city, index)
     }
     // !!refMap && !!geoData && drawDMap(ref, data, selectedArea, index)
     // !!refChart &&
@@ -28,14 +26,11 @@ const CityMap = ({ suikei, geoJson, prevalence, prefecture, city }) => {
   }, [city])
   return (
     <>
-      <div id="map-container">
-        <a href="https://qiita.com/alclimb/items/31d4360c74a8f8935256">
-          参考文献
-        </a>
-      </div>
       <div className="flex ">
         <div>
-          <h2 className="text-2xl text-center">市区町村</h2>
+          <h2 id="titlecity" className="text-2xl text-center">
+            市区町村
+          </h2>
           <svg
             id="chartcity"
             className="border-solid border-2 border-black"
