@@ -76,7 +76,7 @@ export const arrangeData = (
     ) {
       dp = getPopData(params)
       dps.push(dp as DEMENTIAPOP)
-    } else if (index === 'prefectureall' && s['市などの別'] === 'a') {
+    } else if (index === 'prefectureall' && s['市などの別'] === 'a' &&s["都道府県"]===prefecture) {
       dp = getPopData(params)
       dps.push(dp as DEMENTIAPOP)
     } else if (

@@ -89,12 +89,13 @@ const drawBarsDChart = (
     .attr('y', (d) => yScale(d.area))
     .attr('width', (d) => xScale(d.dPopAllSum))
     .attr('fill', (d) => {
-      let sArea = null
-      if (index === 'all') sArea = prefecture
-      if (index === 'prefecture') sArea = city
-
-      if (d.area === sArea) return 'red'
-      return '#2a5599'
+      if (index === 'all') {
+        if (d.area === prefecture) return 'red'
+        else return '#2a5599'
+      } else if ((index = 'prefecture')) {
+        if (d.area === city) return 'red'
+        else return '#2a5599'
+      } else return '#2a5599'
     })
 
     .on('mouseenter', function (d) {
@@ -102,7 +103,14 @@ const drawBarsDChart = (
 
       const selectedArea = d.area
       d3.select('#viewBox' + index).remove()
-      drawDMap(data, selectedArea, index, prefecture, setPrefecture, setCity)
+      if (index === 'all') {
+        setPrefecture(d.area)
+        setCity('')
+      } else if (index === 'prefecture') {
+        setPrefecture(prefecture)
+        setCity(d.area)
+      }
+      drawDMap(data, index, prefecture, setPrefecture, city, setCity)
       showTooltip(d, index)
     })
     .on('mouseleave', function (d) {

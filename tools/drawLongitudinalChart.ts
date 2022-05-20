@@ -2,15 +2,19 @@ import * as d3 from 'd3'
 import { DEMENTIAPOP } from '../types/dementiaPop'
 
 export const drawLChart = (dPop: DEMENTIAPOP[], prefecture, city, index) => {
-  d3.select('#axisX' + index).remove()
-  d3.select('#axisY' + index).remove()
-  d3.select('#axisYRate' + index).remove()
-  d3.select('#line' + index).remove()
-  d3.select('#lineRate' + index).remove()
+  d3.select('#axisX').remove()
+  d3.select('#axisY' ).remove()
+  d3.select('#axisYRate').remove()
+  d3.select('#line').remove()
+  d3.select('#lineRate').remove()
   d3.select('#titleLongitudinal').remove()
 
-  const title = d3.select('#titlecity').append('h2')
-  const text = prefecture + ' ' + city + 'の認知症とMCIの合計人数(黒線)と65歳有病率（赤線）'
+  const title = d3.select('#title').append('h2')
+  const text =
+    prefecture +
+    ' ' +
+    city +
+    'の認知症とMCIの合計人数(黒線)と65歳有病率（赤線）'
   title.attr('id', 'titleLongitudinal').append('text').text(text)
 
   const config = getChartConfig(index)
@@ -38,7 +42,7 @@ const getChartConfig = (index) => {
 
   const bodyWidth = width - margin.left - margin.right
   const bodyHeight = height - margin.top - margin.bottom
-  const container = d3.select('#chart' + index)
+  const container = d3.select('#graph')
   container.attr('width', width).attr('height', height)
   return {
     width,
@@ -80,7 +84,7 @@ const drawAxes = (scales, config, index) => {
 
   container
     .append('g')
-    .attr('id', 'axisX' + index)
+    .attr('id', 'axisX')
     .style(
       'transform',
       `translate(${margin.left}px,${height - margin.bottom}px)`
@@ -90,14 +94,14 @@ const drawAxes = (scales, config, index) => {
 
   container
     .append('g')
-    .attr('id', 'axisY' + index)
+    .attr('id', 'axisY')
     .style('transform', `translate(${margin.left}px,${margin.top}px)`)
     .style('font', '15px times')
     .call(axisY)
 
   container
     .append('g')
-    .attr('id', 'axisYRate' + index)
+    .attr('id', 'axisYRate')
     .style('transform', `translate(${width - margin.right}px,${margin.top}px)`)
     .style('font', '15px times')
     .style('stroke', 'red')
@@ -112,13 +116,13 @@ const drawLine = (data, scales, config, index) => {
   const path = container
     .append('path')
     .datum(data)
-    .attr('id', 'line' + index)
+    .attr('id', 'line')
     .style('transform', `translate(${margin.left + 30}px,${margin.top}px)`)
 
   const pathRate = container
     .append('path')
     .datum(data)
-    .attr('id', 'lineRate' + index)
+    .attr('id', 'lineRate')
     .style('transform', `translate(${margin.left + 30}px,${margin.top}px)`)
   const line = d3
     .line()
@@ -131,16 +135,18 @@ const drawLine = (data, scales, config, index) => {
     .y((d) => yRateScale(d.rate))
 
   path
-  .transition()
-  .duration(750)
-  .ease(d3.easeBounceInOut)
+    .transition()
+    .duration(750)
+    .ease(d3.easeBounceInOut)
     .attr('fill', 'none')
     .attr('stroke', 'black')
     .attr('stroke-width', 3)
     .attr('d', line)
-    
 
   pathRate
+    .transition()
+    .duration(750)
+    .ease(d3.easeBounceInOut)
     .attr('fill', 'none')
     .attr('stroke', 'red')
     .attr('stroke-width', 3)

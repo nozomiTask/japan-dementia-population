@@ -51,9 +51,9 @@ const CityChart = ({
           <button className="btn-primary" onClick={() => japan()}>
             全国ボタン
           </button>
-          <h2 id="titlecity"></h2>
+          <h2 id="title"></h2>
           <svg
-            id="chartcity"
+            id="graph"
             className="border-solid border-2 border-black"
           ></svg>
         </div>
