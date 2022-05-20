@@ -49,13 +49,10 @@ const CityChart = ({
       <div className="flex ">
         <div className="mt-8 text-2xl text-center">
           <button className="btn-primary" onClick={() => japan()}>
-            全国ボタン
+            全国表示ボタン
           </button>
           <h2 id="title"></h2>
-          <svg
-            id="graph"
-            className="border-solid border-2 border-black"
-          ></svg>
+          <svg id="graph" className="border-solid border-2 border-black"></svg>
         </div>
         {/* <div>
           <h2 className="text-2xl text-center">地図</h2>

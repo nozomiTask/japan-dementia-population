@@ -137,7 +137,7 @@ const drawLine = (data, scales, config, index) => {
   path
     .transition()
     .duration(750)
-    .ease(d3.easeBounceInOut)
+    .ease(d3.easeLinear)
     .attr('fill', 'none')
     .attr('stroke', 'black')
     .attr('stroke-width', 3)
@@ -146,7 +146,7 @@ const drawLine = (data, scales, config, index) => {
   pathRate
     .transition()
     .duration(750)
-    .ease(d3.easeBounceInOut)
+    .ease(d3.easeLinear)
     .attr('fill', 'none')
     .attr('stroke', 'red')
     .attr('stroke-width', 3)
