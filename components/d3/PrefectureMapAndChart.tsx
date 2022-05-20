@@ -10,6 +10,7 @@ const PrefectureMap = ({
   prevalence,
   prefecture,
   setPrefecture,
+  city,
   setCity,
 }) => {
   const [geoData, setGeoData] = useState(null)
@@ -28,7 +29,6 @@ const PrefectureMap = ({
         return d
       })
 
-    const selectedArea = ''
     const data = { geoJsonPrefecture, geoData, dPop }
 
     if (geoJsonPrefecture) {
@@ -37,18 +37,18 @@ const PrefectureMap = ({
 
       prefNo1 === prefNo2 &&
         geoJsonPrefecture &&
-        drawDMap(data, selectedArea, index, prefecture, setPrefecture, setCity)
+        drawDMap(data,  index, prefecture, setPrefecture, city,setCity)
       prefNo1 === prefNo2 &&
         geoJsonPrefecture &&
         drawDChart(
           data,
-          selectedArea,
           index,
           prefecture,
           setPrefecture,
+          city,
           setCity
         )
-      selectedArea !== '' && setCity(selectedArea)
+      // selectedArea !== '' && setCity(selectedArea)
     }
   }, [geoJsonPrefecture, prefecture])
   return (

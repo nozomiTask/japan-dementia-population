@@ -118,7 +118,9 @@ const D3Japan = () => {
                 suikei={suikei}
                 geoJson={geoJson}
                 prevalence={prevalence}
+                prefecture={prefecture}
                 setPrefecture={setPrefecture}
+                city={city}
                 setCity={setCity}
               />
             )}
@@ -131,6 +133,7 @@ const D3Japan = () => {
                 prevalence={prevalence}
                 prefecture={prefecture}
                 setPrefecture={setPrefecture}
+                city={city}
                 setCity={setCity}
               />
             )}

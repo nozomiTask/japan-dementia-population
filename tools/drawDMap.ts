@@ -6,10 +6,10 @@ import { centerXY } from './centerXY'
 import { showTooltip } from './tooltips'
 export const drawDMap = (
   data,
-  selectedArea,
   index,
   prefecture,
   setPrefecture,
+  city,
   setCity
 ) => {
   d3.select('#label-group' + index).remove()
@@ -68,9 +68,13 @@ export const drawDMap = (
     .attr(`stroke-width`, 0.25)
     .attr('id', 'mapArea')
     .attr(`fill`, (d) => {
-      let sArea = getAreaName(index, d, prefecture)
-
-      if (selectedArea === sArea) {
+      let getArea = getAreaName(index, d, prefecture)
+      
+      let sArea = null
+      if (index === 'all') sArea = prefecture
+      if (index === 'prefecture') sArea = city
+      
+      if (getArea === sArea) {
         return 'red'
       } else {
         return `#2a5599`
@@ -104,6 +108,7 @@ export const drawDMap = (
         prefecture,
         dPop,
         setPrefecture,
+        city,
         setCity
       )
       let sArea = getAreaName(index, item, prefecture)
@@ -111,7 +116,11 @@ export const drawDMap = (
         setPrefecture(sArea)
         setCity('')
       }
-      if (index === 'prefecture') setCity(sArea)
+      if (index === 'prefecture')
+      { 
+        setPrefecture(prefecture)
+        setCity(sArea)
+      }
       // マウス位置の都道府県領域を赤色に変更
       // d3.select(this).attr(`fill`, `#CC4C39`)
       d3.select(this).attr(`fill`, `red`)
@@ -175,6 +184,7 @@ const displayLabel = (
   prefecture,
   dPop,
   setPrefecture,
+  city,
   setCity
 ) => {
   // ラベル用のグループ
@@ -184,10 +194,12 @@ const displayLabel = (
   let sArea = getAreaName(index, item, prefecture)
 
   const label = sArea
-  const selectedArea = label
+
+  if(index==="all") setPrefecture(label)
+  if(index==="prefcture") setCity(label)
 
   //チャートへの書き入れ
-  drawDChart(data, selectedArea, index, prefecture, setPrefecture, setCity)
+  drawDChart(data,index, prefecture, setPrefecture, city,setCity)
   const dd = dPop.find((d) => d.area === label)
   dd && showTooltip(dd, index)
 

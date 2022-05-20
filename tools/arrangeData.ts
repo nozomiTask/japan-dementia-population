@@ -7,6 +7,8 @@ export const arrangeData = (
   city,
   index
 ): DEMENTIAPOP[] => {
+  const dps: DEMENTIAPOP[] = []
+
   const sources = [
     'AsiaPaciﬁcHighIncome',
     'EastAsia',
@@ -28,7 +30,6 @@ export const arrangeData = (
     '90歳以上',
   ]
 
-  const dps: DEMENTIAPOP[] = []
   const source = 'DementiaPlusMCIJapan'
   const prvlnc = prevalence.filter((p) => p.source === source)
 
@@ -40,58 +41,89 @@ export const arrangeData = (
       .filter((f) => f.indexOf('/a') !== -1)
       .map((m) => m.split('/')[0])
 
+    const params = {
+      prefecture,
+      s,
+      ages,
+      prvlnc,
+      age65Stratified,
+      index,
+      city,
+      source,
+    }
+    /**
+     * prefecture   city    index         ===>  必要なデータ条件
+     * ''           "全国"  "all"   ===>  s['コード'] === '0000' 全国版を提示
+     *
+     * ""           ""      "all"         ===> s['市などの別'] === 'a'
+     *
+     * 道府県名      ""      "prefecture"  ===> ["1","2","3"].indexOf(s['市などの別'])  !== -1 &&
+     *                                          s['都道府県'] === prefecture
+     *
+     * "東京都"      ""      "prefecture"  ===> s['市などの別'] === '0' &&
+     *                                          s['都道府県'] ==="東京都" &&
+     *                                          s['市などの別'].indexOf('区')
+     *
+     * 都道府県名    市区町村名 "city" ===> s['市区町村'] === city
+     */
+
+    let dp: DEMENTIAPOP = null
     if (
-      (prefecture === '' && city === '全国' && s['コード'] === '0000') ||
-      (city === '' &&
-        s['都道府県'] === prefecture &&
-        s['市などの別'] === 'a') ||
-      (index === 'city' &&
-        s['市区町村'] === city &&
-        prefecture !== '' &&
-        s['市などの別'] !== '0' &&
-        s['市などの別'] !== 'a') ||
-      (index === 'prefecture' &&
-        s['市などの別'] !== 'a' &&
-        s['市などの別'] !== '0' &&
-        s['都道府県'] === prefecture) ||
-      (index === 'prefecture' &&
-        s['市などの別'] === '0' &&
-        s['都道府県'] === prefecture &&
-        prefecture === '東京都' &&
-        s['市などの別'].indexOf('区')) ||
-      (index === 'all' && s['市などの別'] === 'a')
+      prefecture === '' &&
+      city === '全国' &&
+      index === 'all' &&
+      s['コード'] === '0000'
     ) {
-      // if (
-      //   //　全国地図を書くとき index="all"
-      //   (index === 'all' && s['市などの別'] === 'a') ||
-      //   // 都道府県地図を書くとき、index="prefecture"
-      //   (index === 'prefecture' &&
-      //     ((prefecture === s['都道府県'] && s['市などの別'] === '0') ||
-      //       (prefecture === '東京都' && s['市などの別'].indexOf('区')))) ||
-      //   (index === 'city' && s['市区町村'] === city)
-      // )
-      const dp = getPopData(
-        s,
-        ages,
-        prvlnc,
-        age65Stratified,
-        index,
-        city,
-        source
-      )
+      dp = getPopData(params)
+      dps.push(dp as DEMENTIAPOP)
+    } else if (index === 'prefectureall' && s['市などの別'] === 'a') {
+      dp = getPopData(params)
+      dps.push(dp as DEMENTIAPOP)
+    } else if (
+      prefecture === '' &&
+      city === '' &&
+      index === 'all' &&
+      s['市などの別'] === 'a'
+    ) {
+      dp = getPopData(params)
+      dps.push(dp as DEMENTIAPOP)
+    } else if (
+      prefecture !== '' &&
+      city === '' &&
+      index === 'prefecture' &&
+      ['1', '2', '3'].indexOf(s['市などの別']) !== -1 &&
+      s['市などの別'] !== '0' &&
+      s['都道府県'] === prefecture
+    ) {
+      dp = getPopData(params)
+      dps.push(dp as DEMENTIAPOP)
+    } else if (
+      prefecture === '東京都' &&
+      city === '' &&
+      index === 'prefecture' &&
+      s['市などの別'] === '0' &&
+      s['都道府県'] === '東京都' &&
+      s['市などの別'].indexOf('区')
+    ) {
+      dp = getPopData(params)
+      dps.push(dp as DEMENTIAPOP)
+    } else if (
+      prefecture !== '' &&
+      city !== '' &&
+      index === 'city' &&
+      s['市区町村'] === city
+    ) {
+      dp = getPopData(params)
       dps.push(dp as DEMENTIAPOP)
     }
   })
-  console.log(
-    `推計から：${[
-      ...dps.filter((d) => d.year === '2020年').map((m) => m.area),
-    ]}`
-  )
-
   return dps
 }
 
-const getPopData = (s, ages, prvlnc, age65Stratified, index, city, source) => {
+const getPopData = (params) => {
+  const dps: DEMENTIAPOP[] = []
+  const { prefecture, s, ages, prvlnc, age65Stratified, index, city, source } =
+    params
   const dPopMale = {}
   const dPopFemale = {}
   const dPopAll = {}
@@ -130,10 +162,10 @@ const getPopData = (s, ages, prvlnc, age65Stratified, index, city, source) => {
   const dRateAll65 = dPopAll65 / PopAll65
 
   let area = null
-  if (index === 'prefecture') area = s['市区町村']
-  if (index === 'all') area = s['都道府県']
-  if (city === '全国') area = '全国'
-  if (city === '') area = s['都道府県']
+  if (prefecture === '' && city === '全国') area = s['都道府県']
+  if (prefecture === '' && city === '' && index === 'all') area = s['都道府県']
+  if (prefecture !== '' && index === 'prefecture') area = s['市区町村']
+  if (city !== '全国' && index === 'city') area = s['市区町村']
 
   const year = s['年']
   const dp: DEMENTIAPOP = {
@@ -158,7 +190,6 @@ const getPopData = (s, ages, prvlnc, age65Stratified, index, city, source) => {
     dementiaCategory: 'dementia', //dementia, mci, dementiaAndMci
     source: source,
   }
-
   return dp
 }
 

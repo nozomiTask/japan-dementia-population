@@ -3,10 +3,10 @@ import { drawDMap } from './drawDMap'
 import { showTooltip } from './tooltips'
 export const drawDChart = (
   data,
-  selectedArea,
   index,
   prefecture,
   setPrefecture,
+  city,
   setCity
 ) => {
   d3.select('#chartBar' + index).remove()
@@ -20,10 +20,10 @@ export const drawDChart = (
     data,
     scales,
     config,
-    selectedArea,
     index,
     prefecture,
     setPrefecture,
+    city,
     setCity
   )
   drawAxesDChart(scales, config, index, prefecture, dPop)
@@ -65,10 +65,10 @@ const drawBarsDChart = (
   data,
   scales,
   config,
-  selectedArea,
   index,
   prefecture,
   setPrefecture,
+  city,
   setCity
 ) => {
   const { geoData, dPop } = data
@@ -89,7 +89,11 @@ const drawBarsDChart = (
     .attr('y', (d) => yScale(d.area))
     .attr('width', (d) => xScale(d.dPopAllSum))
     .attr('fill', (d) => {
-      if (d.area === selectedArea) return 'red'
+      let sArea = null
+      if (index === 'all') sArea = prefecture
+      if (index === 'prefecture') sArea = city
+
+      if (d.area === sArea) return 'red'
       return '#2a5599'
     })
 

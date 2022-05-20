@@ -19,13 +19,26 @@ const CityChart = ({
   const [geoData, setgGeoData] = useState(geoJson.features)
 
   useEffect(() => {
-    const index = 'city'
-    const dPop = arrangeData(suikei, prevalence, prefecture, city, index)
-
-    if (dPop.length > 0 && dPop[0].area === city) {
-      drawLChart(dPop, prefecture, city, index)
+    let index = 'city'
+    if (prefecture === '' && city === '') index = 'all'
+    if (prefecture !== '' && city === '') index = 'prefectureall'
+    if (prefecture !== '' && city !== '') index = 'city'
+    if (prefecture === '' && city === '全国') index = 'all'
+    if (prefCheck(suikei, prefecture, city)) {
+      const dPop = arrangeData(suikei, prevalence, prefecture, city, index)
+      dPop && dPop.length > 0 && drawLChart(dPop, prefecture, city, index)
     }
   }, [prefecture, city])
+
+  const prefCheck = (suikei, prefecture, city): boolean => {
+    let ret: boolean = false
+    if (prefecture === '' || city === '') return true
+    const pref = suikei
+      .filter((s) => s['都道府県'] === prefecture && s['年'] === '2020年')
+      .map((ss) => ss['市区町村'])
+
+    return pref.indexOf(city) !== -1
+  }
 
   const japan = () => {
     setPrefecture('')

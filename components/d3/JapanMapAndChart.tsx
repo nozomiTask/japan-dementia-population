@@ -9,16 +9,17 @@ const JapanMapAndChart = ({
   suikei,
   geoJson,
   prevalence,
+  prefecture,
   setPrefecture,
+  city,
   setCity,
 }) => {
-  const [geoData, setgGeoData] = useState(geoJson.features)
+  const [geoData, setGeoData] = useState(geoJson.features)
 
   useEffect(() => {
     const index = 'all'
-    const dPop_ = arrangeData(suikei, prevalence, '', '', index).filter(
-      (d) => d.year === '2020年'
-    )
+    const dPop__ = arrangeData(suikei, prevalence, '', '', index)
+    const dPop_ = dPop__.filter((d) => d.year === '2020年')
     let order = 0
     const dPop = dPop_
       .sort((a, b) => d3.descending(a.dPopAllSum, b.dPopAllSum))
@@ -28,11 +29,9 @@ const JapanMapAndChart = ({
         return d
       })
 
-    const selectedArea = ''
     const data = { geoJson, geoData, dPop }
-    drawDMap(data, selectedArea, index, '', setPrefecture, setCity)
-    drawDChart(data, selectedArea, index, '', setPrefecture, setCity)
-    selectedArea !== '' && setPrefecture(selectedArea)
+    drawDMap(data, index, '', setPrefecture, '', setCity)
+    drawDChart(data, index, '', setPrefecture, '', setCity)
   }, [geoData, geoJson, prevalence, suikei])
   return (
     <>
