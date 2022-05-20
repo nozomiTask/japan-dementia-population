@@ -138,7 +138,7 @@ export const drawDMap = (
   const zoom = d3.zoom().on('zoom', zoomed)
 
   svg.call(drag)
-  svg.call(zoom)
+  // svg.call(zoom)
 
   function dragstarted() {
     d3.select(this).raise() //this があるからアロー関数はダメ
