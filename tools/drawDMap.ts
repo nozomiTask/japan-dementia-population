@@ -4,6 +4,9 @@ import { prefectureList } from './prefectureList'
 import * as topojson from 'topojson-client'
 import { centerXY } from './centerXY'
 import { showTooltip } from './tooltips'
+// import { drag } from 'd3-drag'
+import { zoom } from 'd3-zoom'
+
 export const drawDMap = (
   data,
   index,
@@ -57,8 +60,9 @@ export const drawDMap = (
     .attr(`width`, `100%`)
     .attr(`height`, `100%`)
     .attr('id', 'viewBox' + index)
+    .attr('cursor', 'grab')
 
-  svg
+  const map = svg
     .selectAll(`path`)
     .data(geoData_)
     .enter()
@@ -69,11 +73,11 @@ export const drawDMap = (
     .attr('id', 'mapArea')
     .attr(`fill`, (d) => {
       let getArea = getAreaName(index, d, prefecture)
-      
+
       let sArea = null
       if (index === 'all') sArea = prefecture
       if (index === 'prefecture') sArea = city
-      
+
       if (getArea === sArea) {
         return 'red'
       } else {
@@ -116,8 +120,7 @@ export const drawDMap = (
         setPrefecture(sArea)
         setCity('')
       }
-      if (index === 'prefecture')
-      { 
+      if (index === 'prefecture') {
         setPrefecture(prefecture)
         setCity(sArea)
       }
@@ -126,6 +129,56 @@ export const drawDMap = (
       d3.select(this).attr(`fill`, `red`)
       d3.select(this).attr(`stroke-width`, `1`)
     })
+
+  const drag = d3
+    .drag()
+    .on('start', dragstarted)
+    .on('drag', dragged)
+    .on('end', dragended)
+  const zoom = d3.zoom().on('zoom', zoomed)
+
+  svg.call(drag)
+  svg.call(zoom)
+
+  function dragstarted() {
+    d3.select(this).raise() //this があるからアロー関数はダメ
+    svg.attr('cursor', 'grabbing')
+  }
+
+  function dragged(event, d) {
+    const tl = projection.translate()
+    projection.translate([tl[0] + d3.event.dx, tl[1] + d3.event.dy])
+    const path = d3.geoPath().projection(projection)
+    map.attr('d', path)
+  }
+
+  function dragended() {
+    svg.attr('cursor', 'grab')
+  }
+
+  //https://www.kabuku.co.jp/developers/how-to-enable-zoom-in-svg
+  function zoomed() {
+    const VB = d3.select('#viewBoxall')
+    const [minX_, minY_, width_, height_] = VB.attr('viewBox').split(' ')
+    const [minX, minY, width, height] = [+minX_, +minY_, +width_, +height_]
+    const { x, y, k } = d3.event.transform
+    // 大きさをscale倍する
+    const zoomedWidth = width * k
+    const zoomedHeight = height * k
+    // 中心の座標を計算する
+    const centerX = minX + width / 2.0
+    const centerY = minY + height / 2.0
+    // scale倍したあとのmin-xとmin-yを計算する
+    const zoomedMinX = centerX - zoomedWidth / 2.0
+    const zoomedMinY = centerY - zoomedHeight / 2.0
+    const zoomedViewBox = [
+      zoomedMinX,
+      zoomedMinY,
+      zoomedWidth,
+      zoomedHeight,
+    ].join(' ')
+    VB.attr('viewBox', zoomedViewBox)
+  }
 
   /**
    * 都道府県領域の MouseMove イベントハンドラ
@@ -195,11 +248,11 @@ const displayLabel = (
 
   const label = sArea
 
-  if(index==="all") setPrefecture(label)
-  if(index==="prefcture") setCity(label)
+  if (index === 'all') setPrefecture(label)
+  if (index === 'prefcture') setCity(label)
 
   //チャートへの書き入れ
-  drawDChart(data,index, prefecture, setPrefecture, city,setCity)
+  drawDChart(data, index, prefecture, setPrefecture, city, setCity)
   const dd = dPop.find((d) => d.area === label)
   dd && showTooltip(dd, index)
 

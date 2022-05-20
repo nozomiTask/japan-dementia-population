@@ -50,6 +50,7 @@ const PrefectureMap = ({
         )
       // selectedArea !== '' && setCity(selectedArea)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [geoJsonPrefecture, prefecture])
   return (
     <>

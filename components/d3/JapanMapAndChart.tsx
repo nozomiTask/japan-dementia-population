@@ -32,14 +32,11 @@ const JapanMapAndChart = ({
     const data = { geoJson, geoData, dPop }
     drawDMap(data, index, '', setPrefecture, '', setCity)
     drawDChart(data, index, '', setPrefecture, '', setCity)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [geoData, geoJson, prevalence, suikei])
   return (
     <>
-      <div id="map-container">
-        <a href="https://qiita.com/alclimb/items/31d4360c74a8f8935256">
-          参考文献
-        </a>
-      </div>
+      <div id="map-container"></div>
       <div className="flex ">
         <div>
           <h2 className="text-2xl text-center">全国</h2>

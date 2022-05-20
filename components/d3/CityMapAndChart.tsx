@@ -28,6 +28,7 @@ const CityChart = ({
       const dPop = arrangeData(suikei, prevalence, prefecture, city, index)
       dPop && dPop.length > 0 && drawLChart(dPop, prefecture, city, index)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [prefecture, city])
 
   const prefCheck = (suikei, prefecture, city): boolean => {
