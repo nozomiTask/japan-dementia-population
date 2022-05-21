@@ -36,7 +36,7 @@ const PrefectureMap = ({
       })
 
     const cities = dPop.map((d) => d.area)
-    cities.length > 70 ? setChartOrNot(false) : setChartOrNot(false)
+    cities.length > 70 ? setChartOrNot(false) : setChartOrNot(true)
     const table: PREFECTURECITIES = {
       prefecture: prefecture,
       cities: cities,
