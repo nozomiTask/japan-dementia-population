@@ -37,6 +37,8 @@ const PrefectureMap = ({
 
     const data = { geoJsonPrefecture, geoData, dPop }
 
+    if (dPop.length > 50) setChartOrNot(false)
+
     if (geoJsonPrefecture) {
       const prefNo1 = prefectureList[prefecture]
       const prefNo2 = Object.keys(geoJsonPrefecture.objects)[0]
@@ -53,7 +55,7 @@ const PrefectureMap = ({
         !chartOrNot &&
         drawDTable(data, index, prefecture, setPrefecture, city, setCity)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     prefecture,
     city,
