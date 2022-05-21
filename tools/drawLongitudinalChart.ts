@@ -7,8 +7,8 @@ export const drawLChart = (dPop: DEMENTIAPOP[], prefecture, city, index) => {
   d3.select('#axisYRate').remove()
   d3.select('#line').remove()
   d3.select('#lineRate').remove()
-  d3.select('#circle').remove()
-  d3.select('#circleRate').remove()
+  d3.selectAll('#circle').remove()
+  d3.selectAll('#circleRate').remove()
   d3.select('#titleLongitudinal').remove()
 
   const title = d3.select('#title').append('h2')
@@ -29,7 +29,7 @@ export const drawLChart = (dPop: DEMENTIAPOP[], prefecture, city, index) => {
       year: d.year,
     }
   })
-  
+
   drawAxes(scales, config, index)
   drawLine(data, scales, config, index)
   drawCircle(data, scales, config, index)
@@ -38,7 +38,7 @@ const getChartConfig = (index) => {
   const width = 700
   const height = 400
   const margin = {
-    top: 30,
+    top: 50,
     left: 80,
     bottom: 40,
     right: 60,
@@ -72,7 +72,7 @@ const getChartScale = (dPop: DEMENTIAPOP[], config) => {
   const yScale = d3
     .scaleLinear()
     .range([bodyHeight, 0])
-    .domain([min-max/10, max])
+    .domain([min - max / 10, max])
   const yRateScale = d3
     .scaleLinear()
     .range([bodyHeight, 0])
@@ -146,7 +146,7 @@ const drawLine = (data, scales, config, index) => {
     // .ease(d3.easeLinear)
     .attr('fill', 'none')
     .attr('stroke', 'black')
-    .attr('stroke-width', 3)
+    .attr('stroke-width', 1)
     .attr('d', line)
 
   pathRate
@@ -155,7 +155,7 @@ const drawLine = (data, scales, config, index) => {
     // .ease(d3.easeLinear)
     .attr('fill', 'none')
     .attr('stroke', 'red')
-    .attr('stroke-width', 3)
+    .attr('stroke-width', 1)
     .attr('d', lineRate)
 }
 
@@ -163,12 +163,8 @@ const drawCircle = (data, scales, config, index) => {
   const { container, margin } = config
   const { xScale, yScale, yRateScale } = scales
 
-const circles =   container
-    .selectAll('circle')
-    .data(data)
-    .enter()
-
-circles
+  const circles = container.selectAll('circle').data(data).enter()
+  circles
     .append('circle')
     .attr('id', 'circle')
     .attr('cx', (d) => xScale(d.year))
@@ -176,13 +172,34 @@ circles
     .attr('fill', 'black')
     .attr('r', 6)
     .style('transform', `translate(${margin.left + 30}px,${margin.top}px)`)
-    
-    circles
+  circles
     .append('circle')
     .attr('id', 'circleRate')
     .attr('cx', (d) => xScale(d.year))
     .attr('cy', (d) => yRateScale(d.rate))
     .attr('fill', 'red')
     .attr('r', 6)
+    .style('transform', `translate(${margin.left + 30}px,${margin.top}px)`)
+
+  const texts = container.append('g').selectAll('text').data(data).enter()
+  texts
+    .append('text')
+    .attr('id', 'circle')
+    .attr('x', (d) => xScale(d.year) - 30)
+    .attr('y', (d) => yScale(d.value) + 30)
+    .text((d) => d.value + '人')
+    .style('font-size', (d) => {
+      if (d.value > 100000) return '14px'
+      else return '20px'
+    })
+    .style('transform', `translate(${margin.left + 30}px,${margin.top}px)`)
+  texts
+    .append('text')
+    .attr('id', 'circleRate')
+    .attr('x', (d) => xScale(d.year) - 10)
+    .attr('y', (d) => yRateScale(d.rate) - 20)
+    .text((d) => d3.format('.0f')(d.rate * 100) + '%')
+    .style('font-size', '20px')
+    .style('fill', 'red')
     .style('transform', `translate(${margin.left + 30}px,${margin.top}px)`)
 }
