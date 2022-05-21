@@ -3,6 +3,7 @@ import * as d3 from 'd3'
 import { drawDMap } from '../../tools/drawDMap'
 import { drawDChart } from '../../tools/drawDChart'
 import { arrangeData } from '../../tools/arrangeData'
+import { drawDTable } from '../../tools/drawDTable'
 //https://qiita.com/alclimb/items/31d4360c74a8f8935256
 
 const JapanMapAndChart = ({
@@ -15,6 +16,7 @@ const JapanMapAndChart = ({
   setCity,
 }) => {
   const [geoData, setGeoData] = useState(geoJson.features)
+  const [chartOrNot, setChartOrNot] = useState(true)
 
   useEffect(() => {
     const index = 'all'
@@ -31,24 +33,42 @@ const JapanMapAndChart = ({
 
     const data = { geoJson, geoData, dPop }
     drawDMap(data, index, '', setPrefecture, '', setCity)
-    drawDChart(data, index, '', setPrefecture, '', setCity)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [geoData, geoJson, prevalence, suikei])
+    chartOrNot && drawDChart(data, index, '', setPrefecture, '', setCity)
+    !chartOrNot &&
+      drawDTable(data, index, prefecture, setPrefecture, city, setCity)
+  }, [prevalence, city, suikei, geoJson, geoData, chartOrNot, prefecture])
+
+  const changeTable = () => {
+    setChartOrNot(!chartOrNot)
+  }
   return (
     <>
       <div id="map-container"></div>
+
       <div className="flex ">
         <div>
-          <h2 className="text-2xl text-center">全国</h2>
-          <svg
-            id="chartall"
-            className="border-solid border-2 border-black"
-            width="400"
-            height="400"
-          ></svg>
+          <span className="ml-20 text-2xl text-center">{'    '} 全国</span>
+          {chartOrNot && (
+            <svg
+              id="chartall"
+              className="border-solid border-2 border-black"
+              width="400"
+              height="400"
+            ></svg>
+          )}{' '}
+          {!chartOrNot && (
+            <svg
+              id="tableall"
+              className="border-solid border-2 border-black"
+              width="400"
+              height="400"
+            ></svg>
+          )}
         </div>
         <div>
-          <h2 id="titlemapall" className="text-2xl text-center">地図</h2>
+          <h2 id="titlemapprefecture" className="text-2xl text-center">
+            地図
+          </h2>
           <svg
             id="mapall"
             className="bar border-solid border-2 border-black"
@@ -59,6 +79,12 @@ const JapanMapAndChart = ({
           </svg>
         </div>
       </div>
+      <button
+        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+        onClick={changeTable}
+      >
+        切替
+      </button>
     </>
   )
 }

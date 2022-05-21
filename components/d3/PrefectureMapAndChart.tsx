@@ -4,6 +4,7 @@ import { drawDChart } from '../../tools/drawDChart'
 import { prefectureList } from '../../tools/prefectureList'
 import { arrangeData } from '../../tools/arrangeData'
 import * as d3 from 'd3'
+import { drawDTable } from '../../tools/drawDTable'
 const PrefectureMap = ({
   suikei,
   geoJsonPrefecture,
@@ -20,7 +21,6 @@ const PrefectureMap = ({
 
   const [geoData, setGeoData] = useState(null)
   const [chartOrNot, setChartOrNot] = useState(true)
-  const [table, setTable] = useState<PREFECTURECITIES>(null)
   useEffect(() => {
     const index = 'prefecture'
     const dPop_ = arrangeData(suikei, prevalence, prefecture, '', index).filter(
@@ -35,13 +35,6 @@ const PrefectureMap = ({
         return d
       })
 
-    const cities = dPop.map((d) => d.area)
-    cities.length > 70 ? setChartOrNot(false) : setChartOrNot(true)
-    const table: PREFECTURECITIES = {
-      prefecture: prefecture,
-      cities: cities,
-    }
-
     const data = { geoJsonPrefecture, geoData, dPop }
 
     if (geoJsonPrefecture) {
@@ -55,14 +48,29 @@ const PrefectureMap = ({
         geoJsonPrefecture &&
         chartOrNot &&
         drawDChart(data, index, prefecture, setPrefecture, city, setCity)
+      prefNo1 === prefNo2 &&
+        geoJsonPrefecture &&
+        !chartOrNot &&
+        drawDTable(data, index, prefecture, setPrefecture, city, setCity)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [geoJsonPrefecture, prefecture])
+  }, [
+    prefecture,
+    city,
+    chartOrNot,
+    suikei,
+    prevalence,
+    geoJsonPrefecture,
+    geoData,
+  ])
+
+  const changeTable = () => {
+    setChartOrNot(!chartOrNot)
+  }
   return (
     <>
       <div className="flex ">
-        <div className="flex-col">
-          <h2 className="text-2xl text-center">都道府県</h2>
+        <div>
+          <span className="ml-20 text-2xl text-center">{'    '} 都道府県</span>
           {chartOrNot && (
             <svg
               id="chartprefecture"
@@ -71,18 +79,15 @@ const PrefectureMap = ({
               height="400"
             ></svg>
           )}{' '}
+          {!chartOrNot && (
+            <svg
+              id="tableprefecture"
+              className="border-solid border-2 border-black"
+              width="400"
+              height="400"
+            ></svg>
+          )}
         </div>
-        {/* https://www.ibulog.com/posts/2021/08/tailwind-fixed-value */}
-
-        {!chartOrNot && (
-          <div
-            className="border-solid border-2 border-black"
-            width="350"
-            height="400"
-          >
-            chart@@@@
-          </div>
-        )}
         <div>
           <h2 id="titlemapprefecture" className="text-2xl text-center">
             地図
@@ -97,6 +102,12 @@ const PrefectureMap = ({
           </svg>
         </div>
       </div>
+      <button
+        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+        onClick={changeTable}
+      >
+        切替
+      </button>
     </>
   )
 }

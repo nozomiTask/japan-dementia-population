@@ -26,10 +26,9 @@ const CityChart = ({
     if (prefecture === '' && city === '全国') index = 'all'
     if (prefCheck(suikei, prefecture, city)) {
       const dPop = arrangeData(suikei, prevalence, prefecture, city, index)
-      dPop && dPop.length > 0 && drawLChart(dPop, prefecture, city, index)
+      dPop && dPop.length === 7 && drawLChart(dPop, prefecture, city, index)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [prefecture, city])
+  }, [prefecture, city, suikei, prevalence])
 
   const prefCheck = (suikei, prefecture, city): boolean => {
     let ret: boolean = false
@@ -47,11 +46,14 @@ const CityChart = ({
   }
   return (
     <>
+      <button
+        className="mt-10 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+        onClick={() => japan()}
+      >
+        全国表示ボタン
+      </button>{' '}
       <div className="flex ">
         <div className="mt-8 text-2xl text-center">
-          <button className="btn-primary" onClick={() => japan()}>
-            全国表示ボタン
-          </button>
           <h2 id="title"></h2>
           <svg id="graph" className="border-solid border-2 border-black"></svg>
         </div>

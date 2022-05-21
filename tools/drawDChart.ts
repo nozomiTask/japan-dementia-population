@@ -89,33 +89,31 @@ const drawBarsDChart = (
     .attr('y', (d) => yScale(d.area))
     .attr('width', (d) => xScale(d.dPopAllSum))
     .attr('fill', (d) => {
-      if (index === 'all') {
-        if (d.area === prefecture) return 'red'
-        else return '#2a5599'
-      } else if ((index = 'prefecture')) {
-        if (d.area === city) return 'red'
-        else return '#2a5599'
-      } else return '#2a5599'
+      let filledColor = null
+      if (index === 'all')
+        filledColor = d.area === prefecture ? 'red' : '#2a5599'
+      if (index === 'prefecture')
+        filledColor = d.area === city ? 'red' : '#2a5599'
+      return filledColor
     })
 
-    .on('mouseenter', function (d) {
+    .on('click', function (d) {
       d3.select(this).attr('fill', 'red')
 
-      const selectedArea = d.area
-      d3.select('#viewBox' + index).remove()
+      // d3.select('#viewBox' + index).remove()
       if (index === 'all') {
         setPrefecture(d.area)
         setCity('')
       } else if (index === 'prefecture') {
-        setPrefecture(prefecture)
+        // setPrefecture(prefecture)
         setCity(d.area)
       }
-      drawDMap(data, index, prefecture, setPrefecture, city, setCity)
+      // drawDMap(data, index, prefecture, setPrefecture, city, setCity)
       showTooltip(d, index)
     })
-    .on('mouseleave', function (d) {
-      d3.select(this).attr('fill', '#2a5599')
-    })
+  // .on('mouseleave', function (d) {
+  //   d3.select(this).attr('fill', '#2a5599')
+  // })
 }
 
 const drawAxesDChart = (scales, config, index, prefecture, dPop) => {

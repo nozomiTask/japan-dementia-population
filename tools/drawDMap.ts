@@ -72,17 +72,13 @@ export const drawDMap = (
     .attr(`stroke-width`, 0.25)
     .attr('id', 'mapArea')
     .attr(`fill`, (d) => {
-      let getArea = getAreaName(index, d, prefecture)
-
-      let sArea = null
-      if (index === 'all') sArea = prefecture
-      if (index === 'prefecture') sArea = city
-
-      if (getArea === sArea) {
-        return 'red'
-      } else {
-        return `#2a5599`
-      }
+      const getAreaNameFromTopojson = getAreaName(index, d, prefecture)
+      let filledColor = null
+      if (index === 'all')
+        filledColor = getAreaNameFromTopojson === prefecture ? 'red' : `#2a5599`
+      if (index === 'prefecture')
+        filledColor = getAreaNameFromTopojson === city ? 'red' : `#2a5599`
+      return filledColor
     })
     .attr(`fill-opacity`, (item: any) => {
       // メモ
