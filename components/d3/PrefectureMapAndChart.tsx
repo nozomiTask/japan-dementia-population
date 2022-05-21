@@ -13,8 +13,14 @@ const PrefectureMap = ({
   city,
   setCity,
 }) => {
-  const [geoData, setGeoData] = useState(null)
+  interface PREFECTURECITIES {
+    prefecture: string
+    cities: string[]
+  }
 
+  const [geoData, setGeoData] = useState(null)
+  const [chartOrNot, setChartOrNot] = useState(true)
+  const [table, setTable] = useState<PREFECTURECITIES>(null)
   useEffect(() => {
     const index = 'prefecture'
     const dPop_ = arrangeData(suikei, prevalence, prefecture, '', index).filter(
@@ -29,6 +35,13 @@ const PrefectureMap = ({
         return d
       })
 
+    const cities = dPop.map((d) => d.area)
+    cities.length > 70 ? setChartOrNot(false) : setChartOrNot(false)
+    const table: PREFECTURECITIES = {
+      prefecture: prefecture,
+      cities: cities,
+    }
+
     const data = { geoJsonPrefecture, geoData, dPop }
 
     if (geoJsonPrefecture) {
@@ -37,35 +50,41 @@ const PrefectureMap = ({
 
       prefNo1 === prefNo2 &&
         geoJsonPrefecture &&
-        drawDMap(data,  index, prefecture, setPrefecture, city,setCity)
+        drawDMap(data, index, prefecture, setPrefecture, city, setCity)
       prefNo1 === prefNo2 &&
         geoJsonPrefecture &&
-        drawDChart(
-          data,
-          index,
-          prefecture,
-          setPrefecture,
-          city,
-          setCity
-        )
-      // selectedArea !== '' && setCity(selectedArea)
+        chartOrNot &&
+        drawDChart(data, index, prefecture, setPrefecture, city, setCity)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [geoJsonPrefecture, prefecture])
   return (
     <>
       <div className="flex ">
-        <div>
+        <div className="flex-col">
           <h2 className="text-2xl text-center">都道府県</h2>
-          <svg
-            id="chartprefecture"
-            className="border-solid border-2 border-black"
-            width="400"
-            height="400"
-          ></svg>
+          {chartOrNot && (
+            <svg
+              id="chartprefecture"
+              className="border-solid border-2 border-black"
+              width="400"
+              height="400"
+            ></svg>
+          )}{' '}
         </div>
+        {!chartOrNot && (
+          <div
+            className="border-solid border-2 border-black"
+            width="350"
+            height="400"
+          >
+            chart@@@@
+          </div>
+        )}
         <div>
-          <h2 id="titlemapprefecture" className="text-2xl text-center">地図</h2>
+          <h2 id="titlemapprefecture" className="text-2xl text-center">
+            地図
+          </h2>
           <svg
             id="mapprefecture"
             className="bar border-solid border-2 border-black"

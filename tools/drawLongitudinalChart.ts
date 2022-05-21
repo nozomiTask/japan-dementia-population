@@ -14,9 +14,8 @@ export const drawLChart = (dPop: DEMENTIAPOP[], prefecture, city, index) => {
   const title = d3.select('#title').append('h2')
   const text =
     prefecture +
-    ' ' +
     city +
-    'の認知症とMCIの合計人数(黒線)と65歳有病率（赤線）'
+    'の認知症とMCIの推計合計人数(黒線)と65歳有病率（赤線）'
   title.attr('id', 'titleLongitudinal').append('text').text(text)
 
   const config = getChartConfig(index)
