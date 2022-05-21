@@ -36,6 +36,7 @@ const JapanMapAndChart = ({
     chartOrNot && drawDChart(data, index, '', setPrefecture, '', setCity)
     !chartOrNot &&
       drawDTable(data, index, prefecture, setPrefecture, city, setCity)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [prevalence, city, suikei, geoJson, geoData, chartOrNot, prefecture])
 
   const changeTable = () => {

@@ -53,6 +53,7 @@ const PrefectureMap = ({
         !chartOrNot &&
         drawDTable(data, index, prefecture, setPrefecture, city, setCity)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     prefecture,
     city,
