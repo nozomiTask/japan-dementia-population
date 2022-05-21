@@ -57,6 +57,9 @@ export const arrangeData = (
      *
      * ""           ""      "all"         ===> s['市などの別'] === 'a'
      *
+     * 道府県名      ""      "prefectureall"  ===> [s['市などの別'] === 'a' &&
+     *                                          s['都道府県'] === prefecture
+     *
      * 道府県名      ""      "prefecture"  ===> ["1","2","3"].indexOf(s['市などの別'])  !== -1 &&
      *                                          s['都道府県'] === prefecture
      *
@@ -76,7 +79,11 @@ export const arrangeData = (
     ) {
       dp = getPopData(params)
       dps.push(dp as DEMENTIAPOP)
-    } else if (index === 'prefectureall' && s['市などの別'] === 'a' &&s["都道府県"]===prefecture) {
+    } else if (
+      index === 'prefectureall' &&
+      s['市などの別'] === 'a' &&
+      s['都道府県'] === prefecture
+    ) {
       dp = getPopData(params)
       dps.push(dp as DEMENTIAPOP)
     } else if (
@@ -84,6 +91,15 @@ export const arrangeData = (
       city === '' &&
       index === 'all' &&
       s['市などの別'] === 'a'
+    ) {
+      dp = getPopData(params)
+      dps.push(dp as DEMENTIAPOP)
+    } else if (
+      prefecture !== '' &&
+      city === '' &&
+      index === 'prefectureall' &&
+      s['市などの別'] === 'a' &&
+      s['都道府県'] === prefecture
     ) {
       dp = getPopData(params)
       dps.push(dp as DEMENTIAPOP)
@@ -164,6 +180,7 @@ const getPopData = (params) => {
   let area = null
   if (prefecture === '' && city === '全国') area = s['都道府県']
   if (prefecture === '' && city === '' && index === 'all') area = s['都道府県']
+  if (prefecture !== '' && index === 'prefectureall') area = s['都道府県']
   if (prefecture !== '' && index === 'prefecture') area = s['市区町村']
   if (city !== '全国' && index === 'city') area = s['市区町村']
 

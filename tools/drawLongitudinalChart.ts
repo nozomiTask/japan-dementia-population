@@ -1,7 +1,7 @@
 import * as d3 from 'd3'
 import { DEMENTIAPOP } from '../types/dementiaPop'
 
-export const drawLChart = (dPop: DEMENTIAPOP[], prefecture, city, index) => {
+export const drawLChart = (dPop: DEMENTIAPOP[], prefecture, city) => {
   d3.select('#axisX').remove()
   d3.select('#axisY').remove()
   d3.select('#axisYRate').remove()
@@ -18,7 +18,7 @@ export const drawLChart = (dPop: DEMENTIAPOP[], prefecture, city, index) => {
     'の認知症とMCIの推計合計人数(黒線)と65歳有病率（赤線）'
   title.attr('id', 'titleLongitudinal').append('text').text(text)
 
-  const config = getChartConfig(index)
+  const config = getChartConfig()
   const scales = getChartScale(dPop, config)
 
   const data = dPop.map((d) => {
@@ -29,11 +29,11 @@ export const drawLChart = (dPop: DEMENTIAPOP[], prefecture, city, index) => {
     }
   })
 
-  drawAxes(scales, config, index)
-  drawLine(data, scales, config, index)
-  drawCircle(data, scales, config, index)
+  drawAxes(scales, config)
+  drawLine(data, scales, config )
+  drawCircle(data, scales, config)
 }
-const getChartConfig = (index) => {
+const getChartConfig = () => {
   const width = 700
   const height = 400
   const margin = {
@@ -80,7 +80,7 @@ const getChartScale = (dPop: DEMENTIAPOP[], config) => {
   return { xScale, yScale, yRateScale }
 }
 
-const drawAxes = (scales, config, index) => {
+const drawAxes = (scales, config ) => {
   const { xScale, yScale, yRateScale } = scales
   const { container, margin, height, width } = config
   const axisX = d3.axisBottom(xScale)
@@ -114,7 +114,7 @@ const drawAxes = (scales, config, index) => {
     .call(axisYRate)
 }
 
-const drawLine = (data, scales, config, index) => {
+const drawLine = (data, scales, config ) => {
   const { container, margin } = config
   const { xScale, yScale, yRateScale } = scales
 
@@ -158,7 +158,7 @@ const drawLine = (data, scales, config, index) => {
     .attr('d', lineRate)
 }
 
-const drawCircle = (data, scales, config, index) => {
+const drawCircle = (data, scales, config) => {
   const { container, margin } = config
   const { xScale, yScale, yRateScale } = scales
 

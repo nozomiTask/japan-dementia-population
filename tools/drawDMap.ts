@@ -120,6 +120,8 @@ export const drawDMap = (
         setPrefecture(prefecture)
         setCity(sArea)
       }
+      const dd = dPop.find((dp) => dp.area === sArea)
+      showTooltip(dd, index)
       // マウス位置の都道府県領域を赤色に変更
       // d3.select(this).attr(`fill`, `#CC4C39`)
       d3.select(this).attr(`fill`, `red`)

@@ -26,7 +26,7 @@ const CityChart = ({
     if (prefecture === '' && city === '全国') index = 'all'
     if (prefCheck(suikei, prefecture, city)) {
       const dPop = arrangeData(suikei, prevalence, prefecture, city, index)
-      dPop && dPop.length === 7 && drawLChart(dPop, prefecture, city, index)
+      dPop && dPop.length === 7 && drawLChart(dPop, prefecture, city)
     }
   }, [prefecture, city, suikei, prevalence])
 

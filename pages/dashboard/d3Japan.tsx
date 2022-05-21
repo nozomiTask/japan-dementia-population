@@ -111,7 +111,7 @@ const D3Japan = () => {
         {/* <a href="https://zenn.dev/ignorant_kenji/articles/76dab0a748516470452b"> */}
         <span className="text-3xl text-blue-500">認知症（とMCI）の人の数</span>
         {/* </a> */}
-        <div className="flex-col">
+        <div className="flex flex-wrap">
           <div>
             {!!suikei && !!geoJson && !!prevalence && (
               <JapanMapAndChart
