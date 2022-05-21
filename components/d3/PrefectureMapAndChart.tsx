@@ -72,7 +72,8 @@ const PrefectureMap = ({
             ></svg>
           )}{' '}
         </div>
-        //<div class="w-[762px]"></div>
+        {/* https://www.ibulog.com/posts/2021/08/tailwind-fixed-value */}
+
         {!chartOrNot && (
           <div
             className="border-solid border-2 border-black"
