@@ -72,6 +72,7 @@ const PrefectureMap = ({
             ></svg>
           )}{' '}
         </div>
+        //<div class="w-[762px]"></div>
         {!chartOrNot && (
           <div
             className="border-solid border-2 border-black"
