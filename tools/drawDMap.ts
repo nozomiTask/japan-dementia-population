@@ -92,9 +92,9 @@ export const drawDMap = (
       const opac_ = dPop.find((d) => sArea === d.area)
       const opac = opac_ ? opac_.dPopAllSum : 0
 
-      // 透明度をランダムに指定する (0.0 - 1.0)
+      // 透明度を指定する (0.0 - 1.0)
       const max = d3.max(dPop, (d) => +d.dPopAllSum)
-      return Math.sqrt(opac / max) //Math.random()
+      return Math.sqrt(opac / max)
     })
 
     /**
@@ -138,7 +138,7 @@ export const drawDMap = (
   const zoom = d3.zoom().on('zoom', zoomed)
 
   svg.call(drag)
-  // svg.call(zoom)
+  svg.call(zoom)
 
   function dragstarted() {
     d3.select(this).raise() //this があるからアロー関数はダメ
@@ -163,8 +163,21 @@ export const drawDMap = (
     const [minX, minY, width, height] = [+minX_, +minY_, +width_, +height_]
     const { x, y, k } = d3.event.transform
     // 大きさをscale倍する
-    const zoomedWidth = width * k
-    const zoomedHeight = height * k
+    let zoomedWidth = width * k
+    let zoomedHeight = height * k
+
+    //変化の制限
+    if (zoomedWidth > 800) {
+      zoomedWidth = 800
+      zoomedHeight = 800
+    }
+    if (zoomedWidth < 200) {
+      zoomedWidth = 200
+      zoomedHeight = 200
+    }
+    console.log(`width ${width} height ${height} k ${k} `)
+    console.log(`zoomedWidth ${zoomedWidth} zoomedHeight ${zoomedHeight}`)
+
     // 中心の座標を計算する
     const centerX = minX + width / 2.0
     const centerY = minY + height / 2.0
@@ -257,27 +270,27 @@ const displayLabel = (
   dd && showTooltip(dd, index)
 
   // 矩形を追加: テキストの枠
-  const rectElement = group
-    .append(`rect`)
-    .attr(`id`, `label-rect` + index)
-    .attr(`stroke`, `#666`)
-    .attr(`stroke-width`, 0.5)
-    .attr(`fill`, `#fff`)
+  // const rectElement = group
+  //   .append(`rect`)
+  //   .attr(`id`, `label-rect` + index)
+  //   .attr(`stroke`, `#666`)
+  //   .attr(`stroke-width`, 0.5)
+  //   .attr(`fill`, `#fff`)
 
   // テキストを追加
-  const textElement = group
-    .append(`text`)
-    .attr(`id`, `label-text` + index)
-    .text(label)
+  // const textElement = group
+  //   .append(`text`)
+  //   .attr(`id`, `label-text` + index)
+  //   .text(label)
 
   // テキストのサイズから矩形のサイズを調整
-  const padding = { x: 5, y: 0 }
-  const textSize = textElement.node().getBBox()
-  rectElement
-    .attr(`x`, textSize.x - padding.x)
-    .attr(`y`, textSize.y - padding.y)
-    .attr(`width`, textSize.width + padding.x * 2)
-    .attr(`height`, textSize.height + padding.y * 2)
+  // const padding = { x: 5, y: 0 }
+  // const textSize = textElement.node().getBBox()
+  // rectElement
+  //   .attr(`x`, textSize.x - padding.x)
+  //   .attr(`y`, textSize.y - padding.y)
+  //   .attr(`width`, textSize.width + padding.x * 2)
+  //   .attr(`height`, textSize.height + padding.y * 2)
 }
 
 const getAreaName = (index, d, prefecture) => {

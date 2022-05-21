@@ -48,7 +48,7 @@ const JapanMapAndChart = ({
           ></svg>
         </div>
         <div>
-          <h2 className="text-2xl text-center">地図</h2>
+          <h2 id="titlemapall" className="text-2xl text-center">地図</h2>
           <svg
             id="mapall"
             className="bar border-solid border-2 border-black"

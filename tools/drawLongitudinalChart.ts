@@ -3,10 +3,12 @@ import { DEMENTIAPOP } from '../types/dementiaPop'
 
 export const drawLChart = (dPop: DEMENTIAPOP[], prefecture, city, index) => {
   d3.select('#axisX').remove()
-  d3.select('#axisY' ).remove()
+  d3.select('#axisY').remove()
   d3.select('#axisYRate').remove()
   d3.select('#line').remove()
   d3.select('#lineRate').remove()
+  d3.select('#circle').remove()
+  d3.select('#circleRate').remove()
   d3.select('#titleLongitudinal').remove()
 
   const title = d3.select('#title').append('h2')
@@ -27,8 +29,10 @@ export const drawLChart = (dPop: DEMENTIAPOP[], prefecture, city, index) => {
       year: d.year,
     }
   })
+  
   drawAxes(scales, config, index)
   drawLine(data, scales, config, index)
+  drawCircle(data, scales, config, index)
 }
 const getChartConfig = (index) => {
   const width = 700
@@ -57,6 +61,8 @@ const getChartConfig = (index) => {
 const getChartScale = (dPop: DEMENTIAPOP[], config) => {
   const { bodyWidth, bodyHeight } = config
   const max = d3.max(dPop, (d) => d.dPopAllSum)
+  const min = d3.min(dPop, (d) => d.dPopAllSum)
+
   const maxRate = d3.max(dPop, (d) => d.dRateAll65)
   const xScale = d3
     .scaleBand()
@@ -66,7 +72,7 @@ const getChartScale = (dPop: DEMENTIAPOP[], config) => {
   const yScale = d3
     .scaleLinear()
     .range([bodyHeight, 0])
-    .domain([max / 2, max])
+    .domain([min-max/10, max])
   const yRateScale = d3
     .scaleLinear()
     .range([bodyHeight, 0])
@@ -135,20 +141,48 @@ const drawLine = (data, scales, config, index) => {
     .y((d) => yRateScale(d.rate))
 
   path
-    .transition()
-    .duration(750)
-    .ease(d3.easeLinear)
+    // .transition()
+    // .duration(750)
+    // .ease(d3.easeLinear)
     .attr('fill', 'none')
     .attr('stroke', 'black')
     .attr('stroke-width', 3)
     .attr('d', line)
 
   pathRate
-    .transition()
-    .duration(750)
-    .ease(d3.easeLinear)
+    // .transition()
+    // .duration(750)
+    // .ease(d3.easeLinear)
     .attr('fill', 'none')
     .attr('stroke', 'red')
     .attr('stroke-width', 3)
     .attr('d', lineRate)
+}
+
+const drawCircle = (data, scales, config, index) => {
+  const { container, margin } = config
+  const { xScale, yScale, yRateScale } = scales
+
+const circles =   container
+    .selectAll('circle')
+    .data(data)
+    .enter()
+
+circles
+    .append('circle')
+    .attr('id', 'circle')
+    .attr('cx', (d) => xScale(d.year))
+    .attr('cy', (d) => yScale(d.value))
+    .attr('fill', 'black')
+    .attr('r', 6)
+    .style('transform', `translate(${margin.left + 30}px,${margin.top}px)`)
+    
+    circles
+    .append('circle')
+    .attr('id', 'circleRate')
+    .attr('cx', (d) => xScale(d.year))
+    .attr('cy', (d) => yRateScale(d.rate))
+    .attr('fill', 'red')
+    .attr('r', 6)
+    .style('transform', `translate(${margin.left + 30}px,${margin.top}px)`)
 }

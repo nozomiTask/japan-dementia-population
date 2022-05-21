@@ -65,7 +65,7 @@ const PrefectureMap = ({
           ></svg>
         </div>
         <div>
-          <h2 className="text-2xl text-center">地図</h2>
+          <h2 id="titlemapprefecture" className="text-2xl text-center">地図</h2>
           <svg
             id="mapprefecture"
             className="bar border-solid border-2 border-black"

@@ -25,8 +25,8 @@ export const showTooltip = (d, index) => {
   const textElement = group
     .append('text')
     .html(html)
-    .attr('x', '150')
-    .attr('y', '380')
+    .attr('x', '10')
+    .attr('y', '20')
     .attr('width', '200')
     .attr('height', '20')
 }
