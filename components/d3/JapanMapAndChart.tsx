@@ -19,25 +19,31 @@ const JapanMapAndChart = ({
   const [chartOrNot, setChartOrNot] = useState(true)
 
   useEffect(() => {
+    //
     const index = 'all'
-    const dPop__ = arrangeData(suikei, prevalence, '', '', index)
-    const dPop_ = dPop__.filter((d) => d.year === '2020年')
-    let order = 0
-    const dPop = dPop_
-      .sort((a, b) => d3.descending(a.dPopAllSum, b.dPopAllSum))
-      .map((d) => {
-        order += 1
-        d.order = order
-        return d
-      })
+    const dPop__ = arrangeData(index, suikei, prevalence, prefecture, '')
+    if (dPop__) {
+      const dPop_ = dPop__.filter((d) => d.year === '2020年')
+      let order = 0
+      const dPop = dPop_
+        .sort((a, b) => d3.descending(a.dPopAllSum, b.dPopAllSum))
+        .map((d) => {
+          order += 1
+          d.order = order
+          return d
+        })
+      const index = 'all'
+      const data = { geoData, dPop, index }
+      if (geoData) {
+        drawDMap(data, '', setPrefecture, '', setCity)
+      }
+      chartOrNot
+        ? drawDChart(data, '', setPrefecture, '', setCity)
+        : drawDTable(data, prefecture, setPrefecture, city, setCity)
+    }
 
-    const data = { geoJson, geoData, dPop }
-    drawDMap(data, index, '', setPrefecture, '', setCity)
-    chartOrNot && drawDChart(data, index, '', setPrefecture, '', setCity)
-    !chartOrNot &&
-      drawDTable(data, index, prefecture, setPrefecture, city, setCity)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [prevalence, city, suikei, geoJson, geoData, chartOrNot, prefecture])
+  }, [prevalence, suikei, geoJson, geoData, chartOrNot, prefecture])
 
   const changeTable = () => {
     setChartOrNot(!chartOrNot)
@@ -48,7 +54,7 @@ const JapanMapAndChart = ({
 
       <div className="flex ">
         <div>
-          <span className="ml-20 text-2xl text-center">{'    '} 全国</span>
+          <span className="ml-20 text-2xl text-center">{'    '} 都道府県</span>
           {chartOrNot && (
             <svg
               id="chartall"

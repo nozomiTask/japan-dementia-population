@@ -5,6 +5,7 @@ import { prefectureList } from '../../tools/prefectureList'
 import { arrangeData } from '../../tools/arrangeData'
 import * as d3 from 'd3'
 import { drawDTable } from '../../tools/drawDTable'
+import { prefCheck } from './CityMapAndChart'
 const PrefectureMap = ({
   suikei,
   geoJsonPrefecture,
@@ -19,62 +20,61 @@ const PrefectureMap = ({
     cities: string[]
   }
 
-  const [geoData, setGeoData] = useState(null)
-  const [chartOrNot, setChartOrNot] = useState(true)
+  const [chartPrefectureOrNot, setChartPrefectureOrNot] = useState(true)
   useEffect(() => {
-    const index = 'prefecture'
-    const dPop_ = arrangeData(suikei, prevalence, prefecture, '', index).filter(
-      (d) => d.year === '2020年'
-    )
-    let order = 0
-    const dPop = dPop_
-      .sort((a, b) => d3.descending(a.dPopAllSum, b.dPopAllSum))
-      .map((d) => {
-        order += 1
-        d.order = order
-        return d
-      })
+    // prefecture !== "" && city !==""
+    const check = prefCheck(suikei, prefecture, city)
+    if (check) {
+      const index = 'prefecture'
+      const dPop_ = arrangeData(
+        index,
+        suikei,
+        prevalence,
+        prefecture,
+        city
+      ).filter((d) => d.year === '2020年')
+      let order = 0
+      const dPop = dPop_
+        .sort((a, b) => d3.descending(a.dPopAllSum, b.dPopAllSum))
+        .map((d) => {
+          order += 1
+          d.order = order
+          return d
+        })
 
-    const data = { geoJsonPrefecture, geoData, dPop }
+      if (dPop.length > 50) setChartPrefectureOrNot(false)
 
-    if (dPop.length > 50) setChartOrNot(false)
-
-    if (geoJsonPrefecture) {
-      const prefNo1 = prefectureList[prefecture]
-      const prefNo2 = Object.keys(geoJsonPrefecture.objects)[0]
-
-      prefNo1 === prefNo2 &&
-        geoJsonPrefecture &&
-        drawDMap(data, index, prefecture, setPrefecture, city, setCity)
-      prefNo1 === prefNo2 &&
-        geoJsonPrefecture &&
-        chartOrNot &&
-        drawDChart(data, index, prefecture, setPrefecture, city, setCity)
-      prefNo1 === prefNo2 &&
-        geoJsonPrefecture &&
-        !chartOrNot &&
-        drawDTable(data, index, prefecture, setPrefecture, city, setCity)
+      if (geoJsonPrefecture) {
+        const prefNo1 = prefectureList[prefecture]
+        const prefNo2 = Object.keys(geoJsonPrefecture.objects)[0]
+        if (prefNo1 === prefNo2) {
+          const data = { geoJsonPrefecture, dPop, index }
+          drawDMap(data, prefecture, setPrefecture, city, setCity)
+          chartPrefectureOrNot
+            ? drawDChart(data, prefecture, setPrefecture, city, setCity)
+            : drawDTable(data, prefecture, setPrefecture, city, setCity)
+        }
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     prefecture,
     city,
-    chartOrNot,
+    chartPrefectureOrNot,
     suikei,
     prevalence,
     geoJsonPrefecture,
-    geoData,
   ])
 
-  const changeTable = () => {
-    setChartOrNot(!chartOrNot)
+  const changePrefctureTable = () => {
+    setChartPrefectureOrNot(!chartPrefectureOrNot)
   }
   return (
     <>
       <div className="flex ">
         <div>
-          <span className="ml-20 text-2xl text-center">{'    '} 都道府県</span>
-          {chartOrNot && (
+          <span className="ml-20 text-2xl text-center">{'    '} 市区町村</span>
+          {chartPrefectureOrNot && (
             <svg
               id="chartprefecture"
               className="border-solid border-2 border-black"
@@ -82,7 +82,7 @@ const PrefectureMap = ({
               height="400"
             ></svg>
           )}{' '}
-          {!chartOrNot && (
+          {!chartPrefectureOrNot && (
             <svg
               id="tableprefecture"
               className="border-solid border-2 border-black"
@@ -107,7 +107,7 @@ const PrefectureMap = ({
       </div>
       <button
         className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-        onClick={changeTable}
+        onClick={changePrefctureTable}
       >
         切替
       </button>

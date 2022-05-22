@@ -60,8 +60,8 @@ export const prefList = {
 
 const D3Japan = () => {
   const [suikei, setSuikei] = useState(null)
-  const [geoJson, setGeoJson] = useState(null)
-  const [geoJsonPrefecture, setGeoJsonPrefecture] = useState(null)
+  const [geoJson, setGeoJson] = useState(null) //日本地図
+  const [geoJsonPrefecture, setGeoJsonPrefecture] = useState(null) //都道府県地図
   const [prevalence, setPrevalence] = useState(null)
   const [prefecture, setPrefecture] = useState('東京都')
   const [city, setCity] = useState('三鷹市')
@@ -109,7 +109,9 @@ const D3Japan = () => {
     <Layout>
       <div className="container">
         {/* <a href="https://zenn.dev/ignorant_kenji/articles/76dab0a748516470452b"> */}
-        <span className="text-3xl text-blue-500">認知症（とMCI）の人の数</span>
+        <span className="text-3xl text-blue-500">
+          認知症（とMCI）の人の数(推計値)
+        </span>
         {/* </a> */}
         <div className="flex flex-wrap">
           <div>
@@ -148,7 +150,6 @@ const D3Japan = () => {
                 setPrefecture={setPrefecture}
                 city={city}
                 setCity={setCity}
-
               />
             )}
           </div>

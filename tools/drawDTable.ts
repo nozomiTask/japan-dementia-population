@@ -1,14 +1,8 @@
 import * as d3 from 'd3'
 import { drawDMap } from './drawDMap'
 import { showTooltip } from './tooltips'
-export const drawDTable = (
-  data,
-  index,
-  prefecture,
-  setPrefecture,
-  city,
-  setCity
-) => {
+export const drawDTable = (data, prefecture, setPrefecture, city, setCity) => {
+  const { index } = data
   d3.selectAll('#text' + index).remove()
 
   //   const { geoData, dPop } = data

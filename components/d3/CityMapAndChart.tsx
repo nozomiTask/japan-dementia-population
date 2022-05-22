@@ -7,6 +7,16 @@ import { drawLChart } from '../../tools/drawLongitudinalChart'
 import { arrangeData } from '../../tools/arrangeData'
 //https://qiita.com/alclimb/items/31d4360c74a8f8935256
 
+export const prefCheck = (suikei, prefecture, city): boolean => {
+  let ret: boolean = false
+  if (prefecture === '' || city === '') return true
+  const pref = suikei
+    .filter((s) => s['都道府県'] === prefecture && s['年'] === '2020年')
+    .map((ss) => ss['市区町村'])
+
+  return pref.indexOf(city) !== -1
+}
+
 const CityChart = ({
   suikei,
   geoJson,
@@ -19,30 +29,34 @@ const CityChart = ({
   const [geoData, setgGeoData] = useState(geoJson.features)
 
   useEffect(() => {
-    let index = 'city'
-    if (prefecture === '' && city === '') index = 'all'
-    if (prefecture !== '' && city === '') index = 'prefectureall'
-    if (prefecture !== '' && city !== '') index = 'city'
-    if (prefecture === '' && city === '全国') index = 'all'
     if (prefCheck(suikei, prefecture, city)) {
-      const dPop = arrangeData(suikei, prevalence, prefecture, city, index)
-      dPop && dPop.length === 7 && drawLChart(dPop, prefecture, city)
+      let index = ''
+      if (prefecture !== '' && city !== '') index = 'prefecture'
+      if (prefecture !== '' && city === '') index = 'all'
+
+      const dPop = arrangeData(index, suikei, prevalence, prefecture, city)
+      if (dPop.length > 0) {
+        if (prefecture === '' && city === '') {
+          drawLChart(dPop, prefecture, city)
+        } else if (prefecture !== '' && city === '')
+          drawLChart(
+            dPop.filter((d) => d.area === prefecture),
+            prefecture,
+            city
+          )
+        else if (prefecture !== '' && city !== '')
+          drawLChart(
+            dPop.filter((d) => d.area === city),
+            prefecture,
+            city
+          )
+      }
     }
   }, [prefecture, city, suikei, prevalence])
 
-  const prefCheck = (suikei, prefecture, city): boolean => {
-    let ret: boolean = false
-    if (prefecture === '' || city === '') return true
-    const pref = suikei
-      .filter((s) => s['都道府県'] === prefecture && s['年'] === '2020年')
-      .map((ss) => ss['市区町村'])
-
-    return pref.indexOf(city) !== -1
-  }
-
   const japan = () => {
     setPrefecture('')
-    setCity('全国')
+    setCity('')
   }
   return (
     <>

@@ -1,19 +1,14 @@
 import * as d3 from 'd3'
 import { drawDMap } from './drawDMap'
 import { showTooltip } from './tooltips'
-export const drawDChart = (
-  data,
-  index,
-  prefecture,
-  setPrefecture,
-  city,
-  setCity
-) => {
+export const drawDChart = (data, prefecture, setPrefecture, city, setCity) => {
+  const { index } = data
+
   d3.select('#chartBar' + index).remove()
   d3.select('#chartAxisX' + index).remove()
   d3.select('#chartAxisY' + index).remove()
 
-  const { geoData, dPop } = data
+  const { dPop } = data
   let config = getDChartConfig(index)
   let scales = getDChartScales(dPop, config)
   drawBarsDChart(

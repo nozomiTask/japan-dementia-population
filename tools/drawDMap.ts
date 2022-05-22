@@ -7,18 +7,11 @@ import { showTooltip } from './tooltips'
 // import { drag } from 'd3-drag'
 import { zoom } from 'd3-zoom'
 
-export const drawDMap = (
-  data,
-  index,
-  prefecture,
-  setPrefecture,
-  city,
-  setCity
-) => {
+export const drawDMap = (data, prefecture, setPrefecture, city, setCity) => {
+  const { index } = data
+
   d3.select('#label-group' + index).remove()
   d3.select('#viewBox' + index).remove()
-
-  const { geoJsonPrefecture, geoData, dPop } = data
 
   const width = 400 // 描画サイズ: 幅
   const height = 400 // 描画サイズ: 高さ
@@ -28,8 +21,8 @@ export const drawDMap = (
   let scale = null
   if (prefecture !== '' && index === 'prefecture') {
     const prefNo = prefectureList[prefecture]
-    const obj = geoJsonPrefecture?.objects[prefNo]
-    const geoData__ = topojson.feature(geoJsonPrefecture, obj).features
+    const obj = data.geoJsonPrefecture?.objects[prefNo]
+    const geoData__ = topojson.feature(data.geoJsonPrefecture, obj).features
     geoData_ = geoData__ //.filter((g) => g.properties.N03_003 === null)
     centerPos = centerXY(geoData_)
     scale = 10000
@@ -38,7 +31,7 @@ export const drawDMap = (
   // if (centerPos[0]===NaN)
   if (index === 'all') {
     centerPos = [137.0, 38.2]
-    geoData_ = geoData
+    geoData_ = data.geoData
     scale = 1000 // 地図のスケール
   }
 
@@ -85,11 +78,11 @@ export const drawDMap = (
       // item.properties.name_ja に都道府県名が入っている
       let sArea = getAreaName(index, item, prefecture)
 
-      const opac_ = dPop.find((d) => sArea === d.area)
+      const opac_ = data.dPop.find((d) => sArea === d.area)
       const opac = opac_ ? opac_.dPopAllSum : 0
 
       // 透明度を指定する (0.0 - 1.0)
-      const max = d3.max(dPop, (d) => +d.dPopAllSum)
+      const max = d3.max(data.dPop, (d) => +d.dPopAllSum)
       return Math.sqrt(opac / max)
     })
 
@@ -100,17 +93,8 @@ export const drawDMap = (
     .on(`click`, function (item: any) {
       d3.selectAll('#mapArea').attr('fill', '#2566CC')
 
-      displayLabel(
-        item,
-        svg,
-        data,
-        index,
-        prefecture,
-        dPop,
-        setPrefecture,
-        city,
-        setCity
-      )
+      displayLabel(item, svg, data, prefecture, setPrefecture, city, setCity)
+      const { index, dPop } = data
       let sArea = getAreaName(index, item, prefecture)
       if (index === 'all') {
         setPrefecture(sArea)
@@ -244,13 +228,12 @@ const displayLabel = (
   item,
   svg,
   data,
-  index,
   prefecture,
-  dPop,
   setPrefecture,
   city,
   setCity
 ) => {
+  const { index, dPop } = data
   // ラベル用のグループ
   const group = svg.append(`g`).attr(`id`, `label-group` + index)
 
@@ -263,7 +246,7 @@ const displayLabel = (
   if (index === 'prefcture') setCity(label)
 
   //チャートへの書き入れ
-  drawDChart(data, index, prefecture, setPrefecture, city, setCity)
+  drawDChart(data, prefecture, setPrefecture, city, setCity)
   const dd = dPop.find((d) => d.area === label)
   dd && showTooltip(dd, index)
 
