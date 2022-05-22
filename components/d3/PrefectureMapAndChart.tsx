@@ -42,7 +42,7 @@ const PrefectureMap = ({
           return d
         })
 
-      if (dPop.length > 50) setChartPrefectureOrNot(false)
+      // if (dPop.length > 50) setChartPrefectureOrNot(false)
 
       if (geoJsonPrefecture) {
         const prefNo1 = prefectureList[prefecture]
