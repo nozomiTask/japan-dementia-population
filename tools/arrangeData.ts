@@ -68,8 +68,7 @@ export const arrangeData = (
 
     let dp: DEMENTIAPOP = null
     if (
-      prefecture === '' &&
-      city === '' &&
+      index === 'alljapan' &&
       s['コード'] === '0000' //全国データのみ抽出
     ) {
       dp = getPopData(params)
@@ -144,9 +143,9 @@ const getPopData = (params) => {
   const dRateAll65 = dPopAll65 / PopAll65
 
   let area = null
-  if (prefecture === '' && city === '') area = '全国'
-  if (prefecture !== '' && index === 'all') area = s['都道府県']
-  if (prefecture !== '' && index === 'prefecture') area = s['市区町村']
+  if (index === 'alljapan') area = '全国'
+  if (index === 'all') area = s['都道府県']
+  if (index === 'prefecture') area = s['市区町村']
 
   const year = s['年']
   const dp: DEMENTIAPOP = {

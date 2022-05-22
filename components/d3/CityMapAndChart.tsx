@@ -31,11 +31,13 @@ const CityChart = ({
   useEffect(() => {
     if (prefCheck(suikei, prefecture, city)) {
       let index = ''
-      if (prefecture !== '' && city !== '') index = 'prefecture'
+      if (prefecture === '' && city === '') index = 'alljapan'
       if (prefecture !== '' && city === '') index = 'all'
-
+      if (prefecture !== '' && city !== '') index = 'prefecture'
+     
       const dPop = arrangeData(index, suikei, prevalence, prefecture, city)
       if (dPop.length > 0) {
+        if (index === 'alljapan') drawLChart(dPop, prefecture, city)
         if (prefecture === '' && city === '') {
           drawLChart(dPop, prefecture, city)
         } else if (prefecture !== '' && city === '')
