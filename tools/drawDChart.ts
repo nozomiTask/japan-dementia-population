@@ -25,7 +25,7 @@ export const drawDChart = (data, prefecture, setPrefecture, city, setCity) => {
 }
 
 const getDChartConfig = (index) => {
-  let width = 350
+  let width = 400
   let height = 400
   let margin = {
     top: 10,

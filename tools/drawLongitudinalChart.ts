@@ -1,7 +1,7 @@
 import * as d3 from 'd3'
 import { DEMENTIAPOP } from '../types/dementiaPop'
 
-export const drawLChart = (dPop: DEMENTIAPOP[], prefecture, city) => {
+export const drawLChart = (dPop: DEMENTIAPOP[], index, prefecture, city) => {
   d3.select('#axisX').remove()
   d3.select('#axisY').remove()
   d3.select('#axisYRate').remove()
@@ -12,9 +12,12 @@ export const drawLChart = (dPop: DEMENTIAPOP[], prefecture, city) => {
   d3.select('#titleLongitudinal').remove()
 
   const title = d3.select('#title').append('h2')
+
+ let area = prefecture + city
+ if(index==="alljapan") area = "全国"
+
   const text =
-    prefecture +
-    city +
+area +
     'の認知症とMCIの推計合計人数(黒線)と65歳有病率（赤線）'
   title.attr('id', 'titleLongitudinal').append('text').text(text)
 
