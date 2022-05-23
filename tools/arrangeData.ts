@@ -124,6 +124,11 @@ const getPopData = (params) => {
     dPopFemaleSum += dPopFemale[ages[a]]
     dPopAllSum += dPopAll[ages[a]]
 
+
+//var arr1 = [0, 1, 2, 3, 4];
+// var arr2 = arr1.slice(0, arr1.length);
+
+
     if (age65Stratified.indexOf(ages[a]) !== -1) {
       dPopMale65 += dPopMale[ages[a]]
       dPopFemale65 += dPopFemale[ages[a]]
