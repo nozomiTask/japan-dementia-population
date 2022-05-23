@@ -5,7 +5,7 @@ import { prefectureList } from '../../tools/prefectureList'
 import { arrangeData } from '../../tools/arrangeData'
 import * as d3 from 'd3'
 import { drawDTable } from '../../tools/drawDTable'
-import { prefCheck } from './CityMapAndChart'
+import { prefCheck } from './SelectedAreaGraph'
 const PrefectureMap = ({
   suikei,
   geoJsonPrefecture,

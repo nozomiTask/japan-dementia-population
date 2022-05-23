@@ -4,8 +4,9 @@ import JapanMap from '../../components/d3/JapanMapAndChart'
 import * as d3 from 'd3'
 import JapanMapAndChart from '../../components/d3/JapanMapAndChart'
 import PrefectureMapAndChart from '../../components/d3/PrefectureMapAndChart'
-import CityMapAndChart from '../../components/d3/CityMapAndChart'
-import CityChart from '../../components/d3/CityMapAndChart'
+import CityMapAndChart from '../../components/d3/SelectedAreaGraph'
+import CityChart from '../../components/d3/SelectedAreaGraph'
+import SelectedAreaGraph from '../../components/d3/SelectedAreaGraph'
 
 export const prefList = {
   日本: '00',
@@ -142,7 +143,7 @@ const D3Japan = () => {
           </div>
           <div>
             {!!suikei && !!geoJson && !!prevalence && (
-              <CityChart
+              <SelectedAreaGraph
                 suikei={suikei}
                 geoJson={geoJson}
                 prevalence={prevalence}

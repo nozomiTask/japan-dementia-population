@@ -17,7 +17,7 @@ export const prefCheck = (suikei, prefecture, city): boolean => {
   return pref.indexOf(city) !== -1
 }
 
-const CityChart = ({
+const SelectedAreaGraph = ({
   suikei,
   geoJson,
   prevalence,
@@ -34,19 +34,17 @@ const CityChart = ({
       if (prefecture === '' && city === '') index = 'alljapan'
       if (prefecture !== '' && city === '') index = 'all'
       if (prefecture !== '' && city !== '') index = 'prefecture'
-     
+
       const dPop = arrangeData(index, suikei, prevalence, prefecture, city)
       if (dPop.length > 0) {
         if (index === 'alljapan') drawLChart(dPop, prefecture, city)
-        if (prefecture === '' && city === '') {
-          drawLChart(dPop, prefecture, city)
-        } else if (prefecture !== '' && city === '')
+        if (index === 'all')
           drawLChart(
             dPop.filter((d) => d.area === prefecture),
             prefecture,
             city
           )
-        else if (prefecture !== '' && city !== '')
+        if (index === 'prefecture')
           drawLChart(
             dPop.filter((d) => d.area === city),
             prefecture,
@@ -89,4 +87,4 @@ const CityChart = ({
   )
 }
 
-export default CityChart
+export default SelectedAreaGraph

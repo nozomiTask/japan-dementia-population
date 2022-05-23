@@ -21,7 +21,7 @@ const JapanMapAndChart = ({
   useEffect(() => {
     //
     const index = 'all'
-    const dPop__ = arrangeData(index, suikei, prevalence, prefecture, '')
+    const dPop__ = arrangeData(index, suikei, prevalence, prefecture, city)
     if (dPop__) {
       const dPop_ = dPop__.filter((d) => d.year === '2020年')
       let order = 0
@@ -38,7 +38,7 @@ const JapanMapAndChart = ({
         drawDMap(data, '', setPrefecture, '', setCity)
       }
       chartOrNot
-        ? drawDChart(data, '', setPrefecture, '', setCity)
+        ? drawDChart(data, prefecture, setPrefecture, city, setCity)
         : drawDTable(data, prefecture, setPrefecture, city, setCity)
     }
 

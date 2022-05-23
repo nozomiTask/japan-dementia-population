@@ -81,18 +81,13 @@ export const arrangeData = (
       dps.push(dp as DEMENTIAPOP)
     } else if (
       index === 'prefecture' &&
-      prefecture === '東京都' &&
-      ['0', '1', '2', '3'].indexOf(s['市などの別']) !== -1 && //東京都は、区を含めて、市区町村を抽出
-      s['都道府県'] === '東京都'
-    ) {
-      dp = getPopData(params)
-      dps.push(dp as DEMENTIAPOP)
-    } else if (
-      index === 'prefecture' &&
-      prefecture !== '' &&
-      prefecture !== '東京都' &&
-      ['1', '2', '3'].indexOf(s['市などの別']) !== -1 &&
-      s['都道府県'] === prefecture //東京都以外は区を含めない
+      s['都道府県'] === prefecture &&
+      (//東京都は、区を含めて、市区町村を抽出
+      (prefecture === '東京都' &&
+        ['0', '1', '2', '3'].indexOf(s['市などの別']) !== -1) ||
+        //東京都は、区を含めて、市区町村を抽出
+        (prefecture !== '東京都' &&
+          ['1', '2', '3'].indexOf(s['市などの別']) !== -1))
     ) {
       dp = getPopData(params)
       dps.push(dp as DEMENTIAPOP)

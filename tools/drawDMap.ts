@@ -149,9 +149,9 @@ export const drawDMap = (data, prefecture, setPrefecture, city, setCity) => {
     let zoomedHeight = height * k
 
     //変化の制限
-    if (zoomedWidth > 800) {
-      zoomedWidth = 800
-      zoomedHeight = 800
+    if (zoomedWidth > 1600) {
+      zoomedWidth = 1600
+      zoomedHeight = 1600
     }
     if (zoomedWidth < 200) {
       zoomedWidth = 200
