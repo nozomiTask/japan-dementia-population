@@ -98,7 +98,7 @@ const drawBarsDChart = (
       // d3.select('#viewBox' + index).remove()
       if (index === 'all') {
         setPrefecture(d.area)
-        setCity('')
+        // setCity('')
       } else if (index === 'prefecture') {
         // setPrefecture(prefecture)
         setCity(d.area)

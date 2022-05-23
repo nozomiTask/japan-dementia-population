@@ -1,5 +1,4 @@
 import * as d3 from 'd3'
-import { drawDMap } from './drawDMap'
 import { showTooltip } from './tooltips'
 export const drawDTable = (data, prefecture, setPrefecture, city, setCity) => {
   const { index } = data
@@ -81,7 +80,7 @@ const drawDTableData = (
 
   text
     .append('text')
-    .attr('id', 'textprefecture')
+    .attr('id', 'text' + index)
     .attr('x', (d, i) => w * Math.floor(i / h_))
     .attr('y', (d, i) => h * (i % h_))
     .attr('text-anchor', 'start')
@@ -101,6 +100,7 @@ const drawDTableData = (
         setCity('')
       }
       if (index === 'prefecture') {
+        setPrefecture(prefecture)
         setCity(d)
       }
       //   drawDMap(data, index, prefecture, setPrefecture, city_, setCity)

@@ -8,7 +8,7 @@ import { showTooltip } from './tooltips'
 import { zoom } from 'd3-zoom'
 
 export const drawDMap = (data, prefecture, setPrefecture, city, setCity) => {
-  const { index } = data
+  const { index, dPop } = data
 
   d3.select('#label-group' + index).remove()
   d3.select('#viewBox' + index).remove()
@@ -63,7 +63,7 @@ export const drawDMap = (data, prefecture, setPrefecture, city, setCity) => {
     .attr(`d`, path)
     .attr(`stroke`, `#666`)
     .attr(`stroke-width`, 0.25)
-    .attr('id', 'mapArea')
+    .attr('id', 'mapArea' + index)
     .attr(`fill`, (d) => {
       const getAreaNameFromTopojson = getAreaName(index, d, prefecture)
       let filledColor = null
@@ -91,10 +91,9 @@ export const drawDMap = (data, prefecture, setPrefecture, city, setCity) => {
      */
     // .on(`mouseover`, function (item: any) {
     .on(`click`, function (item: any) {
-      d3.selectAll('#mapArea').attr('fill', '#2566CC')
+      d3.selectAll('#mapArea' + index).attr('fill', '#2566CC')
 
       displayLabel(item, svg, data, prefecture, setPrefecture, city, setCity)
-      const { index, dPop } = data
       let sArea = getAreaName(index, item, prefecture)
       if (index === 'all') {
         setPrefecture(sArea)
@@ -109,7 +108,7 @@ export const drawDMap = (data, prefecture, setPrefecture, city, setCity) => {
       // マウス位置の都道府県領域を赤色に変更
       // d3.select(this).attr(`fill`, `#CC4C39`)
       d3.select(this).attr(`fill`, `red`)
-      d3.select(this).attr(`stroke-width`, `1`)
+      // d3.select(this).attr(`stroke-width`, `1`)
     })
 
   const drag = d3
@@ -140,7 +139,7 @@ export const drawDMap = (data, prefecture, setPrefecture, city, setCity) => {
 
   //https://www.kabuku.co.jp/developers/how-to-enable-zoom-in-svg
   function zoomed() {
-    const VB = d3.select('#viewBoxall')
+    const VB = d3.select('#viewBox' + index)
     const [minX_, minY_, width_, height_] = VB.attr('viewBox').split(' ')
     const [minX, minY, width, height] = [+minX_, +minY_, +width_, +height_]
     const { x, y, k } = d3.event.transform
@@ -149,9 +148,9 @@ export const drawDMap = (data, prefecture, setPrefecture, city, setCity) => {
     let zoomedHeight = height * k
 
     //変化の制限
-    if (zoomedWidth > 1600) {
-      zoomedWidth = 1600
-      zoomedHeight = 1600
+    if (zoomedWidth > 800) {
+      zoomedWidth = 800
+      zoomedHeight = 800
     }
     if (zoomedWidth < 200) {
       zoomedWidth = 200

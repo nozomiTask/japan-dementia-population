@@ -35,7 +35,7 @@ const JapanMapAndChart = ({
       const index = 'all'
       const data = { geoData, dPop, index }
       if (geoData) {
-        drawDMap(data, '', setPrefecture, '', setCity)
+        drawDMap(data, prefecture, setPrefecture, '', setCity)
       }
       chartOrNot
         ? drawDChart(data, prefecture, setPrefecture, city, setCity)
@@ -73,7 +73,7 @@ const JapanMapAndChart = ({
           )}
         </div>
         <div>
-          <h2 id="titlemapprefecture" className="text-2xl text-center">
+          <h2 id="titlemapall" className="text-2xl text-center">
             地図
           </h2>
           <svg
