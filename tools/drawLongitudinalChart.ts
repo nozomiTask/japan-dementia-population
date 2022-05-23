@@ -13,12 +13,10 @@ export const drawLChart = (dPop: DEMENTIAPOP[], index, prefecture, city) => {
 
   const title = d3.select('#title').append('h2')
 
- let area = prefecture + city
- if(index==="alljapan") area = "全国"
+  let area = prefecture + city
+  if (index === 'alljapan') area = '全国'
 
-  const text =
-area +
-    'の認知症とMCIの推計合計人数(黒線)と65歳有病率（赤線）'
+  const text = area + 'の認知症とMCIの推計合計人数(黒線)と65歳有病率（赤線）'
   title.attr('id', 'titleLongitudinal').append('text').text(text)
 
   const config = getChartConfig()
@@ -33,11 +31,11 @@ area +
   })
 
   drawAxes(scales, config)
-  drawLine(data, scales, config )
+  drawLine(data, scales, config)
   drawCircle(data, scales, config)
 }
 const getChartConfig = () => {
-  const width = 700
+  const width = 800
   const height = 400
   const margin = {
     top: 50,
@@ -83,7 +81,7 @@ const getChartScale = (dPop: DEMENTIAPOP[], config) => {
   return { xScale, yScale, yRateScale }
 }
 
-const drawAxes = (scales, config ) => {
+const drawAxes = (scales, config) => {
   const { xScale, yScale, yRateScale } = scales
   const { container, margin, height, width } = config
   const axisX = d3.axisBottom(xScale)
@@ -117,7 +115,7 @@ const drawAxes = (scales, config ) => {
     .call(axisYRate)
 }
 
-const drawLine = (data, scales, config ) => {
+const drawLine = (data, scales, config) => {
   const { container, margin } = config
   const { xScale, yScale, yRateScale } = scales
 

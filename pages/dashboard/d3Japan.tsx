@@ -117,6 +117,19 @@ const D3Japan = () => {
         <div className="flex flex-wrap">
           <div>
             {!!suikei && !!geoJson && !!prevalence && (
+              <SelectedAreaGraph
+                suikei={suikei}
+                geoJson={geoJson}
+                prevalence={prevalence}
+                prefecture={prefecture}
+                setPrefecture={setPrefecture}
+                city={city}
+                setCity={setCity}
+              />
+            )}
+          </div>
+          <div>
+            {!!suikei && !!geoJson && !!prevalence && (
               <JapanMapAndChart
                 suikei={suikei}
                 geoJson={geoJson}
@@ -133,19 +146,6 @@ const D3Japan = () => {
               <PrefectureMapAndChart
                 suikei={suikei}
                 geoJsonPrefecture={geoJsonPrefecture}
-                prevalence={prevalence}
-                prefecture={prefecture}
-                setPrefecture={setPrefecture}
-                city={city}
-                setCity={setCity}
-              />
-            )}
-          </div>
-          <div>
-            {!!suikei && !!geoJson && !!prevalence && (
-              <SelectedAreaGraph
-                suikei={suikei}
-                geoJson={geoJson}
                 prevalence={prevalence}
                 prefecture={prefecture}
                 setPrefecture={setPrefecture}
