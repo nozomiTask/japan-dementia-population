@@ -14,6 +14,8 @@ const JapanMapAndChart = ({
   setPrefecture,
   city,
   setCity,
+  loadingPrefecture,
+  setLoadingPrefecture,
 }) => {
   const [geoData, setGeoData] = useState(geoJson.features)
   const [chartOrNot, setChartOrNot] = useState(true)
@@ -35,15 +37,47 @@ const JapanMapAndChart = ({
       const index = 'all'
       const data = { geoData, dPop, index }
       if (geoData) {
-        drawDMap(data, prefecture, setPrefecture, '', setCity)
+        drawDMap(
+          data,
+          prefecture,
+          setPrefecture,
+          '',
+          setCity,
+          loadingPrefecture,
+          setLoadingPrefecture
+        )
       }
       chartOrNot
-        ? drawDChart(data, prefecture, setPrefecture, city, setCity)
-        : drawDTable(data, prefecture, setPrefecture, city, setCity)
+        ? drawDChart(
+            data,
+            prefecture,
+            setPrefecture,
+            city,
+            setCity,
+            loadingPrefecture,
+            setLoadingPrefecture
+          )
+        : drawDTable(
+            data,
+            prefecture,
+            setPrefecture,
+            city,
+            setCity,
+            loadingPrefecture,
+            setLoadingPrefecture
+          )
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [prevalence, suikei, geoJson, geoData, chartOrNot, prefecture])
+  }, [
+    prevalence,
+    suikei,
+    geoJson,
+    geoData,
+    chartOrNot,
+    prefecture,
+    loadingPrefecture,
+  ])
 
   const changeTable = () => {
     setChartOrNot(!chartOrNot)

@@ -66,6 +66,7 @@ const D3Japan = () => {
   const [prevalence, setPrevalence] = useState(null)
   const [prefecture, setPrefecture] = useState('東京都')
   const [city, setCity] = useState('三鷹市')
+  const [loadingPrefecture, setLoadingPrefecture] = useState(false)
 
   useEffect(() => {
     d3.csv('../assets/modified_suikei_kekka.csv')
@@ -114,7 +115,7 @@ const D3Japan = () => {
           認知症（とMCI）の人の数(推計値)
         </span>
         {/* </a> */}
-        <div className="flex flex-wrap">
+        <div className="flex-col">
           <div>
             {!!suikei && !!geoJson && !!prevalence && (
               <SelectedAreaGraph
@@ -125,6 +126,7 @@ const D3Japan = () => {
                 setPrefecture={setPrefecture}
                 city={city}
                 setCity={setCity}
+                setLoadingPrefecture={setLoadingPrefecture}
               />
             )}
           </div>
@@ -138,10 +140,22 @@ const D3Japan = () => {
                 setPrefecture={setPrefecture}
                 city={city}
                 setCity={setCity}
+                loadingPrefecture={loadingPrefecture}
+                setLoadingPrefecture={setLoadingPrefecture}
               />
             )}
           </div>
           <div>
+            {/* {loadingPrefecture && (
+              <svg width="800" height="400">
+                <g>
+                  <text id="circle" x="300" y="200">
+                    Loading...
+                  </text>
+                </g>
+                Loading...
+              </svg>
+            )} */}
             {!!suikei && !!geoJson && !!prevalence && (
               <PrefectureMapAndChart
                 suikei={suikei}
@@ -151,6 +165,8 @@ const D3Japan = () => {
                 setPrefecture={setPrefecture}
                 city={city}
                 setCity={setCity}
+                loadingPrefecture={loadingPrefecture}
+                setLoadingPrefecture={setLoadingPrefecture}
               />
             )}
           </div>

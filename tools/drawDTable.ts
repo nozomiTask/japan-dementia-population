@@ -1,6 +1,14 @@
 import * as d3 from 'd3'
 import { showTooltip } from './tooltips'
-export const drawDTable = (data, prefecture, setPrefecture, city, setCity) => {
+export const drawDTable = (
+  data,
+  prefecture,
+  setPrefecture,
+  city,
+  setCity,
+  loadingPrefecture,
+  setLoadingPrefecture
+) => {
   const { index } = data
   d3.selectAll('#text' + index).remove()
 

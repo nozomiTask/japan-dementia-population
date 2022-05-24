@@ -1,8 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-import * as d3 from 'd3'
-import { drawDMap } from '../../tools/drawDMap'
-import { drawDChart } from '../../tools/drawDChart'
-import { arrangeCityData } from '../../tools/arrangeCityData'
 import { drawLChart } from '../../tools/drawLongitudinalChart'
 import { arrangeData } from '../../tools/arrangeData'
 //https://qiita.com/alclimb/items/31d4360c74a8f8935256
@@ -25,6 +21,7 @@ const CityChart = ({
   setPrefecture,
   city,
   setCity,
+  setLoadingPrefecture,
 }) => {
   const [geoData, setgGeoData] = useState(geoJson.features)
 

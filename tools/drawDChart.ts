@@ -1,7 +1,15 @@
 import * as d3 from 'd3'
-import { drawDMap } from './drawDMap'
+
 import { showTooltip } from './tooltips'
-export const drawDChart = (data, prefecture, setPrefecture, city, setCity) => {
+export const drawDChart = (
+  data,
+  prefecture,
+  setPrefecture,
+  city,
+  setCity,
+  loadingPrefecture,
+  setLoadingPrefecture
+) => {
   const { index } = data
 
   d3.select('#chartBar' + index).remove()

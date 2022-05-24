@@ -7,7 +7,15 @@ import { showTooltip } from './tooltips'
 // import { drag } from 'd3-drag'
 import { zoom } from 'd3-zoom'
 
-export const drawDMap = (data, prefecture, setPrefecture, city, setCity) => {
+export const drawDMap = (
+  data,
+  prefecture,
+  setPrefecture,
+  city,
+  setCity,
+  loadingPrefecture,
+  setLoadingPrefecture
+) => {
   const { index, dPop } = data
 
   d3.select('#label-group' + index).remove()
@@ -93,13 +101,25 @@ export const drawDMap = (data, prefecture, setPrefecture, city, setCity) => {
     .on(`click`, function (item: any) {
       d3.selectAll('#mapArea' + index).attr('fill', '#2566CC')
 
-      displayLabel(item, svg, data, prefecture, setPrefecture, city, setCity)
+      displayLabel(
+        item,
+        svg,
+        data,
+        prefecture,
+        setPrefecture,
+        city,
+        setCity,
+        loadingPrefecture,
+        setLoadingPrefecture
+      )
       let sArea = getAreaName(index, item, prefecture)
       if (index === 'all') {
+        setLoadingPrefecture(true)
         setPrefecture(sArea)
         setCity('')
       }
       if (index === 'prefecture') {
+        // setLoadingPrefecture(false)
         setPrefecture(prefecture)
         setCity(sArea)
       }
@@ -230,7 +250,9 @@ const displayLabel = (
   prefecture,
   setPrefecture,
   city,
-  setCity
+  setCity,
+  loadingPrefecture,
+  setLoadingPrefecture
 ) => {
   const { index, dPop } = data
   // ラベル用のグループ
@@ -245,7 +267,15 @@ const displayLabel = (
   if (index === 'prefcture') setCity(label)
 
   //チャートへの書き入れ
-  drawDChart(data, prefecture, setPrefecture, city, setCity)
+  drawDChart(
+    data,
+    prefecture,
+    setPrefecture,
+    city,
+    setCity,
+    loadingPrefecture,
+    setLoadingPrefecture
+  )
   const dd = dPop.find((d) => d.area === label)
   dd && showTooltip(dd, index)
 

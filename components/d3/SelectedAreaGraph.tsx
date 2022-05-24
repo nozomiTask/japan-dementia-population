@@ -21,6 +21,7 @@ const SelectedAreaGraph = ({
   setPrefecture,
   city,
   setCity,
+  setLoadingPrefecture,
 }) => {
   const [geoData, setgGeoData] = useState(geoJson.features)
   const [allJapan, setAllJapan] = useState(false)
