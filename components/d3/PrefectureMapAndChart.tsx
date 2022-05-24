@@ -101,7 +101,7 @@ const PrefectureMap = ({
   }
   return (
     <>
-      {loadingPrefecture && <h1>Loading...</h1>}
+      {loadingPrefecture && <div className="text-4xl text-blue-600">Loading...</div>}
       {!loadingPrefecture && (
         <>
           <div className="mt-10 flex shadow-2xl">
