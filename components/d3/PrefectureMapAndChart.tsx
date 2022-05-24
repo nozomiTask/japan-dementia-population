@@ -71,7 +71,7 @@ const PrefectureMap = ({
   }
   return (
     <>
-      <div className="flex ">
+      <div className="mt-10 flex shadow-2xl">
         <div>
           <span className="ml-20 text-2xl text-center">{'    '} 市区町村</span>
           {chartPrefectureOrNot && (

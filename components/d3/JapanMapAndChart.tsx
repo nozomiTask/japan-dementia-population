@@ -52,7 +52,7 @@ const JapanMapAndChart = ({
     <>
       <div id="map-container"></div>
 
-      <div className="flex ">
+      <div className="mt-10 flex shadow-2xl">
         <div>
           <span className="ml-20 text-2xl text-center">{'    '} 都道府県</span>
           {chartOrNot && (
