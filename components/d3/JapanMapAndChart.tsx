@@ -86,13 +86,13 @@ const JapanMapAndChart = ({
     <>
       <div id="map-container"></div>
 
-      <div className="mt-10 flex shadow-2xl">
+      <div className="mt-10 flex ">
         <div>
           <span className="ml-20 text-2xl text-center">{'    '} 都道府県</span>
           {chartOrNot && (
             <svg
               id="chartall"
-              className="border-solid border-2 border-black"
+              className="border-solid border-2 border-black   shadow-2xl"
               width="400"
               height="400"
             ></svg>
@@ -100,7 +100,7 @@ const JapanMapAndChart = ({
           {!chartOrNot && (
             <svg
               id="tableall"
-              className="border-solid border-2 border-black"
+              className="border-solid border-2 border-black  shadow-2xl"
               width="400"
               height="400"
             ></svg>
@@ -112,7 +112,7 @@ const JapanMapAndChart = ({
           </h2>
           <svg
             id="mapall"
-            className="bar border-solid border-2 border-black"
+            className="bar border-solid border-2 border-black  shadow-2xl"
             width="400"
             height="400"
           >

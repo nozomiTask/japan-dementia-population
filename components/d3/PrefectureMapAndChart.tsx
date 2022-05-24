@@ -101,10 +101,12 @@ const PrefectureMap = ({
   }
   return (
     <>
-      {loadingPrefecture && <div className="text-4xl text-blue-600">Loading...</div>}
+      {loadingPrefecture && (
+        <div className="text-4xl text-blue-600">Loading...</div>
+      )}
       {!loadingPrefecture && (
         <>
-          <div className="mt-10 flex shadow-2xl">
+          <div className="mt-10 flex ">
             <div>
               <span className="ml-20 text-2xl text-center">
                 {'    '} 市区町村
@@ -112,7 +114,7 @@ const PrefectureMap = ({
               {chartPrefectureOrNot && (
                 <svg
                   id="chartprefecture"
-                  className="border-solid border-2 border-black"
+                  className="border-solid border-2 border-black shadow-2xl"
                   width="400"
                   height="400"
                 ></svg>
@@ -120,7 +122,7 @@ const PrefectureMap = ({
               {!chartPrefectureOrNot && (
                 <svg
                   id="tableprefecture"
-                  className="border-solid border-2 border-black"
+                  className="border-solid border-2 border-black  shadow-2xl"
                   width="400"
                   height="400"
                 ></svg>
@@ -133,7 +135,7 @@ const PrefectureMap = ({
 
               <svg
                 id="mapprefecture"
-                className="bar border-solid border-2 border-black"
+                className="bar border-solid border-2 border-black  shadow-2xl"
                 width="400"
                 height="400"
               >
