@@ -16,7 +16,17 @@ export interface DEMENTIAPOP {
   dRateFemale65: number
   dRateAll65: number
 
-/*
+  dPopMale85: number //85歳以上認知症人数
+  dPopFemale85: number
+  dPopAll85: number
+  PopMale85: number //85歳以上人口
+  PopFemale85: number
+  PopAll85: number
+  dRateMale85: number //85歳以上認知症有病率
+  dRateFemale85: number
+  dRateAll85: number
+
+  /*
   dPopMaleAge: agePop[] //x歳以上認知症人数
   dPopFemaleAge: agePop[]
   dPopAllAge: agePop[]

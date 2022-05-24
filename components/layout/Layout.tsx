@@ -4,7 +4,7 @@ export const Layout = (props) => {
   const { children, title = 'タイトル' } = props
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-gray-100">
       <header className="justify-around bg-gray-300 h-24 md:h-12 flex">
         <div className="flex items-center justify-round">
           <Link href="/dashboard/initPage">
@@ -15,7 +15,7 @@ export const Layout = (props) => {
           <div className="ml-6 text-sm text-mono"></div>
         </div>
       </header>
-      <main className="flex-grow ml-10">{children}</main>
+      <main className="flex-grow ml-10 ">{children}</main>
 
       <footer className="bg-gray-200">
         <p className="p-2 text-center text-xs">
