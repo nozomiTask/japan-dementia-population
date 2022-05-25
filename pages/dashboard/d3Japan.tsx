@@ -112,7 +112,7 @@ const D3Japan = () => {
       <div className="container">
         {/* <a href="https://zenn.dev/ignorant_kenji/articles/76dab0a748516470452b"> */}
         <span className="text-3xl text-blue-500">
-          認知症とMCI(軽度認知障害)の人数(推計値)
+          認知症とMCI(軽度認知障害)の人の数(推計値)
         </span>
         {/* </a> */}
         <div className="flex-col">
