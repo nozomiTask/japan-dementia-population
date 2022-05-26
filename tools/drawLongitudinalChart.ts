@@ -18,7 +18,7 @@ export const drawLChart = (dPop: DEMENTIAPOP[], index, prefecture, city) => {
   let area = prefecture + city
   if (index === 'alljapan') area = '全国'
 
-  const text = area + 'の人数(黒線)と有病率（65歳以上赤線、85歳以上青線）'
+  const text = area + 'の認知症・MCI推計人数(黒線)と有病率（65歳以上赤線、85歳以上青線）'
   title.attr('id', 'titleLongitudinal').append('text').text(text)
 
   const config = getChartConfig()

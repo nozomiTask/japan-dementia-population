@@ -14,7 +14,7 @@ export const Layout = (props) => {
               width={40}
               height={40}
             />
-            <span className="text-green-500 text-4xl">
+            <span className="mb-3 text-green-700 text-4xl">
               のぞみメモリークリニック
             </span>
           </a>
@@ -22,7 +22,7 @@ export const Layout = (props) => {
 
         <div className="items-center justify-between flex text-sm md:text-lg bg-color-gray-400">
           <Link href="https://www.nozomi-mem.jp/">
-            <a className="ml-6 text-xl text-mono text-green-500">
+            <a className="ml-6 text-xl text-mono text-green-700 bg-gray-100 hover:opacity-30">
               のぞみメモリークリニックのホームページへ
             </a>
           </Link>
